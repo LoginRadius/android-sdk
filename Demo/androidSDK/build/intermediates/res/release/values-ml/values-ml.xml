@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- From: file:/C:/wamp/www/AndroidStudio/Updated%20Demo/Demo/androidSDK/build/intermediates/exploded-aar/com.facebook.android/facebook/4.1.0/res/values-ml/values-ml.xml -->
-    <eat-comment/>
-    <string name="messenger_send_button_text">അയയ്ക്കുക</string>
-</resources>
