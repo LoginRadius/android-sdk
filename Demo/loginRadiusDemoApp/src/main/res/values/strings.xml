@@ -5,8 +5,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="lr_drawer_open">Open drawer</string>
     <string name="lr_drawer_close">Close drawer</string>
-    <string name="app_id">Your Facebook App Id</string>
-    <string name="LoginRadius_API_Key">Your LoginRadius API KEY</string>
+    <string name="app_id">Your Facebook App ID</string>
+    <string name="LoginRadius_API_Key">Your LoginRadius API Key</string>
 
     <string-array name="api_names">
         <item>User Profile</item>

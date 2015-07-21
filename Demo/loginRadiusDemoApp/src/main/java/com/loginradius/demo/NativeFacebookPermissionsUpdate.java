@@ -1,5 +1,6 @@
 package com.loginradius.demo;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -21,7 +22,7 @@ import com.loginradius.sdk.ui.lrLoginManager;
 import com.loginradius.sdk.util.AsyncHandler;
 
 
-public class NativeFacebookPermissionsUpdate extends ActionBarActivity {
+public class NativeFacebookPermissionsUpdate extends Activity {
     CallbackManager callManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
