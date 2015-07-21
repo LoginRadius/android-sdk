@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">LoginRadiusDemo</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="lr_drawer_open">Open drawer</string>
+    <string name="lr_drawer_close">Close drawer</string>
+    <string name="app_id">Your Facebook App Id</string>
+    <string name="LoginRadius_API_Key">Your LoginRadius API KEY</string>
+
+    <string-array name="api_names">
+        <item>User Profile</item>
+        <item>Contact</item>
+        <item>Group</item>
+        <item>Event</item>
+        <item>Post</item>
+        <item>Status</item>
+        <item>Album</item>
+        <item>Like</item>
+        <item>CheckIn</item>
+        <item>Company </item>
+        <item>Mention</item>
+        <item>Photo</item>
+        <item>Page</item>
+        <item>Logout</item>
+    </string-array>
+
+    <string name="title_activity_interface">Interface</string>
+    <string name="title_activity_login_radius_interface">LoginRadiusInterface</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_event">Event</string>
+    <string name="title_activity_status_update">StatusUpdate</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_message_send">MessageSend</string>
+    <string name="title_activity_login_radius_welcome_screen">LoginRadius</string>
+    <string name="loginradius">LoginRadius</string>
+    <string name="button_list">List View</string>
+    <string name="button_single">Single Views</string>
+    <string name="button_facebook_profile">Native Facebook Profile</string>
+    <string name="button_update_status">Update Status</string>
+    <string name="button_fb_Native_update">Request Additional Facebook Permissions</string>
+    <string name="title_activity_list_view">Login Radius Demo App</string>
+    <string name="textview">Example Text</string>
+    <string name="list_view_first">The ListView below is automatically populated with providers by the LoginRadius SDK. You can customize the row layouts or use the default provided.</string>
+    <string name="list_view_second">Providers can be specified through the LoginRadius online management services.</string>
+    <string name="title_activity_single_login">Independent Login</string>
+    <string name="single_login">Items can be individually attached with a provider. This allows further customization. Default icons and text can be used. Or you can customize the view to your needs.</string>
+    <string name="independent_login">Login with Facebook</string>
+    <string name="title_activity_user_profile">User Details</string>
+    <string name="title_activity_facebook_native">Facebook Native Login</string>
+    <string name="title_activity_post_status">Post Status API</string>
+    <string name="postbutton">Post Status</string>
+    <string name="poststatustext">Post Status</string>
+    <string name="title_section1">User Profile</string>
+    <string name="title_section2">Contacts</string>
+    <string name="title_section3">Videos</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="user_name">Name : </string>
+    <string name="id">ID : </string>
+    <string name="provider">Provider : </string>
+    <string name="birth_date">Birth date :</string>
+    <string name="contact_email">Email : </string>
+    <string name="contact_website">Website : </string>
+    <string name="contact_Location">Location : </string>
+    <string name="status_update">Update</string>
+    <string name="title_activity_native_login">NativeLoginActivity</string>
+    <string name="title_activity_native_facebook_permissions_update">
+        NativeFacebookPermissionsUpdate
+    </string>
+    <string name="Update_permissions">Include Publish Permissions</string>
+
+    
+
+</resources>
