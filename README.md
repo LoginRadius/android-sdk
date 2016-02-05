@@ -1,6 +1,6 @@
 
 
-- # Android-Social-sdk
+# LoginRadius Android SDK
 
 This repository contains the Framework and Demo of LoginRadius SDK.
 
