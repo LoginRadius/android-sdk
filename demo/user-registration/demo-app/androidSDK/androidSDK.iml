@@ -116,8 +116,8 @@
     <orderEntry type="library" exported="" name="play-services-plus-7.3.0" level="project" />
     <orderEntry type="library" exported="" name="twitter4j-core-3.0.4" level="project" />
     <orderEntry type="library" exported="" name="play-services-wearable-7.3.0" level="project" />
-    <orderEntry type="library" exported="" name="android-async-http-1.4.3" level="project" />
     <orderEntry type="library" exported="" name="play-services-appstate-7.3.0" level="project" />
+    <orderEntry type="library" exported="" name="android-async-http-1.4.8" level="project" />
     <orderEntry type="library" exported="" name="play-services-games-7.3.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-identity-7.3.0" level="project" />
     <orderEntry type="module" module-name="facebook" exported="" />
