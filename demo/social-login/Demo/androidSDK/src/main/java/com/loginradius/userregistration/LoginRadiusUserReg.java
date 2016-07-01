@@ -74,8 +74,8 @@ public abstract class LoginRadiusUserReg extends WebView {
     public LoginRadiusUserReg(Context context, Option options, Callback callback)
             throws RegistrationException{
 
-        this(context, new ViewGroup.LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT), 100, options,callback);
+        this(context, new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT), 100, options,callback);
     }
 
     /**

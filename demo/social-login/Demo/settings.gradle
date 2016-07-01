@@ -1,1 +1,1 @@
-include ':loginRadiusDemoApp', ':androidSDK', ':facebook'
+include ':loginRadiusDemoApp', ':androidSDK'
