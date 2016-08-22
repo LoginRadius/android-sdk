@@ -107,10 +107,10 @@ public class lrLoginManager {
 	 * @param provider provider by which the login process was started
     */
 	public static void performWebLogin(final Activity activity, Provider provider) {
-		Intent i = new Intent(activity, WebLogin.class);
-		i.putExtra(WebLogin.KEY_URL, provider.Endpoint + MOBILE_EXT);
-		i.putExtra(WebLogin.KEY_PROVIDER, provider.Name);
-		activity.startActivity(i);
+	//	Intent i = new Intent(activity, WebLogin.class);
+	//	i.putExtra(WebLogin.KEY_URL, provider.Endpoint + MOBILE_EXT);
+	//	i.putExtra(WebLogin.KEY_PROVIDER, provider.Name);
+	//	activity.startActivity(i);
 	}
 
 	private static void HandleFacebookToken()
