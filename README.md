@@ -11,17 +11,19 @@ LoginRadius helps businesses boost user engagement on their web/mobile platform,
 Please visit [here](http://www.loginradius.com/) for more information.
 
 
-   
+
 #### There are two projects in the library:
-a. app project - This is the demo application.    
+a. demo - This is the demo application.    
 b. androidSDK -This is the LoginRadius SDK
 
 
-##### app project
 
-1.Put the value according to your requirement in string.xml
+##### demo
 
-#### string.xml
+1)SocialLogin With UserRegistration Demo
+
+a.Put the value according to your requirement in string.xml
+
 
 ```xml
     <string name="app_name">LoginRadius</string>
@@ -39,32 +41,43 @@ b. androidSDK -This is the LoginRadius SDK
     <string name="ApplicationActivityId">"your applicationId"</string>
 ```
 
-
-2.Bind the OnClick listener to those buttons in the OnCreate method and get value of string.xml and put in Intent.
+b.Bind the OnClick listener to those buttons in the OnCreate method and get value of string.xml and put in Intent.
 
 #### MainActivity.java
 
 ```java
-
-Button loginBt, signinBt, socialBt, forgetBt;
+ Button loginBt, signinBt, socialBt, forgetBt;
     Button.OnClickListener listener;
-    
-    
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
+
+        /*   Apikey ,Sitename and applicationid is necessary for implementing Loginradius SDK
+         *  */
         final String apiKey = getString(R.string.loginradius_api_key);
         final String siteName = getString(R.string.loginradius_site_name);
-        final String ApplicationActivityId = getString(R.string.ApplicationActivityId);
+
+
+        /*  if you want native facebook login then pass app_id in string */
         final String facebook_native = getString(R.string.facebook_native);
         final String google_native = getString(R.string.google_native);
-        final String recaptchakey = getString(R.string.recaptchakey);
+
+        /*
+           optional for user recaptchakey,promptpassword,messagelogin,messageforgotpass
+         */
+        final String V2RecaptchaSiteKey = getString(R.string.V2RecaptchaSiteKey);
         final String promptpassword = getString(R.string.promptPasswordOnSocialLogin);
         final String messagelogin = getString(R.string.Toast_message_for_login);
         final String messageforgotpass = getString(R.string.Toast_message_for_ForgotPassword);
-    
-     listener = new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplication(), WebviewActivity.class);
 
-                intent.putExtra("recaptchakey", recaptchakey);
+        listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,WebviewActivity.class);
+                intent.putExtra("V2RecaptchaSiteKey", V2RecaptchaSiteKey);
                 intent.putExtra("keyname", apiKey);
                 intent.putExtra("sitename", siteName);
                 intent.putExtra("promptpassowrd", promptpassword);
@@ -72,7 +85,7 @@ Button loginBt, signinBt, socialBt, forgetBt;
                 intent.putExtra("google_native", google_native);
                 intent.putExtra("toast_message_for_login", messagelogin);
                 intent.putExtra("toast_message_for_ForgotPassword", messageforgotpass);
-                intent.putExtra("ApplicationActivityId", ApplicationActivityId);
+
 
                 switch (v.getId()) {
                     case R.id.login_bt:
@@ -86,12 +99,12 @@ Button loginBt, signinBt, socialBt, forgetBt;
                         intent.putExtra("action", "SOCIAL");
                         break;
                     case R.id.forget_bt:
-                        intent.putExtra("action", "FORGET");
+                        intent.putExtra("action", "FORGOT");
                         break;
                     default:
                         return;
                 }
-                startActivity(intent);
+                startActivityForResult(intent, 2);
             }
         };
         initWidget();
@@ -112,9 +125,29 @@ Button loginBt, signinBt, socialBt, forgetBt;
 
 
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode==2){
+        if(data!=null){
+            String accessToken=data.getStringExtra("accesstoken");
+            String provider=data.getStringExtra("provider");
+            Intent intent = new Intent(getApplication(), UserProfileActivity.class);
+            intent.putExtra("accesstoken", accessToken);
+            intent.putExtra("provider", provider);
+            startActivity(intent);
+         }
+        }
+    }
+    
+    
 ```
-3.After getting token, you can easily call loginradius api in this demo we call UserData, Status, Contacts API in userProfileactivity and get all data..
+    
+c.After getting token, you can easily call loginradius api in this demo we call UserData, Status, Contacts API in userProfileactivity and get all data..
 ####UserProfileActivity
+
 
 ```java
 
@@ -254,8 +287,258 @@ Button loginBt, signinBt, socialBt, forgetBt;
 ```
 
 
+2)SocialLogin Demo
+
+a.Pass LoginRadius API key and Bind the OnClick listener to those buttons in the OnCreate method.
+
+#### MainActivity.java
+
+```java
+
+    private Button btnLogin;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        btnLogin = (Button) findViewById(R.id.btnLogin);
+        lrLoginManager.getAppConfiguration("<api_key>",
+                new AsyncHandler<AppInformation>() {
+                    @Override
+                    public void onSuccess(AppInformation appInfo) {
+                        setupView(appInfo);
+                    }
+
+                    @Override
+                    public void onFailure(Throwable error,
+                                          String errorCode) {
+                    }
+                });
+    }
 
 
+    private void setupView(final AppInformation appInfo) {
+
+        Button btnLogin = (Button) findViewById(R.id.btnLogin);
 
 
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+
+                /** Perform login through Yahoo **/
+                lrLoginManager.performLogin(MainActivity.this,
+                        Provider.findByName("facebook", appInfo.Providers),
+                        new AsyncHandler<lrAccessToken>() {
+                            @Override
+                            public void onSuccess(lrAccessToken token) {
+                                Intent intent = new Intent(getApplication(), UserProfileActivity.class);
+                                intent.putExtra("accesstoken", token.access_token);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onFailure(Throwable error, String errorcode) {
+                            }
+                        });
+
+            }
+        });
+        btnLogin.setEnabled(true);
+
+    }
+
+```
+
+b.After getting token, you can easily call loginradius api in this demo we call UserData, Status, Contacts API in userProfileactivity and get all data..
+####UserProfileActivity
+
+```java
+
+ private List<String> info;
+    private ArrayAdapter<String> adapter;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        setContentView(R.layout.activity_user_profile);
+        if(intent != null) {
+            String token = intent.getStringExtra("accesstoken");
+            Log.d("token",token);
+            ListView listview = (ListView) findViewById(R.id.listView);
+            info = new ArrayList<>();
+            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, info);
+            listview.setAdapter(adapter);
+
+            lrAccessToken accessToken = new lrAccessToken();
+            accessToken.access_token = token;
+            accessToken.provider = "facebook"; // just for demo
+            getUserData(accessToken);
+            getStatus(accessToken);
+            getContacts(accessToken);
+        }
+
+    }
+    /** Get Profile Info **/
+    private void getUserData(lrAccessToken accessToken) {
+        UserProfileAPI userAPI = new UserProfileAPI();
+        userAPI.getResponse(accessToken, new AsyncHandler<LoginRadiusUltimateUserProfile>() {
+            @Override
+            public void onSuccess(LoginRadiusUltimateUserProfile userProfile) {
+                List<String> result = new ArrayList<String>();
+                /**
+                 * While we could easily pull any desired fields, we can also just grab every
+                 * fields that is not null. Many fields are not strings, but you can extract
+                 * their information manually.
+                 */
+                try {
+                    for (Field field : userProfile.getClass().getDeclaredFields()) {
+                        field.setAccessible(true);
+                        Object value = field.get(userProfile);
+                        if (value != null && value instanceof String) {
+                            result.add(field.getName() + ": " + value);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                info.addAll(result);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable error, String errorcode) {
+                if (errorcode.equals("lr_API_NOT_SUPPORTED")) {
+                    info.add("UserProfileAPI is not supported by this provider.");
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+    /**
+     * Some APIs are Provider-specific (such as StatusAPI). If the API is not available
+     * for the provider, it will just return 'onFailure' with an errorcode.
+     */
+    private void getStatus(lrAccessToken token) {
+        StatusAPI statusAPI = new StatusAPI();
+        statusAPI.getResponse(token, new AsyncHandler<LoginRadiusStatus[]>() {
+            @Override
+            public void onSuccess(LoginRadiusStatus[] data) {
+                if (data.length == 0 || data[0] == null) return;
+                info.add("Recent status: " + data[0]);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Throwable error, String errorcode) {
+                if (errorcode.equals("lr_API_NOT_SUPPORTED")) {
+                    info.add("StatusAPI is not supported by this provider.");
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+    }
+    /**
+     * Load ten contacts into list
+     * @param token
+     */
+    private void getContacts(lrAccessToken token) {
+
+        ContactAPI contactAPI = new ContactAPI();
+        contactAPI.getResponse(token, new AsyncHandler<LoginRadiusContactCursorResponse>() {
+            @Override
+            public void onSuccess(LoginRadiusContactCursorResponse data) {
+                int index=0;
+                for (LoginRadiusContact c : data.Data) {
+                    if (index>=10) break;
+                    info.add("Contact " + index + ": " + c.name);
+                    index++;
+                }
+                adapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onFailure(Throwable error, String errorcode) {
+                if (errorcode.equals("lr_API_NOT_SUPPORTED")) {
+                    info.add("ContactAPI is not supported by this provider.");
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+    
+```
+
+c.if you want nativelogin for facebook and google please follow some steps.
+
+#### MainActivity.java
+
+```java
+
+ private Button btnLogin;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        btnLogin = (Button) findViewById(R.id.btnLogin);
+         btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplication(), FacebookNativeActivity.class);
+                intent.putExtra("nativelogin", "true");
+                intent.putExtra("keyName", "<your loginradius api key>");
+                startActivityForResult(intent, 2);
+                }
+        });
+    }
+   
+ @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode==2){
+            if(data!=null){
+                String accessToken=data.getStringExtra("accesstoken");
+                String provider=data.getStringExtra("provider");
+                Intent intent = new Intent(getApplication(), UserProfileActivity.class);
+                intent.putExtra("accesstoken", accessToken);
+                startActivity(intent);
+            }
+        }
+    }
+
+```
+
+
+1)After adding in MainActivity you must be define your facebook app id in string.xml
+string.xml
+```xml
+ 
+ <string name="app_id"> your facebook app id </string>
+ 
+ 
+```
+
+2)Add the following activity definitions, meta data, and permissions to your Android Manifest inside the application tag:?
+
+AndroidManifest.xml
+```xml
+
+ <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id" />
+
+        <activity android:name="com.loginradius.sdk.ui.GoogleSSO" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+ ```

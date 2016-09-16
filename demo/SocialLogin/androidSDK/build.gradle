@@ -1,0 +1,43 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+   useLibrary  'org.apache.http.legacy'
+
+
+
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 23
+
+
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+dependencies {
+    compile('com.facebook.android:facebook-android-sdk:4.+') {
+        exclude module: 'support-v4'
+    }
+    compile 'com.squareup.picasso:picasso:2.3.2'
+    compile files('libs/android-async-http-1.4.8.jar')
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile files('libs/sendgrid-0.1.2-jar.jar')
+    compile files('libs/universal-image-loader-1.9.5.jar')
+    compile 'com.android.support:design:23.1.1'
+    compile 'com.google.android.gms:play-services:9.0.1'
+}
