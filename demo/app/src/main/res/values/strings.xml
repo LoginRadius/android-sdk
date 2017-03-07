@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Demo</string>
+    <string name="api_key">your loginradius api key</string>
+    <string name="site_name">your loginradius sitename</string>
+    <string name="verification_url">https://auth.lrcontent.com/mobile/verification/index.html</string>
+    <string name="reset_password_url">your-resetpasswordurl</string>
+    <string name="email_template">your-email-Template</string>
+    <string name="app_id">your facebook app_id</string>
+    <string name="facebook_native">false</string>
+    <string name="google_native">false</string>
+    <string name="is_mobile">false</string>
+    <string name="username_login">false</string>
+    <string name="sms_template">your-sms-template</string>
+    <string name="prompt_password_on_social_login">false</string>
+
+
+</resources>
