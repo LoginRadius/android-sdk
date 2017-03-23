@@ -8,7 +8,6 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class CreateCustomObject {
-
     @SerializedName("Id")
     @Expose
     private String id;
@@ -29,7 +28,7 @@ public class CreateCustomObject {
     private String uid;
     @SerializedName("CustomObject")
     @Expose
-    private CustomObject customObject;
+    private Object customObject;
 
     /**
      *
@@ -144,7 +143,7 @@ public class CreateCustomObject {
      * @return
      * The customObject
      */
-    public CustomObject getCustomObject() {
+    public Object getCustomObject() {
         return customObject;
     }
 
@@ -153,7 +152,7 @@ public class CreateCustomObject {
      * @param customObject
      * The CustomObject
      */
-    public void setCustomObject(CustomObject customObject) {
+    public void setCustomObject(Object customObject) {
         this.customObject = customObject;
     }
 

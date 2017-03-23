@@ -48,14 +48,15 @@ import com.loginradius.androidsdk.helper.Iso2Phone;
 import com.loginradius.androidsdk.resource.CustomizeLanguageResponse;
 import com.loginradius.androidsdk.resource.DefaultLanguage;
 import com.loginradius.androidsdk.resource.Endpoint;
-import com.loginradius.androidsdk.response.AppInformation;
-import com.loginradius.androidsdk.response.Provider;
+
 import com.loginradius.androidsdk.response.login.LoginParams;
 import com.loginradius.androidsdk.response.lrAccessToken;
 import com.loginradius.androidsdk.helper.ProviderPermissions;
 import com.loginradius.androidsdk.helper.lrLoginManager;
 import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.response.register.RegisterResponse;
+import com.loginradius.androidsdk.response.socialinterface.Provider;
+import com.loginradius.androidsdk.response.socialinterface.SocialInterface;
 import com.loginradius.androidsdk.response.traditionalinterface.UserRegisteration;
 import com.loginradius.androidsdk.response.userprofile.LoginRadiusUltimateUserProfile;
 
@@ -73,6 +74,7 @@ public class GoogleNativeActivity extends AppCompatActivity implements AdapterVi
     LinearLayout linlaHeaderProgress;
     CallbackManager callManager;
     ProgressBar bar;
+    private List<Provider> providers;
     private static final String LOG_TAG = "CheckNetworkStatus";
     private NetworkChangeReceiver receiver;
     private boolean isConnected = false;
@@ -119,15 +121,17 @@ public class GoogleNativeActivity extends AppCompatActivity implements AdapterVi
         String apiKey= dataapi;
         ProviderPermissions.resetPermissions();
         lrLoginManager.getNativeAppConfiguration(apiKey, callManager,
-                new AsyncHandler<AppInformation>() {
+                new AsyncHandler<SocialInterface>() {
                     @Override
-                    public void onSuccess(AppInformation appInfo) {
-                        for (Provider p : appInfo.Providers) {
-                            if (p.Name.equalsIgnoreCase("google")) {
-                                showdialog(p);
+                    public void onSuccess(SocialInterface socialInterface) {
+                        providers = socialInterface.getProviders();
+                        for (Provider provider : providers) {
+                            if (provider.getName().equalsIgnoreCase("google")) {
+                                showdialog(provider);
                                 break;
                             }
                         }
+
                     }
 
                     @Override

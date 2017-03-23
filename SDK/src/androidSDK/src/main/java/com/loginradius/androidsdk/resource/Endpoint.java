@@ -39,7 +39,6 @@ public class Endpoint
 	private static final String API_V2_STATUS = "/api/v2/status";
 	private static final String API_V2_USERPROFILE = "/identity/v2/auth/account";
 	private static final String API_V2_VIDEO = "/api/v2/video";
-	private static final String FACEBOOK_PERMISSION = "/api/v2/app/jsinterface";
 	private static final String API_V2_ACCESS_TOKEN_FB = "/api/v2/access_token/facebook";
 	private static final String API_V2_ACCESS_TOKEN_GOOGLE = "/api/v2/access_token/google";
 	public static final String SHAREDPREFERENCEFILEKEY = "com.loginradius.loginradiusraas.PREFERENCE_FILE_KEY";
@@ -151,9 +150,7 @@ public class Endpoint
 		return LOGINRADIUS_API_ROOT+LOGINRADIUSU_SocialIdentities;
 	}
 
-	public static String getFacebookPermissionfornative() {
-		return LOGINRADIUS_API_ROOT+FACEBOOK_PERMISSION;
-	}
+
 
 	public static String getFacebookToken_Native() {
 		return LOGINRADIUS_API_ROOT+API_V2_ACCESS_TOKEN_FB;

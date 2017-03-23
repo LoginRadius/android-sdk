@@ -28,6 +28,7 @@ import java.util.List;
 
 import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.activity.WebViewActivity;
+
 import com.loginradius.androidsdk.response.login.LoginParams;
 import com.loginradius.androidsdk.response.phone.PhoneResponse;
 import com.loginradius.androidsdk.response.register.DeleteResponse;
@@ -171,6 +172,7 @@ public class ProfileActivity extends AppCompatActivity {
             accessToken.provider = provider;
             accessToken.apikey=apiKey;
             getUserData(accessToken);
+
 
             //  getStatus(accessToken);
             //   getContacts(accessToken);
@@ -348,6 +350,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+
+
+
     private void UpdateProfile(lrAccessToken token) {
         String lrapikey = getString(R.string.api_key);                 //get loginradius api key from string.xml
         String verificationUrl = getString(R.string.verification_url);   //get verificationUrl from string.xml(optional)
@@ -512,6 +517,12 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
+
 
 
     private void CheckIdentites(final lrAccessToken token){

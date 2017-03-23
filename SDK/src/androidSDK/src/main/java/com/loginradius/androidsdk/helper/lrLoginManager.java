@@ -21,9 +21,11 @@ import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.handler.JsonDeserializer;
 import com.loginradius.androidsdk.handler.RestRequest;
 import com.loginradius.androidsdk.resource.Endpoint;
-import com.loginradius.androidsdk.response.AppInformation;
-import com.loginradius.androidsdk.response.Provider;
+
+
 import com.loginradius.androidsdk.response.lrAccessToken;
+import com.loginradius.androidsdk.response.socialinterface.Provider;
+import com.loginradius.androidsdk.response.socialinterface.SocialInterface;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,7 +59,7 @@ public class lrLoginManager {
 	 * @param key	apikey KEY given by the Loginradius
 	 * @param asyncHandler	callback returning AppInformation
 	 */
-	public static void getAppConfiguration(String key, final AsyncHandler<AppInformation> asyncHandler) {
+	public static void getAppConfiguration(String key, final AsyncHandler<SocialInterface> asyncHandler) {
 		lrLoginManager.AKey = key;
 		restHandler(key, asyncHandler);
 	}
@@ -67,7 +69,7 @@ public class lrLoginManager {
 	 * @param callback callback manager for Facebook Native Login
 	 * @param asyncHandler	callback returning AppInformation
 	 */
-	public static void getNativeAppConfiguration(String key, CallbackManager callback, final AsyncHandler<AppInformation> asyncHandler) {
+	public static void getNativeAppConfiguration(String key, CallbackManager callback, final AsyncHandler<SocialInterface> asyncHandler) {
 		lrLoginManager.AKey = key;
 		lrCallbackManager=callback;
 		restHandler(key, asyncHandler);
@@ -81,12 +83,12 @@ public class lrLoginManager {
 	 */
 	public static void performLogin(final Activity activity, Provider provider, AsyncHandler<lrAccessToken> asyncHandler) {
 		lrLoginManager.asyncHandler = asyncHandler;
-		if (provider.Name.equalsIgnoreCase("facebook") && lrLoginManager.nativeLogin) {
+		if (provider.getName().equalsIgnoreCase("facebook") && lrLoginManager.nativeLogin) {
 			/** FACEBOOK SESSION **/
 			OpenFacebookSession(activity);
 			/**openActiveSession(activity, true);**/
 		}
-		else if (provider.Name.equalsIgnoreCase("google") && lrLoginManager.nativeLogin) {
+		else if (provider.getName().equalsIgnoreCase("google") && lrLoginManager.nativeLogin) {
 			/** Google Activity **/
 			activity.startActivity(new Intent(activity, GoogleSSO.class));
 		}
@@ -216,18 +218,22 @@ public class lrLoginManager {
 	 * @param key	API-KEY provided by the loginradius
 	 * @param asyncHandler	callback handler
 	 */
-	private static void restHandler(String key, final AsyncHandler<AppInformation> asyncHandler) {
+	private static void restHandler(String key, final AsyncHandler<SocialInterface> asyncHandler) {
 
 		// Format key into map
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("apikey", key);
 
 		// Send request to LoginRadius server
-		RestRequest.get(Endpoint.getFacebookPermissionfornative(), params, new AsyncHandler<String>() {
+		RestRequest.get(Endpoint.getSocialInterfaceUrl(key), params, new AsyncHandler<String>() {
 			@Override
-			public void onSuccess(String data) {
-				AppInformation appInfo = JsonDeserializer.deserializeJson(data, AppInformation.class);
-				asyncHandler.onSuccess(appInfo);
+			public void onSuccess(String response) {
+
+				response=response.replace("loginRadiusAppJsonLoaded(","");
+				response=response.substring(0,response.length()-1);
+				SocialInterface socialInterface = JsonDeserializer.deserializeJson(response,SocialInterface.class);
+				asyncHandler.onSuccess(socialInterface);
+
 			}
 
 			@Override

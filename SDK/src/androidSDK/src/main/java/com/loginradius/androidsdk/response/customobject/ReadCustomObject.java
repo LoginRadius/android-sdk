@@ -14,7 +14,7 @@ public class ReadCustomObject {
 
     @SerializedName("data")
     @Expose
-    private List<Datum> data = new ArrayList<Datum>();
+    private List<CreateCustomObject> data = new ArrayList<CreateCustomObject>();
     @SerializedName("Count")
     @Expose
     private Integer count;
@@ -24,7 +24,7 @@ public class ReadCustomObject {
      * @return
      * The data
      */
-    public List<Datum> getData() {
+    public List<CreateCustomObject> getData() {
         return data;
     }
 
@@ -33,7 +33,7 @@ public class ReadCustomObject {
      * @param data
      * The data
      */
-    public void setData(List<Datum> data) {
+    public void setData(List<CreateCustomObject> data) {
         this.data = data;
     }
 

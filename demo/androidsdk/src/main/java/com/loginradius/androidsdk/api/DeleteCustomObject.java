@@ -29,7 +29,7 @@ public class DeleteCustomObject {
 
 
 
-        RestRequest.delete(null,Endpoint.getCustomObjectUrl()+"/"+value.objectRecordId,params,null,new AsyncHandler<String>()
+        RestRequest.delete(null,Endpoint.getCustomObjectUrl()+"/"+value.objectRecordId,params,"",new AsyncHandler<String>()
         {
             @Override
             public void onSuccess(String response) {

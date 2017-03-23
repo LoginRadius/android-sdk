@@ -4,6 +4,7 @@ import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.handler.JsonDeserializer;
 import com.loginradius.androidsdk.handler.RestRequest;
 import com.loginradius.androidsdk.resource.Endpoint;
+import com.loginradius.androidsdk.response.customobject.CreateCustomObject;
 import com.loginradius.androidsdk.response.customobject.ReadCustomObject;
 import com.loginradius.androidsdk.response.login.LoginParams;
 import com.loginradius.androidsdk.response.lrAccessToken;
@@ -17,7 +18,7 @@ import java.util.LinkedHashMap;
 
 public class ReadCustomObjectbyIdAPI {
 
-    public void getResponse(LoginParams value, lrAccessToken token, final AsyncHandler<ReadCustomObject> handler)
+    public void getResponse(LoginParams value, lrAccessToken token, final AsyncHandler<CreateCustomObject> handler)
     {
         HashMap<String,String> params = new LinkedHashMap<>();
         params.put("apikey", value.apikey);
@@ -32,7 +33,7 @@ public class ReadCustomObjectbyIdAPI {
             @Override
             public void onSuccess(String response) {
 
-                ReadCustomObject readCustomObject = JsonDeserializer.deserializeJson(response,ReadCustomObject.class);
+                CreateCustomObject readCustomObject = JsonDeserializer.deserializeJson(response,CreateCustomObject.class);
                 handler.onSuccess(readCustomObject);
             }
 
