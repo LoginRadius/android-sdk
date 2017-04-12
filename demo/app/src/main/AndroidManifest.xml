@@ -46,9 +46,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ProfileActivity" />
-
-
-
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".ForgotPasswordActivity"></activity>
     </application>
 
 </manifest>

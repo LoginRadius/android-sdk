@@ -1,63 +1,9 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:id="@+id/coordinatorLayout">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:id="@+id/raas"
-                android:visibility="gone"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textSize="16dp"
-                    android:gravity="center_horizontal"
-                    android:text="Please Fill all field to complete the\n registration process"
-                    android:layout_marginBottom="25dp"/>
-
-                <include android:id="@+id/myid1"
-                    layout="@layout/registeredittext" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:id="@+id/rassbutton"
-                android:visibility="gone"
-                android:orientation="vertical">
-
-                <Button android:id="@+id/btn_signup"
-                    android:layout_width="fill_parent"
-                    android:layout_height="40dp"
-                    android:text="Register"
-                    android:textAllCaps="false"
-                    android:textSize="20dp"
-                    android:background="@color/actionButtoncolor"
-                    android:layout_marginTop="25dp"
-                    android:textColor="@android:color/white"/>
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -71,4 +17,4 @@
             />
     </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

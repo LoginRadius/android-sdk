@@ -5,19 +5,29 @@ package com.loginradius.androidsdk.response.login;
  */
 public class LoginParams {
 
-
-        public String email;
-       public String phone;
-    public String username ;
-        //public Provider provider;
-        public String password;
-        public String apikey;
+    public String sott;
+    public String email;
+    public String phone;
+    public String username;
+    //public Provider provider;
+    public String otp;
+    public String password;
+    public String apikey;
     public String emailTemplate;
+    public String resetPasswordUrl;
+    public String smsTemplate;
     public String loginUrl;
     public String verificationUrl;
     public String objectname;
     public String objectRecordId;
 
+    public String getSott() {
+        return sott;
+    }
+
+    public void setSott(String sott) {
+        this.sott = sott;
+    }
 
     public String getEmail() {
         return email;
@@ -36,11 +46,11 @@ public class LoginParams {
     }
 
     public String getUsername() {
-        return username ;
+        return username;
     }
 
     public void setUsername(String username) {
-        this.username  = username;
+        this.username = username;
     }
 
     public String getPassword() {
@@ -60,6 +70,17 @@ public class LoginParams {
 
     }
 
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+
+    }
+
+
     public String getEmailTemplate() {
         return emailTemplate;
     }
@@ -69,6 +90,24 @@ public class LoginParams {
 
     }
 
+    public String getResetPasswordUrl() {
+        return resetPasswordUrl;
+    }
+
+    public void setResetPasswordUrl(String resetPasswordUrl) {
+        this.resetPasswordUrl = resetPasswordUrl;
+
+    }
+
+
+    public String getSmsTemplate() {
+        return smsTemplate;
+    }
+
+    public void setSmsTemplate(String smsTemplate) {
+        this.smsTemplate = smsTemplate;
+
+    }
 
 
     public String getLoginUrl() {
@@ -96,7 +135,6 @@ public class LoginParams {
     public void setObjectname(String objectname) {
         this.objectname = objectname;
     }
-
 
 
     public String getObjectRecordId() {

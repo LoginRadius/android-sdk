@@ -177,7 +177,7 @@ public class ProfileActivity extends AppCompatActivity {
             //  getStatus(accessToken);
             //   getContacts(accessToken);
             CheckIdentites(accessToken);
-            final String is_mobile = getString(R.string.is_mobile);
+            final String is_mobile = "true";
             if (is_mobile!=null && is_mobile.equals("true")) {
                 liemail.setVisibility(View.GONE);
             }
@@ -372,6 +372,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (registerResponse.getIsPosted()) {
                     Toast.makeText(ProfileActivity.this, "You have successfully Update your Profile", Toast.LENGTH_LONG).show();
                 }
+
             }
             @Override
             public void onFailure(Throwable error, String errorcode) {
@@ -668,10 +669,8 @@ public class ProfileActivity extends AppCompatActivity {
                         intent.putExtra("sitename", getString(R.string.site_name));
                         intent.putExtra("verificationUrl", getString(R.string.verification_url));
                         intent.putExtra("emailTemplate", getString(R.string.email_template));
-                        intent.putExtra("is_mobile", getString(R.string.is_mobile));
                         intent.putExtra("smsTemplate", getString(R.string.sms_template));
-                        intent.putExtra("promptPasswordOnSocialLogin", getString(R.string.prompt_password_on_social_login));
-                        intent.putExtra("preaction", "Linking");
+
                         switch (provider.getName()){
                             case "Facebook":
                                 if (vFacebook!=null &&vFacebook.equals("VISIBLE")) {

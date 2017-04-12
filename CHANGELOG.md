@@ -2,17 +2,32 @@
 
 
 
+### Version 3.2.0
+Released on **April 12,  2017**
+
+
+##### Enhancements
+  
+  - Easy to Customization.
+  - Tiny size overhead to your application, below 200kb for everything.
+  - Improved native login performance for better native user experience.
+  - Significantly improved code performance.
+
+
+
 ### Version 3.1.0
 Released on **March 23,  2017**
 
 
 ##### Enhancements
   
-  - Added CustomeObject API,Custom objects are custom database tables that allow you to store cistom data points, like payment info, activity etc.
+  - Added CustomeObject API,Custom objects are custom database tables that allow you to store information unique to your organization.
   - Improved native login performance for Better Native User Experience.
   - Significantly improved code performance.
 
 
+
+  
 ### Version 3.0.0
 Released on **March 7,  2017**
 

@@ -260,7 +260,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/facebookcolor"
-                        android:src="@drawable/facebook"/>
+                        />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -269,7 +269,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/googlecolor"
-                        android:src="@drawable/google"/>
+                        />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -278,7 +278,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/twittercolor"
-                        android:src="@drawable/twitter"/>
+                       />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -287,7 +287,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/linkedincolor"
-                        android:src="@drawable/linkedin"/>
+                       />
 
                     <ImageButton
                         android:layout_width="wrap_content"
@@ -297,7 +297,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/yahoocolor"
-                        android:src="@drawable/yahoo"/>
+                       />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -306,7 +306,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/instagramcolor"
-                        android:src="@drawable/instagram"/>
+                        />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -315,7 +315,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/amazoncolor"
-                        android:src="@drawable/amazon"/>
+                       />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -329,7 +329,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/livecolor"
-                        android:src="@drawable/live"/>
+                       />
 
                     <ImageButton
                         android:layout_width="wrap_content"
@@ -339,7 +339,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/pinterestcolor"
-                        android:src="@drawable/pinterest"/>
+                       />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -348,7 +348,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/vkontaktecolor"
-                        android:src="@drawable/vkontakte"/>
+                       />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -357,7 +357,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/disquscolor"
-                        android:src="@drawable/disqus"/>
+                      />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -366,7 +366,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/aolcolor"
-                        android:src="@drawable/aol"/>
+                       />
 
 
                     <ImageButton
@@ -377,7 +377,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/mixicolor"
-                        android:src="@drawable/mixi"/>
+                        />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -386,7 +386,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/steamcommunitycolor"
-                        android:src="@drawable/steamcommunity"/>
+                      />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -400,7 +400,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/hyvescolor"
-                        android:src="@drawable/hyves"/>
+                       />
 
                     <ImageButton
                         android:layout_width="wrap_content"
@@ -410,7 +410,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/livejournalcolor"
-                        android:src="@drawable/livejournal"/>
+                       />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -419,7 +419,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/verisigncolor"
-                        android:src="@drawable/verisign"/>
+                     />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -428,7 +428,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/virgiliocolor"
-                        android:src="@drawable/virgilio"/>
+                      />
 
                     <ImageButton
                         android:layout_width="wrap_content"
@@ -438,7 +438,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/foursquarecolor"
-                        android:src="@drawable/foursquare"/>
+                       />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -447,7 +447,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/githubcolor"
-                        android:src="@drawable/github"/>
+                      />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -456,7 +456,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/openidcolor"
-                        android:src="@drawable/openid"/>
+                      />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -471,7 +471,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/renrencolor"
-                        android:src="@drawable/renren"/>
+                       />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -480,7 +480,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/kaixincolor"
-                        android:src="@drawable/kaixin"/>
+                        />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -489,7 +489,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/qqcolor"
-                        android:src="@drawable/qq"/>
+                       />
 
                     <ImageButton
                         android:layout_width="wrap_content"
@@ -499,7 +499,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/salesforcecolor"
-                        android:src="@drawable/salesforce"/>
+                       />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -508,7 +508,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/odnoklassnikicolor"
-                        android:src="@drawable/odnoklassniki"/>
+                       />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -517,7 +517,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/paypalcolor"
-                        android:src="@drawable/paypal"/>
+                      />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -526,7 +526,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/sinaweibocolor"
-                        android:src="@drawable/sinaweibo"/>
+                      />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -540,7 +540,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/wordpresscolor"
-                        android:src="@drawable/wordpress"/>
+                       />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -549,7 +549,7 @@
                         android:layout_marginBottom="10dp"
                         android:layout_marginLeft="15dp"
                         android:background="@color/mailrucolor"
-                        android:src="@drawable/mailru"/>
+                      />
 
                     <ImageButton
                         android:layout_width="wrap_content"
@@ -559,7 +559,7 @@
                         android:layout_marginBottom="10dp"
                         android:layout_marginLeft="15dp"
                         android:background="@color/xingcolor"
-                        android:src="@drawable/xing"/>
+                     />
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -568,7 +568,7 @@
                         android:layout_marginBottom="10dp"
                         android:layout_marginLeft="15dp"
                         android:background="@color/linecolor"
-                        android:src="@drawable/line"/>
+                     />
 
                     <ImageButton
                         android:layout_width="wrap_content"
@@ -578,7 +578,7 @@
                         android:layout_marginLeft="15dp"
                         android:visibility="gone"
                         android:background="@color/stackexchangecolor"
-                        android:src="@drawable/stackexchange"/>
+                     />
                 </LinearLayout>
 
 

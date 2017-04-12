@@ -19,18 +19,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
         <activity android:name=".activity.FacebookNativeActivity" />
-        <activity android:name=".activity.ForgotPasswordActivity" />
         <activity android:name=".activity.GoogleNativeActivity" />
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.OtpVerificationActivity" />
-        <activity android:name=".activity.RegisterActivity" />
-        <activity android:name=".activity.SocialLoginActivity" />
         <activity android:name=".activity.WebViewActivity"></activity>
-        <receiver android:name=".response.phone.IncomingSms">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>
