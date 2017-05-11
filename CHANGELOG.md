@@ -2,6 +2,35 @@
 
 
 
+### Version 3.2.3
+Released on **May 11,  2017**
+
+
+##### Enhancements
+  
+  - Added new fields in APIs response, Unverified email ids in UserProfile and Image in PhotoAPI.
+  - Added email prompt Auto login APIs.
+  - Significantly improved code performance.
+
+##### Bug Fixes
+
+  - Fixed instagram login bug.
+
+
+
+### Version 3.2.2
+Released on **April 27,  2017**
+
+
+##### Enhancements
+  
+  - Reduce Number of library From SDK.
+  - Using upstream HttpClient of version 4.3.6 instead of Android provided DefaultHttpClient.
+  - Significantly improved code performance.
+
+
+
+
 ### Version 3.2.0
 Released on **April 12,  2017**
 
@@ -10,7 +39,7 @@ Released on **April 12,  2017**
   
   - Easy to Customization.
   - Tiny size overhead to your application, below 200kb for everything.
-  - Improved native login performance for better native user experience.
+  - Improved native login performance for Better Native User Experience.
   - Significantly improved code performance.
 
 
@@ -74,7 +103,7 @@ Released on **July 12,  2016**
   - Update Facebook native login handle null email condition through hosted page.
   
 ##### Bug Fixes
-- Handled social ID provider Empty email address scenario. 
+  - Handled social ID provider Empty email address scenario. 
 
 
  

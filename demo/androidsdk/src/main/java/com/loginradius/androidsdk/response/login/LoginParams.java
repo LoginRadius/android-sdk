@@ -18,6 +18,11 @@ public class LoginParams {
     public String smsTemplate;
     public String loginUrl;
     public String verificationUrl;
+    public String clientGuid;
+    public String autoLoginEmailTemplate;
+    public String welcomeEmailTemplate;
+
+
     public String objectname;
     public String objectRecordId;
 
@@ -145,5 +150,32 @@ public class LoginParams {
         this.objectRecordId = objectRecordId;
     }
 
+
+
+    public String getClientGuid() {
+        return clientGuid;
+    }
+
+    public void setClientGuid(String clientGuid) {
+        this.clientGuid = clientGuid;
+    }
+
+
+    public String getAutoLoginEmailTemplate() {
+        return autoLoginEmailTemplate;
+    }
+
+    public void setAutoLoginEmailTemplate(String autoLoginEmailTemplate) {
+        this.autoLoginEmailTemplate = autoLoginEmailTemplate;
+    }
+
+
+    public String getWelcomeEmailTemplate() {
+        return welcomeEmailTemplate ;
+    }
+
+    public void setWelcomeEmailTemplate(String welcomeEmailTemplate ) {
+        this.welcomeEmailTemplate  = welcomeEmailTemplate ;
+    }
 
 }

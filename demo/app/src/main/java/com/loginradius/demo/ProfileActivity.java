@@ -251,7 +251,9 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginRadiusUltimateUserProfile userProfile) {
                 List<String> result = new ArrayList<String>();
-                String email = userProfile.Email.get(0).Value;
+                if (userProfile.Email!=null) {
+                     String email = userProfile.Email.get(0).Value;
+                }
                 String Uid = userProfile.getUid();
                 if (userProfile.getCustomFields() != null) {
                     LinkedTreeMap linkedMap = (LinkedTreeMap) userProfile.getCustomFields();
@@ -269,7 +271,7 @@ public class ProfileActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                info.add("Email: " + email);
+              //  info.add("Email: " + email);
                 info.add("UID: " + Uid);
                 info.addAll(result);
                 adapter.notifyDataSetChanged();

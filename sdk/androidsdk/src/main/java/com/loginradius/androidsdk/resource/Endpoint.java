@@ -43,6 +43,7 @@ public class Endpoint
 	private static final String API_V2_ACCESS_TOKEN_GOOGLE = "/api/v2/access_token/google";
 	public static final String SHAREDPREFERENCEFILEKEY = "com.loginradius.loginradiusraas.PREFERENCE_FILE_KEY";
 	public static final String webviewlogin=".hub.loginradius.com/RequestHandlor.aspx";
+	public static final String EmailPromptAutoLogin="identity/v2/auth/login/autologin";
 	/**
 	 * Creates url after appending LoginRadius api root url
 
@@ -148,6 +149,11 @@ public class Endpoint
 
 	public static String getSocialIdentities() {
 		return LOGINRADIUS_API_ROOT+LOGINRADIUSU_SocialIdentities;
+	}
+
+
+	public static String getEmailPromptAutoLogin () {
+		return LOGINRADIUS_API_ROOT+EmailPromptAutoLogin;
 	}
 
 

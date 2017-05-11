@@ -14,4 +14,4 @@ Please visit [here](http://www.loginradius.com/) for more information.
 
 #### There are two projects in the library:
 a. demo - This is the demo application.    
-b. androidSDK -This is the LoginRadius SDK
+b. androidSDK -This is the LoginRadius SDK.

@@ -244,7 +244,18 @@ public class LoginRadiusUltimateUserProfile
      public int PrivateGists;
       @SerializedName("Subscription")
      public LoginRadiusUserSubscription Subscription ;
-
+     @SerializedName("RegistrationProvider")
+     private Object registrationProvider;
+     @SerializedName("IsLoginLocked")
+     private Boolean isLoginLocked;
+     @SerializedName("LastLoginLocation")
+     private Object lastLoginLocation;
+     @SerializedName("RegistrationSource")
+     private Object registrationSource;
+     @SerializedName("IsCustomUid")
+     private Boolean isCustomUid;
+     @SerializedName("UnverifiedEmail")
+     private List<UnverifiedEmail> unverifiedEmail = null;
 
 
  /**
@@ -451,6 +462,54 @@ public class LoginRadiusUltimateUserProfile
 
  public void setPassword(Object password) {
   this.password = password;
+ }
+
+ public Object getRegistrationProvider() {
+  return registrationProvider;
+ }
+
+ public void setRegistrationProvider(Object registrationProvider) {
+  this.registrationProvider = registrationProvider;
+ }
+
+ public Boolean getIsLoginLocked() {
+  return isLoginLocked;
+ }
+
+ public void setIsLoginLocked(Boolean isLoginLocked) {
+  this.isLoginLocked = isLoginLocked;
+ }
+
+ public Object getLastLoginLocation() {
+  return lastLoginLocation;
+ }
+
+ public void setLastLoginLocation(Object lastLoginLocation) {
+  this.lastLoginLocation = lastLoginLocation;
+ }
+
+ public Object getRegistrationSource() {
+  return registrationSource;
+ }
+
+ public void setRegistrationSource(Object registrationSource) {
+  this.registrationSource = registrationSource;
+ }
+
+ public Boolean getIsCustomUid() {
+  return isCustomUid;
+ }
+
+ public void setIsCustomUid(Boolean isCustomUid) {
+  this.isCustomUid = isCustomUid;
+ }
+
+ public List<UnverifiedEmail> getUnverifiedEmail() {
+  return unverifiedEmail;
+ }
+
+ public void setUnverifiedEmail(List<UnverifiedEmail> unverifiedEmail) {
+  this.unverifiedEmail = unverifiedEmail;
  }
 
 }

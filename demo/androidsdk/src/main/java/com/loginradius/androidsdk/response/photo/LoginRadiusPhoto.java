@@ -2,25 +2,27 @@ package com.loginradius.androidsdk.response.photo;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class LoginRadiusPhoto
 {
-	@SerializedName("ID")
+	 @SerializedName("ID")
 	 public String ID;
-	@SerializedName("AlbumId")
+	 @SerializedName("AlbumId")
      public String AlbumId;
-	@SerializedName("OwnerId")
+	 @SerializedName("OwnerId")
      public String OwnerId;
-	@SerializedName("OwnerName")
+	 @SerializedName("OwnerName")
      public String OwnerName;
-	@SerializedName("Name")
+	 @SerializedName("Name")
      public String Name;
-	@SerializedName("DirectUrl")
+	 @SerializedName("DirectUrl")
      public String DirectUrl;
-	@SerializedName("Location")
+	 @SerializedName("Location")
      public String Location;
-	@SerializedName("Link")
+	 @SerializedName("Link")
      public String Link;
-	@SerializedName("Description")
+	 @SerializedName("Description")
      public String Description;
 	 @SerializedName("Height")
      public String Height;
@@ -30,4 +32,12 @@ public class LoginRadiusPhoto
      public String CreatedDate;
      @SerializedName("UpdatedDate")
      public String UpdatedDate;
+     @SerializedName("Images")
+     private List<Image> images = null;
+     public List<Image> getImages() {
+        return images;
+     }
+     public void setImages(List<Image> images) {
+        this.images = images;
+    }
 }

@@ -21,7 +21,7 @@ public class UserProfileAPI
 {
 
 
-    private static final String[] providers = {"facebook", "google", "twitter", "linkedin", "yahoo", "live",
+    private static final String[] providers = {"facebook", "google", "twitter", "instagram", "yahoo", "live",
 	   "persona", "wordpress", "vkontakte", "aol", "myopenid", "mixi", "steamcommunity", "hyves", "livejournal",
 	   "verisign", "virgilio", "orange", "github", "openid", "renren", "kaixin", "qq", "stackexchange","email","amazon","line","xing","paypal" };
    /**

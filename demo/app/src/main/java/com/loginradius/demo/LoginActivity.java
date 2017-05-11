@@ -20,10 +20,12 @@ import android.widget.Toast;
 
 import com.loginradius.androidsdk.activity.FacebookNativeActivity;
 import com.loginradius.androidsdk.activity.WebViewActivity;
+
 import com.loginradius.androidsdk.api.LoginAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.response.login.LoginData;
 import com.loginradius.androidsdk.response.login.LoginParams;
+
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -31,23 +33,23 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
-  String apikey,sitename,verificationUrl,emailTemplate;
+    String apikey, sitename, verificationUrl, emailTemplate;
     private EditText inputEmail, inputPassword;
     private TextInputLayout inputLayoutEmail, inputLayoutPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        verificationUrl=getString(R.string.verification_url);
-        emailTemplate=getString(R.string.email_template);
-        apikey=getString(R.string.api_key);
-        sitename=getString(R.string.site_name);
+        verificationUrl = getString(R.string.verification_url);
+        emailTemplate = getString(R.string.email_template);
+        apikey = getString(R.string.api_key);
+        sitename = getString(R.string.site_name);
 
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.setTitle("Please wait");
         pDialog.setCancelable(false);
-
 
 
         inputLayoutEmail = (TextInputLayout) findViewById(R.id.input_layout_email);
@@ -57,13 +59,13 @@ public class LoginActivity extends AppCompatActivity {
         inputEmail.addTextChangedListener(new MyTextWatcher(inputEmail));
         inputPassword.addTextChangedListener(new MyTextWatcher(inputPassword));
 
-         ImageButton facebook = (ImageButton) findViewById(R.id.facebook);
+        ImageButton facebook = (ImageButton) findViewById(R.id.facebook);
         ImageButton google = (ImageButton) findViewById(R.id.google);
         Button login = (Button) findViewById(R.id.btn_login);
         facebook.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), FacebookNativeActivity.class);
-                intent.putExtra("apikey",apikey);
+                intent.putExtra("apikey", apikey);
                 startActivityForResult(intent, 2);
             }
         });
@@ -71,8 +73,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Perform action on click
                 Intent intent = new Intent(getApplication(), WebViewActivity.class);
-                intent.putExtra("apikey",apikey);
-                intent.putExtra("sitename",sitename);
+                intent.putExtra("apikey", apikey);
+                intent.putExtra("sitename", sitename);
                 intent.putExtra("provider", "google");
                 startActivityForResult(intent, 2);
             }
@@ -82,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-               doLogin();
+                doLogin();
             }
         });
 
@@ -96,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void hideProgressDialog() {
-        if(pDialog!=null && pDialog.isShowing()){
+        if (pDialog != null && pDialog.isShowing()) {
             pDialog.dismiss();
         }
     }
@@ -105,12 +107,12 @@ public class LoginActivity extends AppCompatActivity {
         showProgressDialog();
         LoginParams value = new LoginParams();
         value.apikey = apikey; //put loginradius your apikey (required)
-        value.email=inputEmail.getText().toString();
-        value.password=inputPassword.getText().toString();
-        value.verificationUrl=verificationUrl;// put your verificationUrl(required)
-        value.emailTemplate=emailTemplate;//put your emailTemplate(optional)
+        value.email = inputEmail.getText().toString();
+        value.password = inputPassword.getText().toString();
+        value.verificationUrl = verificationUrl;// put your verificationUrl(required)
+        value.emailTemplate = emailTemplate;//put your emailTemplate(optional)
         LoginAPI userAPI = new LoginAPI();
-        userAPI.getResponse(value,new AsyncHandler<LoginData>() {
+        userAPI.getResponse(value, new AsyncHandler<LoginData>() {
             @Override
             public void onSuccess(LoginData logindata) {
                 hideProgressDialog();
@@ -121,14 +123,15 @@ public class LoginActivity extends AppCompatActivity {
                         Object value = field.get(logindata);
                         Intent intent = new Intent(getApplication(), ProfileActivity.class);
                         intent.putExtra("accesstoken", logindata.getAccessToken());
-                        intent.putExtra("provider",  logindata.getProfile().getProvider().toLowerCase());
-                        intent.putExtra("apikey",getString(R.string.api_key));
+                        intent.putExtra("provider", logindata.getProfile().getProvider().toLowerCase());
+                        intent.putExtra("apikey", getString(R.string.api_key));
                         startActivity(intent);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onFailure(Throwable error, String errorcode) {
                 hideProgressDialog();
@@ -137,6 +140,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     private boolean validateEmail() {
         String email = inputEmail.getText().toString().trim();
 
@@ -175,13 +179,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private class MyTextWatcher implements TextWatcher {
         private View view;
+
         private MyTextWatcher(View view) {
             this.view = view;
         }
+
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }
+
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }
+
         public void afterTextChanged(Editable editable) {
             int i = view.getId();
             if (i == R.id.input_email) {
@@ -194,19 +202,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
-        if(requestCode==2) {
-            if (data != null){
+        if (requestCode == 2) {
+            if (data != null) {
                 String token = data.getStringExtra("accesstoken");
-                String provider=data.getStringExtra("provider");
+                String provider = data.getStringExtra("provider");
                 Intent intent = new Intent(getApplication(), ProfileActivity.class);
                 intent.putExtra("accesstoken", token);
                 intent.putExtra("provider", provider);
-                intent.putExtra("apikey",getString(R.string.api_key));
+                intent.putExtra("apikey", getString(R.string.api_key));
                 startActivity(intent);
-            }  }
+            }
+        }
     }
 
 }
