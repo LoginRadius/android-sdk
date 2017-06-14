@@ -45,7 +45,7 @@ import com.loginradius.androidsdk.api.RemoveEmailAPI;
 import com.loginradius.androidsdk.api.StatusAPI;
 import com.loginradius.androidsdk.api.UnlinkAPI;
 import com.loginradius.androidsdk.api.UpdateProfileAPI;
-import com.loginradius.androidsdk.api.UpdatephoneAPI;
+import com.loginradius.androidsdk.api.UpdatePhoneAPI;
 import com.loginradius.androidsdk.api.UserProfileAPI;
 import com.loginradius.androidsdk.api.VerifyOtpAPI;
 import com.loginradius.androidsdk.response.LoginRadiusContactCursorResponse;
@@ -196,7 +196,7 @@ public class ProfileActivity extends AppCompatActivity {
             phonebutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Updatephone(accessToken);
+                    UpdatePhone(accessToken);
                 }
             });
 
@@ -251,8 +251,11 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginRadiusUltimateUserProfile userProfile) {
                 List<String> result = new ArrayList<String>();
+                String email = null;
                 if (userProfile.Email!=null) {
-                     String email = userProfile.Email.get(0).Value;
+                    email = userProfile.Email.get(0).Value;
+                }else {
+                   email ="Email Field Empty";
                 }
                 String Uid = userProfile.getUid();
                 if (userProfile.getCustomFields() != null) {
@@ -271,7 +274,7 @@ public class ProfileActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-              //  info.add("Email: " + email);
+                info.add("Email: " + email);
                 info.add("UID: " + Uid);
                 info.addAll(result);
                 adapter.notifyDataSetChanged();
@@ -410,14 +413,14 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
-    private void Updatephone(final lrAccessToken token) {
+    private void UpdatePhone(final lrAccessToken token) {
         final String lrapikey = getString(R.string.api_key);                 //get loginradius api key from string.xml
         final LoginParams value = new LoginParams();
         value.apikey = lrapikey;
         JsonObject update = new JsonObject();
         update.addProperty("Phone", updatephone.getText().toString());  // put your phone number
         final Context context = this;
-        final UpdatephoneAPI updatephoneAPI = new UpdatephoneAPI();
+        final UpdatePhoneAPI updatephoneAPI = new UpdatePhoneAPI();
         updatephoneAPI.getResponse(value, token, update, new AsyncHandler<PhoneResponse>() {
             @Override
             public void onSuccess(PhoneResponse updtephone) {
@@ -2165,7 +2168,7 @@ public class ProfileActivity extends AppCompatActivity {
         change.addProperty("Provider", token.provider.toLowerCase());
         change.addProperty("ProviderId", token.id); // put your new provider token
         final UnlinkAPI unlinkAPI = new UnlinkAPI();
-        unlinkAPI.getResponse(value,logintoken,change,new AsyncHandler<DeleteResponse>() {
+        unlinkAPI.getResponse(value,logintoken, change,new AsyncHandler<DeleteResponse>() {
             @Override
             public void onSuccess(DeleteResponse deleteResponse) {
                 if (deleteResponse.getIsDeleted()){

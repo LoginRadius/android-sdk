@@ -17,12 +17,12 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookOperationCanceledException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.loginradius.androidsdk.handler.ApiInterface;
 import com.loginradius.androidsdk.handler.AsyncHandler;
-import com.loginradius.androidsdk.handler.JsonDeserializer;
 import com.loginradius.androidsdk.handler.RestRequest;
+
+
 import com.loginradius.androidsdk.resource.Endpoint;
-
-
 import com.loginradius.androidsdk.response.lrAccessToken;
 import com.loginradius.androidsdk.response.socialinterface.Provider;
 import com.loginradius.androidsdk.response.socialinterface.SocialInterface;
@@ -32,6 +32,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.HttpException;
+import retrofit2.http.Header;
 
 //import twitter4j.TwitterException;
 
@@ -225,23 +231,33 @@ public class lrLoginManager {
 		params.put("apikey", key);
 
 		// Send request to LoginRadius server
-		RestRequest.get(Endpoint.getSocialInterfaceUrl(key), params, new AsyncHandler<String>() {
-			@Override
-			public void onSuccess(String response) {
+		ApiInterface apiService = RestRequest.getClientCdn().create(ApiInterface.class);
+		apiService.getSocailProviderInterface(Endpoint.API_V2_SOCIALINTERFACE_URL+key+".json").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+				.subscribe(new DisposableObserver<SocialInterface>() {
+					@Override
+					public void onComplete() {
+					}
 
-				response=response.replace("loginRadiusAppJsonLoaded(","");
-				response=response.substring(0,response.length()-1);
-				SocialInterface socialInterface = JsonDeserializer.deserializeJson(response,SocialInterface.class);
-				asyncHandler.onSuccess(socialInterface);
+					@Override
+					public void onError(Throwable e) {
+						if (e instanceof HttpException) {
+							try {
+								Throwable t = new Throwable(((HttpException) e).response().errorBody().string(), e);
+								asyncHandler.onFailure(t, "lr_SERVER");
+							} catch (Exception t) {
+								t.printStackTrace();
+							}
 
-			}
+						}
 
-			@Override
-			public void onFailure(Throwable error, String errorCode) {
-				Log.e("lrLoginManager", "API json can't get fetched"); //Log error to handle the errors
-				asyncHandler.onFailure(error, errorCode);
-			}
-		});
+					}
+
+					@Override
+					public void onNext(SocialInterface response) {
+						asyncHandler.onSuccess(response);
+					}
+
+				});
 	}
 	
 	/* Handling Facebook Operation Cancellation Event for native facebook login */

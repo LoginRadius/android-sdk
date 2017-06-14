@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.loginradius.androidsdk.api.RegistrationAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
+import com.loginradius.androidsdk.handler.JsonDeserializer;
+import com.loginradius.androidsdk.helper.ErrorResponse;
 import com.loginradius.androidsdk.response.login.LoginParams;
 import com.loginradius.androidsdk.response.register.Country;
 import com.loginradius.androidsdk.response.register.Email;
@@ -31,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     private TextInputLayout inputfirstname,inputlastname,inputcountry,inputcountrycode,inputemail,inputpassword,inputconfirmpassword;
     private ProgressDialog pDialog;
     String apikey ,verificationUrl,emailTemplate;
-    String sott="URFt3wUFCwADUsESWB527ogfgIiLkhwvDijS9KCYWa/llxYMuASULG7nmsPT3sIsQz4monAmsVeKvmxJMOafLG9G/KomiI7l6glDX6wVTRY=*8a5d9284d870265d4d16deb795057f16";
+    String sott="put your sott";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,7 +165,6 @@ public class RegisterActivity extends AppCompatActivity {
             public void onFailure(Throwable error, String errorcode) {
                 hideProgressDialog();
                 Toast.makeText(RegisterActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
-
             }
         });
     }

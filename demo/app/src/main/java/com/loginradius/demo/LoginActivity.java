@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.loginradius.androidsdk.activity.FacebookNativeActivity;
+import com.loginradius.androidsdk.activity.GoogleNativeActivity;
 import com.loginradius.androidsdk.activity.WebViewActivity;
 
 import com.loginradius.androidsdk.api.LoginAPI;
@@ -64,18 +65,18 @@ public class LoginActivity extends AppCompatActivity {
         Button login = (Button) findViewById(R.id.btn_login);
         facebook.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplication(), FacebookNativeActivity.class);
+                Intent intent = new Intent(getApplication(), WebViewActivity.class);
                 intent.putExtra("apikey", apikey);
+                intent.putExtra("sitename", sitename);
+                intent.putExtra("provider", "facebook");
                 startActivityForResult(intent, 2);
             }
         });
         google.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                Intent intent = new Intent(getApplication(), WebViewActivity.class);
+                Intent intent = new Intent(getApplication(), GoogleNativeActivity.class);
                 intent.putExtra("apikey", apikey);
-                intent.putExtra("sitename", sitename);
-                intent.putExtra("provider", "google");
                 startActivityForResult(intent, 2);
             }
         });
@@ -136,7 +137,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Throwable error, String errorcode) {
                 hideProgressDialog();
                 Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
-
             }
         });
     }

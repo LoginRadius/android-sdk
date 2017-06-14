@@ -1,5 +1,20 @@
-> **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](http://apidocs.loginradius.com/docs/android)
+> **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://docs.loginradius.com/api/v2/mobile-libraries/android)
 
+
+
+### Version 3.3.0
+Released on **June 14,  2017**
+
+
+##### Enhancements
+
+  - Added new Access Token Validate and Invalidate APIs.
+  - Added new Phone Login using OTP API.
+  - Enhanced performance of network requests and response time reduced.
+  - Automatic smart request retries optimized for spotty mobile connections.
+  - Avoid intricate stateful programs, using clean input/output functions over observable streams with help of ReactiveX.
+  - Implemented ReactiveX, this is a best way to handle I/O blocking operation which is on event based model, this doesn't block main thread and doesn't create whole new thread. So it is lightweight yet powerfull.
+  - Significantly improved code performance.
 
 
 ### Version 3.2.3
@@ -8,8 +23,8 @@ Released on **May 11,  2017**
 
 ##### Enhancements
   
-  - Added new fields in APIs response, Unverified email ids in UserProfile and Image in PhotoAPI.
-  - Added email prompt Auto login APIs.
+  - Added new fields in APIs response Unverified email ids in UserProfile and Image in PhotoAPI.
+  - Added new email prompt Auto login.
   - Significantly improved code performance.
 
 ##### Bug Fixes

@@ -1,37 +1,55 @@
 package com.loginradius.androidsdk.api;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
+import com.loginradius.androidsdk.handler.ApiInterface;
 import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.handler.RestRequest;
 import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.response.login.LoginParams;
 import com.loginradius.androidsdk.response.traditionalinterface.UserRegisteration;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.HttpException;
 
 
 public class TraditionalInterfaceAPI {
 
 	public void getResponse(LoginParams value,final AsyncHandler<List<UserRegisteration>> handler) {
-		Map<String, String> params = new HashMap<String, String>();
-		RestRequest.get(Endpoint.getRegisterInterfaceUrl(value.apikey),params,new AsyncHandler<String>() {
+		ApiInterface apiService = RestRequest.getClientCdn().create(ApiInterface.class);
+		apiService.getTraditionalInterface(Endpoint.API_V2_RAASINTERFACE_URL+value.apikey+".json").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+			.subscribe(new DisposableObserver<List<UserRegisteration>>() {
 		@Override
-		public void onSuccess(String response) {
-			 response=response.replace("loginRadiusAppRaasSchemaJsonLoaded(","");
-			 response=response.substring(0,response.length()-1);
-			Type listType = new TypeToken<ArrayList<UserRegisteration>>(){}.getType();
-			List<UserRegisteration> ragisterInterfacedata = new Gson().fromJson(response, listType);
-			handler.onSuccess(ragisterInterfacedata);
+		public void onComplete() {
 		}
-		   @Override
-		public void onFailure(Throwable error, String response) {
-			handler.onFailure(error, response);
-		   }
-		});
-	}
+
+
+
+				@Override
+		public void onError(Throwable e) {
+			if (e instanceof HttpException) {
+				try {
+					Throwable t = new Throwable(((HttpException) e).response().errorBody().string(), e);
+					handler.onFailure(t, "lr_SERVER");
+				} catch (Exception t) {
+					t.printStackTrace();
+				}
+
+			}
+
+		}
+
+		@Override
+		public void onNext(List<UserRegisteration> response) {
+
+		//	Type listType = new TypeToken<ArrayList<UserRegisteration>>(){}.getType();
+		//	List<UserRegisteration> ragisterInterfacedata = new Gson().fromJson(response, listType);
+			handler.onSuccess(response);
+		}
+
+	});
+}
 }

@@ -4,9 +4,9 @@ import android.content.Intent;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
 import android.view.View;
 import android.widget.Button;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -18,17 +18,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
-
         listener = new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = null;
                 switch (v.getId()) {
                     case R.id.login_bt:
-                        intent = new Intent(getApplication(), LoginActivity.class);
-                        break;
+                      intent = new Intent(getApplication(), LoginActivity.class);
+                       break;
                     case R.id.signup_bt:
                         intent = new Intent(getApplication(), RegisterActivity.class);
                         // do stuff;
@@ -46,10 +42,8 @@ public class MainActivity extends AppCompatActivity {
         };
         initWidget();
 
-
-
     }
-    private void initWidget() {
+   private void initWidget() {
         //initialize button
         btnlogin = (Button) findViewById(R.id.login_bt);
         btnregister = (Button) findViewById(R.id.signup_bt);
@@ -58,6 +52,6 @@ public class MainActivity extends AppCompatActivity {
         btnlogin.setOnClickListener(listener);
         btnregister.setOnClickListener(listener);
         btnforgotpassword.setOnClickListener(listener);
-    }
 
+}
 }

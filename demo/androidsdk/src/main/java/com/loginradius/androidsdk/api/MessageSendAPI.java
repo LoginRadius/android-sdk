@@ -1,9 +1,10 @@
 package com.loginradius.androidsdk.api;
 
-import android.content.Context;
 
+
+import com.google.gson.JsonObject;
+import com.loginradius.androidsdk.handler.ApiInterface;
 import com.loginradius.androidsdk.handler.AsyncHandler;
-import com.loginradius.androidsdk.handler.JsonDeserializer;
 import com.loginradius.androidsdk.handler.RestRequest;
 import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.response.PostAPIResponse;
@@ -11,6 +12,11 @@ import com.loginradius.androidsdk.response.lrAccessToken;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.HttpException;
 
 /**
  * Used to post messages to the user's contacts.
@@ -47,26 +53,38 @@ public class MessageSendAPI
 	 * @param token Authentication token from LoginRadius
 	 * @param handler Used to handle the success and failure events
 	 */
-	public void sendMessage(lrAccessToken token, final AsyncHandler<PostAPIResponse> handler)
-	{
+	public void sendMessage(lrAccessToken token, final AsyncHandler<PostAPIResponse> handler) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("access_token", token.access_token);
 		params.put("to", to);
 		params.put("subject", subject);
 		params.put("message", message);
-		RestRequest.post(null, Endpoint.getV2_MESSAGE(), params,"{}",new AsyncHandler<String>()
-				{
-			@Override
-			public void onSuccess(String response)
-			{
-				PostAPIResponse postResponse = JsonDeserializer.deserializeJson(response,PostAPIResponse.class);
-				handler.onSuccess(postResponse);
-			}
 
-			@Override
-			public void onFailure(Throwable error, String response) {
-				handler.onFailure(error, response);
-			}
+		ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
+		apiService.getMessage(Endpoint.API_V2_MESSAGE,params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+				.subscribe(new DisposableObserver<PostAPIResponse>() {
+					@Override
+					public void onComplete() {}
+
+					@Override
+					public void onError(Throwable e) {
+						if (e instanceof HttpException) {
+							try {
+								Throwable t = new Throwable(((HttpException) e).response().errorBody().string(), e);
+								handler.onFailure(t, "lr_SERVER");
+							} catch (Exception t) {
+								t.printStackTrace();
+							}
+
+						}
+
+					}
+
+					@Override
+					public void onNext(PostAPIResponse response) {
+						handler.onSuccess(response);
+					}
+
 				});
 	}
 	

@@ -1,15 +1,22 @@
 package com.loginradius.androidsdk.api;
 
+import com.google.gson.JsonObject;
+import com.loginradius.androidsdk.handler.ApiInterface;
 import com.loginradius.androidsdk.handler.AsyncHandler;
-import com.loginradius.androidsdk.handler.JsonDeserializer;
 import com.loginradius.androidsdk.handler.RestRequest;
 import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.response.PostAPIResponse;
 import com.loginradius.androidsdk.response.lrAccessToken;
 
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.HttpException;
 
 /**
  *The StatusUpdate API is used to update the status on the user's wall. 
@@ -63,21 +70,34 @@ public class StatusUpdateAPI
 		params.put("status", status);
 		params.put("caption", caption);
 		params.put("description", description);
+
 		
-		RestRequest.post(null,Endpoint.getV2_STATUS(), params,"{}",new AsyncHandler<String>()
-		{
+		ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
+		apiService.getStatusUpdate(Endpoint.API_V2_STATUS,params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+				.subscribe(new DisposableObserver<PostAPIResponse>() {
+					@Override
+					public void onComplete() {}
 
-			@Override
-			public void onSuccess(String response) {
-				PostAPIResponse userprofile = JsonDeserializer.deserializeJson(response,PostAPIResponse.class);
-				handler.onSuccess(userprofile);
-			}
+					@Override
+					public void onError(Throwable e) {
+						if (e instanceof HttpException) {
+							try {
+								Throwable t = new Throwable(((HttpException) e).response().errorBody().string(), e);
+								handler.onFailure(t, "lr_SERVER");
+							} catch (Exception t) {
+								t.printStackTrace();
+							}
 
-			@Override
-			public void onFailure(Throwable error, String response) {
-				handler.onFailure(error, response);
-			}
-		});
+						}
+
+					}
+
+					@Override
+					public void onNext(PostAPIResponse response) {
+						handler.onSuccess(response);
+					}
+
+				});
 	}
 
 }

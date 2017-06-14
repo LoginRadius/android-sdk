@@ -1,8 +1,9 @@
 package com.loginradius.androidsdk.api;
 
+import com.loginradius.androidsdk.handler.ApiInterface;
 import com.loginradius.androidsdk.handler.AsyncHandler;
-import com.loginradius.androidsdk.handler.JsonDeserializer;
 import com.loginradius.androidsdk.handler.RestRequest;
+
 import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.response.login.LoginParams;
 import com.loginradius.androidsdk.response.lrAccessToken;
@@ -10,6 +11,11 @@ import com.loginradius.androidsdk.response.userprofile.LoginRadiusUltimateUserPr
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.HttpException;
 
 /**
  * Created by loginradius on 9/7/2016.
@@ -21,20 +27,31 @@ public class GetSocialProfileAPI {
         HashMap<String,String> params = new LinkedHashMap<>();
         params.put("apikey", value.apikey);
         params.put("access_token",token.access_token);
+        ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
+        apiService.getSocialProfile(Endpoint.API_V2_SOCIALIDENTITIES,params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<LoginRadiusUltimateUserProfile>() {
+                    @Override
+                    public void onComplete() {}
 
-        RestRequest.get(Endpoint.getSocialIdentities(),params,new AsyncHandler<String>()
-        {
-            @Override
-            public void onSuccess(String response) {
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof HttpException) {
+                            try {
+                                Throwable t = new Throwable(((HttpException) e).response().errorBody().string(), e);
+                                handler.onFailure(t, "lr_SERVER");
+                            } catch (Exception t) {
+                                t.printStackTrace();
+                            }
 
-                LoginRadiusUltimateUserProfile ultimateUserProfile = JsonDeserializer.deserializeJson(response, LoginRadiusUltimateUserProfile.class);
-                handler.onSuccess(ultimateUserProfile);
-            }
+                        }
 
-            @Override
-            public void onFailure(Throwable error, String response) {
-                handler.onFailure(error, response);
-            }
-        });
+                    }
+
+                    @Override
+                    public void onNext(LoginRadiusUltimateUserProfile response) {
+                        handler.onSuccess(response);
+                    }
+
+                });
     }
 }
