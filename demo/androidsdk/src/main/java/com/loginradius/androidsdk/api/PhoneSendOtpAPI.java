@@ -19,10 +19,11 @@ import retrofit2.HttpException;
 
 public class PhoneSendOtpAPI {
     public void getResponse(LoginParams value, final AsyncHandler<PhoneSendOtpData> handler) {
+        String smstemplate = (value.getSmsTemplate()!=null) ? value.getSmsTemplate() : "";
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", value.getApikey());
         params.put("phone", value.getPhone());
-        params.put("smstemplate",value.getSmsTemplate());
+        params.put("smstemplate",smstemplate);
 
 
         ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);

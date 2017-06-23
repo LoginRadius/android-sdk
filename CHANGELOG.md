@@ -2,6 +2,16 @@
 
 
 
+### Version 3.3.1
+Released on **June 23,  2017**
+
+
+##### Bug Fixes
+
+  - Fixed some minor issues related to Facebook and Google native login.
+  - Handled Social Provider cancel event. 
+  
+
 ### Version 3.3.0
 Released on **June 14,  2017**
 

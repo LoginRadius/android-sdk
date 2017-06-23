@@ -18,20 +18,25 @@ import retrofit2.HttpException;
 
 public class LoginAPI {
     public void getResponse(LoginParams value, final AsyncHandler<LoginData> handler) {
+        String verificationUrl = (value.getVerificationUrl()!=null) ? value.getVerificationUrl() : "";
+        String emailTemplate=(value.getEmailTemplate()!=null) ? value.getEmailTemplate() : "";
+        String smstemplate=(value.getSmsTemplate()!=null) ? value.getSmsTemplate() : "";
+        String loginurl=(value.getLoginUrl()!=null) ? value.getLoginUrl() : "";
+
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", value.getApikey());
         if (value.phone!=null) {
             params.put("phone", value.getPhone());
-            params.put("loginurl",value.getLoginUrl());
-            params.put("smstemplate",value.getSmsTemplate());
+            params.put("loginurl",loginurl);
+            params.put("smstemplate",smstemplate);
         }else if(value.username!=null){
             params.put("username", value.getUsername());
-            params.put("verificationUrl", value.getVerificationUrl());
-            params.put("emailTemplate", value.getEmailTemplate());
+            params.put("verificationUrl", verificationUrl);
+            params.put("emailTemplate", emailTemplate);
         }else {
             params.put("email", value.getEmail());
-            params.put("verificationUrl", value.getVerificationUrl());
-            params.put("emailTemplate", value.getEmailTemplate());
+            params.put("verificationUrl", verificationUrl);
+            params.put("emailTemplate", emailTemplate);
         }
             params.put("password", value.getPassword());
 

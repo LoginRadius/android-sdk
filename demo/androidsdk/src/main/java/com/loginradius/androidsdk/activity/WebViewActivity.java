@@ -59,7 +59,11 @@ public class WebViewActivity extends ActionBarActivity {
                         accessToken.apikey = apikey;
                         sendAccessToken(accessToken);
                     }
-                } else {
+                } else if (url.contains("error=access_denied"))
+                {
+                    finish();
+                }else
+                {
                     view.loadUrl(url);
                 }
                 return true;
@@ -73,12 +77,9 @@ public class WebViewActivity extends ActionBarActivity {
     @Override
     // Detect when the back button is pressed
     public void onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack();
-        } else {
-            // Let the system handle the back button
-            super.onBackPressed();
-        }
+        // Let the system handle the back button
+        super.onBackPressed();
+
     }
 
 

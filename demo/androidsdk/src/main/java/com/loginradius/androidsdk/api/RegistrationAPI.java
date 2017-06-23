@@ -26,14 +26,16 @@ public class RegistrationAPI {
 
     public void getResponse(LoginParams value, RegistrationData registrationData , final AsyncHandler<RegisterResponse> handler)
     {
+        String verificationUrl = (value.getVerificationUrl()!=null) ? value.getVerificationUrl() : "";
+        String emailTemplate=(value.getEmailTemplate()!=null) ? value.getEmailTemplate() : "";
         HashMap<String,String> params = new LinkedHashMap<>();
         params.put("apikey", value.apikey);
         params.put("sott",value.sott);
         if (value.smsTemplate!=null){
             params.put("smsTemplate",value.smsTemplate);
         }else {
-            params.put("verificationUrl", value.verificationUrl);
-            params.put("emailTemplate", value.emailTemplate);
+            params.put("verificationUrl", verificationUrl);
+            params.put("emailTemplate", emailTemplate);
         }
 
 

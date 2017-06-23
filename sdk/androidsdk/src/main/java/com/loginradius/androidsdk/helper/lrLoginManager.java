@@ -131,6 +131,7 @@ public class lrLoginManager {
 				@Override
 				public void onFailure(Throwable error, String code) {
 					lrLoginManager.asyncHandler.onFailure(error, code);
+
 				}
 			});
 		}
@@ -258,8 +259,11 @@ public class lrLoginManager {
 					}
 
 				});
+
+
 	}
-	
+
+
 	/* Handling Facebook Operation Cancellation Event for native facebook login */
 	public static void onNativeFailure(){
 		   asyncHandler.onFailure(new Throwable("Facebook Operation cancelled"), "lr_LOGIN_CANCELLED");

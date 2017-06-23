@@ -59,8 +59,12 @@ public class FacebookNativeActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Throwable error,
                                           String errorCode) {
+
+
                     }
                 });
+
+
 
 
     }
@@ -77,7 +81,9 @@ public class FacebookNativeActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable error, String errorcode) {
-
+                if (errorcode.toString().equals("lr_LOGIN_CANCELLED")){
+                    finish();
+                }
             }
         });
     }
@@ -125,6 +131,7 @@ public class FacebookNativeActivity extends AppCompatActivity {
         }
 
     }
+
 
 
 }

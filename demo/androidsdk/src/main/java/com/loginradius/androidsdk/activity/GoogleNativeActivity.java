@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -135,7 +136,9 @@ public class GoogleNativeActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable error, String errorcode) {
-
+                if (errorcode.toString().equals("lr_LOGIN_CANCELLED")){
+                    finish();
+                }
             }
         });
 
@@ -171,6 +174,8 @@ public class GoogleNativeActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }
 
 
