@@ -130,7 +130,7 @@ public interface ApiInterface {
 
 
     @GET
-    Observable<SocialInterface> getSocailProviderInterface(@Url String url);
+    Observable<SocialInterface> getSocialProviderInterface(@Url String url);
 
 
     @GET

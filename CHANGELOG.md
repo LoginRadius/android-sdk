@@ -1,6 +1,16 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://docs.loginradius.com/api/v2/mobile-libraries/android)
 
 
+### Version 3.3.2
+Released on **July 06,  2017**
+
+
+##### Bug Fixes
+
+  - Fixed email template issue of ForgotPasswordAPI.
+  - Fixed email type issue of AddEmailAPI.
+  - Fixed SMS template issue of VerifyOtpAPI.
+  
 
 ### Version 3.3.1
 Released on **June 23,  2017**
@@ -9,7 +19,6 @@ Released on **June 23,  2017**
 ##### Bug Fixes
 
   - Fixed some minor issues related to Facebook and Google native login.
-  - Handled Social Provider cancel event. 
   
 
 ### Version 3.3.0

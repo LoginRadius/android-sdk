@@ -44,7 +44,7 @@ public class WebViewActivity extends ActionBarActivity {
 
     }
 
-   private void startWebView(String url) {
+    private void startWebView(String url) {
         webView.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.contains("?token")) {
@@ -73,7 +73,7 @@ public class WebViewActivity extends ActionBarActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(url);
     }
-    
+
     @Override
     // Detect when the back button is pressed
     public void onBackPressed() {

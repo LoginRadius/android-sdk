@@ -22,6 +22,8 @@ import retrofit2.HttpException;
 public class EmailPromptAutoLoginAPI {
 
     public void getResponse(LoginParams value, final AsyncHandler<RegisterResponse> handler) {
+        String autoLoginEmailTemplate = (value.getAutoLoginEmailTemplate()!=null) ? value.getAutoLoginEmailTemplate() : "";
+        String welcomeEmailTemplate = (value.getWelcomeEmailTemplate()!=null) ? value.getWelcomeEmailTemplate() : "";
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", value.getApikey());
         if (value.getUsername()!=null){
@@ -29,8 +31,11 @@ public class EmailPromptAutoLoginAPI {
         }else {params.put("email", value.getEmail());}
 
         params.put("clientGuid", value.getClientGuid());
-        params.put("autoLoginEmailTemplate", value.getAutoLoginEmailTemplate());
-        params.put("welcomeEmailTemplate ", value.getWelcomeEmailTemplate());
+        params.put("autoLoginEmailTemplate", autoLoginEmailTemplate);
+        params.put("welcomeEmailTemplate", welcomeEmailTemplate);
+
+
+
 
         ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
         apiService.getEmailPromptAutoLogin(Endpoint.API_V2_EMAIL_PROMPT_AUTO_LOGIN,params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())

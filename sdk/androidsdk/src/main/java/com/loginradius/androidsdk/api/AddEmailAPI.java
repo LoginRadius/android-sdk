@@ -24,12 +24,13 @@ public class AddEmailAPI {
 
     public void getResponse(LoginParams value, lrAccessToken token, JsonObject update , final AsyncHandler<RegisterResponse> handler)
     {
+        String verificationUrl = (value.getVerificationUrl()!=null) ? value.getVerificationUrl() : "";
+        String emailTemplate = (value.getEmailTemplate()!=null) ? value.getEmailTemplate() : "";
         HashMap<String,String> params = new LinkedHashMap<>();
         params.put("apikey", value.apikey);
         params.put("access_token",token.access_token);
-        params.put("verificationUrl",value.verificationUrl);
-        params.put("emailTemplate", value.emailTemplate);
-        update.addProperty("Type", "Primary");  // Your Email Type
+        params.put("verificationUrl",verificationUrl);
+        params.put("emailTemplate", emailTemplate);
 
 
         ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);

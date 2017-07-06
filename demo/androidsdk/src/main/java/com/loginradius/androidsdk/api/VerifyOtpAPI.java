@@ -23,8 +23,9 @@ import retrofit2.HttpException;
  */
 public class VerifyOtpAPI {
 
-    public void getResponse(LoginParams value, lrAccessToken token, String otp, String smsTemplate , final AsyncHandler<RegisterResponse> handler)
+    public void getResponse(LoginParams value, lrAccessToken token, String otp, final AsyncHandler<RegisterResponse> handler)
     {
+        String smsTemplate = (value.getSmsTemplate()!=null) ? value.getSmsTemplate() : "";
         HashMap<String,String> params = new LinkedHashMap<>();
         params.put("access_token",token.access_token);
         params.put("smsTemplate",smsTemplate);

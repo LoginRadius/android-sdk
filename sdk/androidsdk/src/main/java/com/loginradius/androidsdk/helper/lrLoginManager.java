@@ -37,7 +37,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.HttpException;
-import retrofit2.http.Header;
 
 //import twitter4j.TwitterException;
 
@@ -233,7 +232,7 @@ public class lrLoginManager {
 
 		// Send request to LoginRadius server
 		ApiInterface apiService = RestRequest.getClientCdn().create(ApiInterface.class);
-		apiService.getSocailProviderInterface(Endpoint.API_V2_SOCIALINTERFACE_URL+key+".json").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+		apiService.getSocialProviderInterface(Endpoint.API_V2_SOCIALINTERFACE_URL+key+".json").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 				.subscribe(new DisposableObserver<SocialInterface>() {
 					@Override
 					public void onComplete() {

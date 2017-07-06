@@ -22,17 +22,12 @@ import retrofit2.HttpException;
 public class ForgotPasswordByEmailAPI {
     public void getResponse(LoginParams value, ForgotPasswordData data , final AsyncHandler<ForgotResponse> handler)
     {
+        String resetPasswordUrl = (value.getResetPasswordUrl()!=null) ? value.getResetPasswordUrl() : "";
+        String emailTemplate = (value.getEmailTemplate()!=null) ? value.getEmailTemplate() : "";
         HashMap<String,String> params = new LinkedHashMap<>();
         params.put("apikey", value.apikey);
-        if (value.resetPasswordUrl!=null) {
-            params.put("resetPasswordUrl", value.getResetPasswordUrl());
-        }else if(value.emailTemplate!=null){
-            params.put("emailTemplate", value.getEmailTemplate());
-        }
-
-
-
-
+        params.put("resetPasswordUrl", resetPasswordUrl);
+        params.put("emailTemplate", emailTemplate);
 
 
         ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);

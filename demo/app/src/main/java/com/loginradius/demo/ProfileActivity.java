@@ -34,7 +34,7 @@ import com.loginradius.androidsdk.response.phone.PhoneResponse;
 import com.loginradius.androidsdk.response.register.DeleteResponse;
 import com.loginradius.androidsdk.response.register.RegisterResponse;
 import com.loginradius.androidsdk.response.socialinterface.Provider;
-import com.loginradius.androidsdk.api.SocailInterfaceAPI;
+import com.loginradius.androidsdk.api.SocialInterfaceAPI;
 import com.loginradius.androidsdk.response.socialinterface.SocialInterface;
 import com.loginradius.androidsdk.api.AddEmailAPI;
 import com.loginradius.androidsdk.api.ChangePasswordAPI;
@@ -459,9 +459,9 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void VerifyOTP(lrAccessToken token, LoginParams value, String otp) {
-        String smsTemplate = getString(R.string.sms_template); //get smsTemplate from string.xml(optional)
+        value.smsTemplate = ""; //put your smstemplate(optional)
         final VerifyOtpAPI verifyotpAPI = new VerifyOtpAPI();
-        verifyotpAPI.getResponse(value, token, otp, smsTemplate, new AsyncHandler<RegisterResponse>() {
+        verifyotpAPI.getResponse(value, token, otp, new AsyncHandler<RegisterResponse>() {
             @Override
             public void onSuccess(RegisterResponse registerResponse) {
                 if (registerResponse.getIsPosted()) {
@@ -662,7 +662,7 @@ public class ProfileActivity extends AppCompatActivity {
         editor.commit();
         LoginParams value = new LoginParams();
         value.apikey=getString(R.string.api_key);
-        final SocailInterfaceAPI socialapi = new SocailInterfaceAPI();
+        final SocialInterfaceAPI socialapi = new SocialInterfaceAPI();
         socialapi.getResponse(value,new AsyncHandler<SocialInterface>() {
             @Override
             public void onSuccess(SocialInterface socialInterface) {
