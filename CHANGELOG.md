@@ -1,6 +1,14 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://docs.loginradius.com/api/v2/mobile-libraries/android)
 
+### Version 3.3.3
+Released on **July 10,  2017**
 
+
+##### Bug Fixes
+
+  - Fixed status update permission issue of Facebook native login.
+  
+  
 ### Version 3.3.2
 Released on **July 06,  2017**
 
