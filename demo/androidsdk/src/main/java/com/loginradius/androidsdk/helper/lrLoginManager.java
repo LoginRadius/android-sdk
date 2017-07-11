@@ -19,6 +19,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.loginradius.androidsdk.handler.ApiInterface;
 import com.loginradius.androidsdk.handler.AsyncHandler;
+import com.loginradius.androidsdk.handler.ExceptionResponse;
 import com.loginradius.androidsdk.handler.RestRequest;
 
 
@@ -27,6 +28,7 @@ import com.loginradius.androidsdk.response.lrAccessToken;
 import com.loginradius.androidsdk.response.socialinterface.Provider;
 import com.loginradius.androidsdk.response.socialinterface.SocialInterface;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -240,15 +242,8 @@ public class lrLoginManager {
 
 					@Override
 					public void onError(Throwable e) {
-						if (e instanceof HttpException) {
-							try {
-								Throwable t = new Throwable(((HttpException) e).response().errorBody().string(), e);
-								asyncHandler.onFailure(t, "lr_SERVER");
-							} catch (Exception t) {
-								t.printStackTrace();
-							}
-
-						}
+						ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
+						asyncHandler.onFailure(exceptionResponse.t, exceptionResponse.message);
 
 					}
 

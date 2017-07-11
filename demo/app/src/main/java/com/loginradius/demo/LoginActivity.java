@@ -65,10 +65,10 @@ public class LoginActivity extends AppCompatActivity {
         Button login = (Button) findViewById(R.id.btn_login);
         facebook.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplication(), WebViewActivity.class);
+                Intent intent = new Intent(getApplication(), FacebookNativeActivity.class);
                 intent.putExtra("apikey", apikey);
-                intent.putExtra("sitename", sitename);
-                intent.putExtra("provider", "facebook");
+              //  intent.putExtra("sitename", sitename);
+              //  intent.putExtra("provider", "facebook");
                 startActivityForResult(intent, 2);
             }
         });

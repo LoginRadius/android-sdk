@@ -39,7 +39,7 @@ public class FacebookNativeActivity extends AppCompatActivity {
         ProviderPermissions.addFbPermission(FB_Permission.USER_BASIC_INFO);
         ProviderPermissions.addFbPermission(FB_Permission.USER_BIRTHDAY);
         ProviderPermissions.addFbPermission(FB_Permission.USER_EMAIL);
-        ProviderPermissions.addFbPermission(FB_Permission.PUBLISH_ACTIONS);
+
         final String dataapi = getIntent().getExtras().getString("apikey");
         String apiKey = dataapi;
         lrLoginManager.getNativeAppConfiguration(apiKey, callManager,
@@ -60,8 +60,6 @@ public class FacebookNativeActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Throwable error,
                                           String errorCode) {
-
-
                     }
                 });
 
