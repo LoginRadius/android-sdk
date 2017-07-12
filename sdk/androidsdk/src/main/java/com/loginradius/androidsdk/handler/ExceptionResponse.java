@@ -5,7 +5,7 @@ import java.io.IOException;
 import retrofit2.HttpException;
 
 /**
- * Created by admin on 11-Jul-17.
+ * Created by loginradius on 11-Jul-17.
  */
 
 public class ExceptionResponse {

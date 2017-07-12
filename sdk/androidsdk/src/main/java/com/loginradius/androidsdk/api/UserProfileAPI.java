@@ -21,24 +21,15 @@ import retrofit2.HttpException;
  * The data is normalized into LoginRadius' standard data format.
  *
  */
-public class UserProfileAPI 
-{
+public class UserProfileAPI {
 
-
-    private static final String[] providers = {"facebook", "google", "twitter", "instagram", "yahoo", "live",
-	   "persona", "wordpress", "vkontakte", "aol", "myopenid", "mixi", "steamcommunity", "hyves", "livejournal",
-	   "verisign", "virgilio", "orange", "github", "openid", "renren", "kaixin", "qq", "stackexchange","email","amazon","line","xing","paypal" };
    /**
     * Retrieves User Profile details
     * @param token Authentication token from LoginRadius
     * @param handler Used to handle the success and failure events
     */
-	public void getResponse(lrAccessToken token,final AsyncHandler<LoginRadiusUltimateUserProfile> handler)
-	{
-		if (!Arrays.asList(providers).contains(token.provider.toLowerCase())) {
-			handler.onFailure(new Throwable(), "lr_API_NOT_SUPPORTED");
-			return;
-		}
+	public void getResponse(lrAccessToken token,final AsyncHandler<LoginRadiusUltimateUserProfile> handler) {
+
 		ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
 		apiService.getUserProfile(Endpoint.API_V2_USERPROFILE,token.access_token,token.apikey).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 				.subscribe(new DisposableObserver<LoginRadiusUltimateUserProfile>() {

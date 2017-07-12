@@ -1,13 +1,24 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://docs.loginradius.com/api/v2/mobile-libraries/android)
 
+
+### Version 3.3.5
+Released on **July 12,  2017**
+
+##### Bug Fixes
+
+  - Fixed LinkedIn Provider issue related to UserProfileAPI.
+
+
+
 ### Version 3.3.4
 Released on **July 11,  2017**
 
 ##### Bug Fixes
 
-  - Improved Exception handling, added few more cases to handle specific exception, like IllegalArgumentException, IOException,IllegalStateException etc..
+  - Improved Exception handling, added few more cases to handle specific exception, like IllegalArgumentException, IOException,IllegalStateException etc.
 
 
+   
 ### Version 3.3.3
 Released on **July 10,  2017**
 
@@ -15,7 +26,8 @@ Released on **July 10,  2017**
 
   - Fixed status update permission issue of Facebook native login.
   
-  
+ 
+
 ### Version 3.3.2
 Released on **July 06,  2017**
 
@@ -26,6 +38,7 @@ Released on **July 06,  2017**
   - Fixed SMS template issue of VerifyOtpAPI.
   
 
+  
 ### Version 3.3.1
 Released on **June 23,  2017**
 
