@@ -1,5 +1,31 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](http://apidocs.loginradius.com/docs/android)
 
+
+### Version 2.0.4
+Released on **July 25  2017**
+
+##### Bug Fixes
+  - Fixed Instagram Provider issue related to UserProfileAPI.
+  - Fixed some minor issues related to Facebook and Google native login at cancelled or back event.
+
+
+### Version 2.0.3
+Released on **September 19  2016**
+
+##### Bug Fixes
+  - Removed material design dependency from style.
+  - Increased heap size in demo.
+
+
+### Version 2.0.2
+Released on **September 15,  2016**
+
+
+##### Bug Fixes
+  - Fix When back in App crash SDK Activity issue.
+  - Fix Google Native Login Crash issue if the users device does not have Google Playservices installed.
+
+
 ### Version 2.0.0
 Released on **July 18, 2016**
 
@@ -18,22 +44,10 @@ Released on **July 18, 2016**
   - Update Facebook native login handle null email condition through hosted page.
   
 ##### Bug Fixes
-- Handled social ID provider Empty email address scenario. 
+  - Handled social ID provider Empty email address scenario. 
 
 
-### Version 2.0.2
-Released on **September 15,  2016**
 
 
-##### Bug Fixes
-- Fix When back in App crash SDK Activity issue.
-- Fix Google Native Login Crash issue if the users device does not have Google Playservices installed.
 
 
-### Version 2.0.3
-Released on **September 19  2016**
-
-
-##### Bug Fixes
-- Removed material design dependency from style.
-- Increased heap size in demo.

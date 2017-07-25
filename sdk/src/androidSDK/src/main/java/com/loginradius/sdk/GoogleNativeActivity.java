@@ -144,6 +144,9 @@ public class GoogleNativeActivity extends ActionBarActivity {
 
             @Override
             public void onFailure(Throwable error, String errorcode) {
+                if (errorcode.toString().equals("lr_LOGIN_CANCELLED")){
+                    finish();
+                }
 
             }
         });

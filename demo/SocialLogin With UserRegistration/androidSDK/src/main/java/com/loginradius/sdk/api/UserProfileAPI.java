@@ -1,6 +1,6 @@
 package com.loginradius.sdk.api;
 
-import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,24 +19,17 @@ import com.loginradius.sdk.util.RestRequest;
 public class UserProfileAPI 
 {
    private static final String API_V2_USERPROFILE = "/api/v2/userprofile";
-   private static final String[] providers = {"facebook", "google", "twitter", "linkedin", "yahoo", "live",
-	   "persona", "wordpress", "vkontakte", "aol", "myopenid", "mixi", "steamcommunity", "hyves", "livejournal",
-	   "verisign", "virgilio", "orange", "github", "openid", "renren", "kaixin", "qq", "stackexchange" };
    /**
     * Retrieves User Profile details
     * @param token Authentication token from LoginRadius
     * @param handler Used to handle the success and failure events
     */
-	public void getResponse(lrAccessToken token,final AsyncHandler<LoginRadiusUltimateUserProfile> handler)
-	{
-		if (!Arrays.asList(providers).contains(token.provider.toLowerCase())) {
-			handler.onFailure(new Throwable(), "lr_API_NOT_SUPPORTED");
-			return;
-		}
-		
-       Map<String, String> params = new HashMap<String, String>();
-	   params.put("access_token", token.access_token);
-       RestRequest.get(API_V2_USERPROFILE,params,new AsyncHandler<String>() 
+	public void getResponse(lrAccessToken token,final AsyncHandler<LoginRadiusUltimateUserProfile> handler) {
+
+
+		Map<String, String> params = new HashMap<String, String>();
+	    params.put("access_token", token.access_token);
+        RestRequest.get(API_V2_USERPROFILE,params,new AsyncHandler<String>()
        {
 		@Override
 		public void onSuccess(String response) {

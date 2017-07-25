@@ -207,15 +207,6 @@ public class WebviewActivity extends Activity {
             Intent intent = getIntent();
             if (intent != null) {
                 String action = intent.getStringExtra("action");
-                progressBar = ProgressDialog.show(WebviewActivity.this, "Connecting", "Please wait for a few seconds...");
-                long delayInMillis = 5000;
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        progressBar.dismiss();
-                    }
-                }, delayInMillis);
                 switch (action) {
                     case "LOGIN":
                         lrraas.loadLoginPage();
