@@ -14,17 +14,25 @@ public class LoginParams {
     public String password;
     public String apikey;
     public String emailTemplate;
+
     public String resetPasswordUrl;
     public String smsTemplate;
     public String loginUrl;
     public String verificationUrl;
     public String clientGuid;
+
     public String autoLoginEmailTemplate;
     public String welcomeEmailTemplate;
-
+    public String redirecturl;
+    public String noregistrationemailtemplate;
+    public String name;
 
     public String objectname;
     public String objectRecordId;
+    public Boolean updatetype;
+
+
+    public String access_token;
 
     public String getSott() {
         return sott;
@@ -151,6 +159,14 @@ public class LoginParams {
     }
 
 
+    public Boolean getUpdatetype() {
+        return updatetype;
+    }
+
+    public void setUpdatetype(Boolean updatetype) {
+        this.updatetype = updatetype;
+    }
+
 
     public String getClientGuid() {
         return clientGuid;
@@ -176,6 +192,40 @@ public class LoginParams {
 
     public void setWelcomeEmailTemplate(String welcomeEmailTemplate ) {
         this.welcomeEmailTemplate  = welcomeEmailTemplate ;
+    }
+
+
+    public String getNoregistrationemailtemplate() {
+        return noregistrationemailtemplate ;
+    }
+
+    public void setNoregistrationemailtemplate(String noregistrationemailtemplate ) {
+        this.noregistrationemailtemplate  = noregistrationemailtemplate ;
+    }
+
+    public String getRedirecturl() {
+        return redirecturl ;
+    }
+
+    public void setRedirecturl(String redirecturl ) {
+        this.redirecturl  = redirecturl ;
+    }
+
+    public String getName() {
+        return welcomeEmailTemplate ;
+    }
+
+    public void setName(String name ) {
+        this.name  = name ;
+    }
+
+
+    public String getAccess_token() {
+        return access_token ;
+    }
+
+    public void setAccess_token(String access_token ) {
+        this.access_token  = access_token ;
     }
 
 }

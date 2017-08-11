@@ -2,6 +2,7 @@ package com.loginradius.androidsdk.handler;
 
 import com.google.gson.JsonObject;
 import com.loginradius.androidsdk.response.CheckAvailability;
+import com.loginradius.androidsdk.response.GetSecurityQuestionsResponse;
 import com.loginradius.androidsdk.response.LoginRadiusContactCursorResponse;
 import com.loginradius.androidsdk.response.PostAPIResponse;
 import com.loginradius.androidsdk.response.album.LoginRadiusAlbum;
@@ -20,6 +21,7 @@ import com.loginradius.androidsdk.response.mention.LoginRadiusMention;
 import com.loginradius.androidsdk.response.page.LoginRadiusPage;
 import com.loginradius.androidsdk.response.password.ForgotPasswordData;
 import com.loginradius.androidsdk.response.password.ForgotResponse;
+import com.loginradius.androidsdk.response.phone.PhoneDataResponse;
 import com.loginradius.androidsdk.response.phone.PhoneForgotPasswordResponse;
 import com.loginradius.androidsdk.response.phone.PhoneResponse;
 import com.loginradius.androidsdk.response.phonesendotp.PhoneSendOtpData;
@@ -181,6 +183,22 @@ public interface ApiInterface {
     Observable<PhoneSendOtpData> getphonesendOtp(@Url String url, @QueryMap Map<String, String> options);
 
 
+    @GET
+    Observable<RegisterResponse> getSimplifiedRegistrationByEmail(@Url String url, @QueryMap Map<String, String> options);
+
+
+    @GET
+    Observable<PhoneDataResponse> getSimplifiedRegistrationByPhone(@Url String url, @QueryMap Map<String, String> options);
+
+
+    @GET
+    Observable<LoginData> getSimplifiedRegistrationOtpVerification(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+
+
+    @GET
+    Observable<GetSecurityQuestionsResponse[]> GetSecurityQuestions(@Url String url, @QueryMap Map<String, String> options);
+
+
     @POST
     Observable<PostAPIResponse> getMessage(@Url String url,@QueryMap Map<String, String> options);
 
@@ -247,6 +265,14 @@ public interface ApiInterface {
 
     @PUT
     Observable<RegisterResponse> getVerifyOtp(@Url String url,@QueryMap Map<String, String> options);
+
+
+    @PUT
+    Observable<RegisterResponse> getResetPasswordbySecurityQuestion(@Url String url,@QueryMap Map<String, String> options,@Body JsonObject data);
+
+
+    @PUT
+    Observable<RegisterResponse> getUpdateSecurityQuestionByAccessToken(@Url String url,@QueryMap Map<String, String> options,@Body JsonObject data);
 
 
     @HTTP(method = "DELETE",hasBody = true)

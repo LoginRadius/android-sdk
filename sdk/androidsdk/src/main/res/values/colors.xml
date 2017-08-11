@@ -62,4 +62,6 @@
     <color name="mailrucolor">#1897e6</color>
     <color name="xingcolor">#007072</color>
     <color name="linecolor">#00c300</color>
+
+    <color name="wv_fields_color">#2299DD</color>
 </resources>

@@ -11,14 +11,14 @@ import com.loginradius.androidsdk.response.customobject.CreateCustomObject;
 import com.loginradius.androidsdk.response.login.LoginParams;
 import com.loginradius.androidsdk.response.lrAccessToken;
 
-import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.HttpException;
+
 
 /**
  * Created by loginradius on 23-Nov-16.
@@ -29,10 +29,17 @@ public class UpdateCustomObjectAPI {
 
     public void getResponse(LoginParams value, lrAccessToken token, JsonObject update , final AsyncHandler<CreateCustomObject> handler)
     {
+        Boolean updatetype = (value.getUpdatetype()!=null) ? value.getUpdatetype() : false;
+
         HashMap<String,String> params = new LinkedHashMap<>();
         params.put("apikey", value.apikey);
         params.put("access_token",token.access_token);
         params.put("objectname",value.objectname);
+        if (updatetype){
+             params.put("updatetype","replace");
+        }else{
+            params.put("updatetype","partialreplace");
+        }
 
 
         ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);

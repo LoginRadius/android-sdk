@@ -21,14 +21,11 @@ import com.loginradius.androidsdk.handler.ApiInterface;
 import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.handler.ExceptionResponse;
 import com.loginradius.androidsdk.handler.RestRequest;
-
-
 import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.response.lrAccessToken;
 import com.loginradius.androidsdk.response.socialinterface.Provider;
 import com.loginradius.androidsdk.response.socialinterface.SocialInterface;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,9 +35,8 @@ import java.util.Map;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.HttpException;
 
-//import twitter4j.TwitterException;
+
 
 /**
  * Performs user login and manages different native / web logins

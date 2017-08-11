@@ -43,7 +43,7 @@ public class LoginRadiusUltimateUserProfile
     @SerializedName("PhoneId")
     public String PhoneId;
     @SerializedName("PhoneIdVerified")
-    public String PhoneIdVerified;
+    public Boolean PhoneIdVerified;
      @SerializedName("ID")
      public String ID;
       @SerializedName("Provider")

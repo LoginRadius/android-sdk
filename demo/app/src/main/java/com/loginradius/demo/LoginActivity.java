@@ -65,10 +65,10 @@ public class LoginActivity extends AppCompatActivity {
         Button login = (Button) findViewById(R.id.btn_login);
         facebook.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplication(), FacebookNativeActivity.class);
+                Intent intent = new Intent(getApplication(), WebViewActivity.class);
                 intent.putExtra("apikey", apikey);
-              //  intent.putExtra("sitename", sitename);
-              //  intent.putExtra("provider", "facebook");
+                intent.putExtra("sitename", sitename);
+                intent.putExtra("provider", "facebook");
                 startActivityForResult(intent, 2);
             }
         });
@@ -206,7 +206,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
         if (requestCode == 2) {
-            if (data != null) {
+            if (data != null &&data.toString().contains("extras")) {
                 String token = data.getStringExtra("accesstoken");
                 String provider = data.getStringExtra("provider");
                 Intent intent = new Intent(getApplication(), ProfileActivity.class);

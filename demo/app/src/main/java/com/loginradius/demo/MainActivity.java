@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 
 
-
 public class MainActivity extends AppCompatActivity {
     private Button btnlogin,btnregister,btnforgotpassword;
     Button.OnClickListener listener;

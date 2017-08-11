@@ -9,14 +9,13 @@ import com.loginradius.androidsdk.handler.RestRequest;
 import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.response.lrAccessToken;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.HttpException;
+
 
 /**
  * Manages communication involving Facebook and Google keys for native login

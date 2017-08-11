@@ -1,6 +1,25 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://docs.loginradius.com/api/v2/mobile-libraries/android)
 
 
+### Version 3.4.0
+Released on **August 11,  2017**
+
+
+##### Enhancements
+
+  - Added required fields registration feature along with RxAndroid/RxJava to optimise rendering of dynamic views at social login.
+  - Added new Simplified Registration APIs.
+  - Added new Get Security Questions By Phone,Email,UserName or Access_token APIs.
+  - Added new Update Security Question by Access_token APIs.
+  - Added new Reset Password by Security Question APIs.
+  - Added updatetype flag in Custom Object By Access Token API to enable complete or partial update custom object data.
+  - Significantly improved code performance.
+  
+##### Bug Fixes
+
+  - Fixed LinkedIn white space issue.
+  
+
 ### Version 3.3.5
 Released on **July 12,  2017**
 

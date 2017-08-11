@@ -51,6 +51,9 @@ public class Endpoint {
 	public static final String API_V2_EMAIL_PROMPT_AUTO_LOGIN="identity/v2/auth/login/autologin";
 	public static final String API_V2_VALIDATE_ACCESS_TOKEN="identity/v2/auth/access_token/validate";
 	public static final String API_V2_INVALIDATE_ACCESS_TOKEN="identity/v2/auth/access_token/invalidate";
+	public static final String API_V2_SIMPLIFIED_REGISTRATION="identity/v2/auth/noregistration";
+	public static final String API_V2_GET_SECURITY_QUESTIONS="identity/v2/auth/securityquestion";
+	public static final String API_V2_RESET_PASSWORD_BY_SECURITY_QUESTION="identity/v2/auth/password/securityanswer";
 
 	public static final String SHAREDPREFERENCEFILEKEY = "com.loginradius.loginradiusraas.PREFERENCE_FILE_KEY";
 	public static final String webviewlogin=".hub.loginradius.com/RequestHandlor.aspx";
