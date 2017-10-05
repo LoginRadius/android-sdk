@@ -31,8 +31,9 @@ public class LoginParams {
     public String objectRecordId;
     public Boolean updatetype;
 
-
     public String access_token;
+
+    public String vtoken;
 
     public String getSott() {
         return sott;
@@ -228,4 +229,11 @@ public class LoginParams {
         this.access_token  = access_token ;
     }
 
+    public String getVtoken() {
+        return vtoken;
+    }
+
+    public void setVtoken(String vtoken) {
+        this.vtoken = vtoken;
+    }
 }

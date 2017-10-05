@@ -9,14 +9,12 @@ import com.loginradius.androidsdk.response.customobject.CreateCustomObject;
 import com.loginradius.androidsdk.response.login.LoginParams;
 import com.loginradius.androidsdk.response.lrAccessToken;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.HttpException;
 
 /**
  * Created by loginradius on 23-Nov-16.
@@ -31,6 +29,50 @@ public class ReadCustomObjectbyIdAPI {
         params.put("access_token",token.access_token);
         params.put("objectname",value.objectname);
 
+
+        ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
+        String url= Endpoint.API_V2_CUSTOMOBJECT+"/"+value.objectRecordId;
+        apiService.getReadCustomobjectById(url,params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<CreateCustomObject>() {
+                    @Override
+                    public void onComplete() {}
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
+                        handler.onFailure(exceptionResponse.t, exceptionResponse.message);
+                    }
+
+                    @Override
+                    public void onNext(CreateCustomObject response) {
+                        handler.onSuccess(response);
+                    }
+
+                });
+    }
+
+    public void getResponse(LoginParams value, lrAccessToken token, String fields[], final AsyncHandler<CreateCustomObject> handler)
+    {
+        HashMap<String,String> params = new LinkedHashMap<>();
+        params.put("apikey", value.apikey);
+        params.put("access_token",token.access_token);
+        params.put("objectname",value.objectname);
+
+        String strFields = null;
+        if(fields!=null && fields.length>0){
+            strFields = "";
+            for(int i=0;i<fields.length;i++){
+                if(i == (fields.length-1)){
+                    strFields = strFields + fields[i];
+                }else{
+                    strFields = strFields + fields[i] + ",";
+                }
+            }
+        }
+
+        if(strFields!=null){
+            params.put("fields",strFields);
+        }
 
         ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
         String url= Endpoint.API_V2_CUSTOMOBJECT+"/"+value.objectRecordId;

@@ -50,4 +50,48 @@ public class SimplifiedRegistrationOtpVerificationAPI {
 
                 });
     }
+
+    public void getResponse(LoginParams value, JsonObject json, String fields[], final AsyncHandler<LoginData> handler) {
+        String smstemplate = (value.getSmsTemplate()!=null) ? value.getSmsTemplate() : "";
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", value.getApikey());
+        params.put("otp", value.getOtp());
+        params.put("smstemplate", smstemplate);
+
+        String strFields = null;
+        if(fields!=null && fields.length>0){
+            strFields = "";
+            for(int i=0;i<fields.length;i++){
+                if(i == (fields.length-1)){
+                    strFields = strFields + fields[i];
+                }else{
+                    strFields = strFields + fields[i] + ",";
+                }
+            }
+        }
+
+        if(strFields!=null){
+            params.put("fields",strFields);
+        }
+
+        ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
+        apiService.getSimplifiedRegistrationOtpVerification(Endpoint.API_V2_SIMPLIFIED_REGISTRATION+"/phone/verify",params,json).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<LoginData>() {
+                    @Override
+                    public void onComplete() {}
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
+                        handler.onFailure(exceptionResponse.t, exceptionResponse.message);
+                    }
+
+                    @Override
+                    public void onNext(LoginData response) {
+                        handler.onSuccess(response);
+                    }
+
+                });
+    }
 }

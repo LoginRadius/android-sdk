@@ -51,7 +51,6 @@ public class TokenHelper
 		 	providerHandler(Endpoint.API_V2_ACCESS_TOKEN_GOOGLE, params, handler);
 	  }
 
-
 	/**
 	 * Generic request
 	 * @param uri Url for sending request

@@ -1,6 +1,7 @@
 package com.loginradius.androidsdk.response.userprofile;
 
 import com.google.gson.annotations.SerializedName;
+import com.loginradius.androidsdk.response.userprofile.identity.Identity;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class LoginRadiusUltimateUserProfile
 {
  @SerializedName("Identities")
 
- private Object identities;
+ private List<Identity> identities;
  @SerializedName("PasswordExpirationDate")
 
  private String passwordExpirationDate;
@@ -263,7 +264,7 @@ public class LoginRadiusUltimateUserProfile
   * @return
   * The identities
   */
- public Object getIdentities() {
+ public List<Identity> getIdentities() {
   return identities;
  }
 
@@ -272,7 +273,7 @@ public class LoginRadiusUltimateUserProfile
   * @param identities
   * The Identities
   */
- public void setIdentities(Object identities) {
+ public void setIdentities(List<Identity> identities) {
   this.identities = identities;
  }
 

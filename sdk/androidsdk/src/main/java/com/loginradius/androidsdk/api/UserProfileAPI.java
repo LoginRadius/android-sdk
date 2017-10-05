@@ -8,12 +8,9 @@ import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.response.lrAccessToken;
 import com.loginradius.androidsdk.response.userprofile.LoginRadiusUltimateUserProfile;
 
-import java.io.IOException;
-import java.util.Arrays;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.HttpException;
 
 /**
  * Used to retrieve social profile data from the user's social account after authentication.
@@ -23,15 +20,15 @@ import retrofit2.HttpException;
  */
 public class UserProfileAPI {
 
-   /**
-    * Retrieves User Profile details
-    * @param token Authentication token from LoginRadius
-    * @param handler Used to handle the success and failure events
-    */
+	/**
+	 * Retrieves User Profile details
+	 * @param token Authentication token from LoginRadius
+	 * @param handler Used to handle the success and failure events
+	 */
 	public void getResponse(lrAccessToken token,final AsyncHandler<LoginRadiusUltimateUserProfile> handler) {
 
 		ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
-		apiService.getUserProfile(Endpoint.API_V2_USERPROFILE,token.access_token,token.apikey).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+		apiService.getUserProfile(Endpoint.API_V2_USERPROFILE,token.access_token,token.apikey,null).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 				.subscribe(new DisposableObserver<LoginRadiusUltimateUserProfile>() {
 					@Override
 					public void onComplete() {}
@@ -50,6 +47,43 @@ public class UserProfileAPI {
 				});
 	}
 
+   /**
+    * Retrieves User Profile details
+    * @param token Authentication token from LoginRadius
+	* @param fields Projection of fields
+    * @param handler Used to handle the success and failure events
+    */
+	public void getResponse(lrAccessToken token,String fields[],final AsyncHandler<LoginRadiusUltimateUserProfile> handler) {
 
+		String strFields = null;
+		if(fields!=null && fields.length>0){
+			strFields = "";
+			for(int i=0;i<fields.length;i++){
+				if(i == (fields.length-1)){
+					strFields = strFields + fields[i];
+				}else{
+					strFields = strFields + fields[i] + ",";
+				}
+			}
+		}
 
+		ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
+		apiService.getUserProfile(Endpoint.API_V2_USERPROFILE,token.access_token,token.apikey,strFields).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+				.subscribe(new DisposableObserver<LoginRadiusUltimateUserProfile>() {
+					@Override
+					public void onComplete() {}
+
+					@Override
+					public void onError(Throwable e) {
+						ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
+						handler.onFailure(exceptionResponse.t, exceptionResponse.message);
+					}
+
+					@Override
+					public void onNext(LoginRadiusUltimateUserProfile response) {
+						handler.onSuccess(response);
+					}
+
+				});
+	}
 }

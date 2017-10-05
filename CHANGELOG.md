@@ -1,5 +1,19 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://docs.loginradius.com/api/v2/mobile-libraries/android)
 
+### Version 3.5.0
+Released on **October 5,  2017**
+
+
+##### Enhancements
+
+  - Added projection of fields in some APIs.
+  - Added Verify Auto Login Email API.
+  - Released AAR dependency
+  
+##### Bug Fixes
+
+  - Now, LoginRadiusUltimateUserProfile.getIdentities() will return a list of Identity objects.
+  - Modified the Google Play Services version to 11.0.4
 
 ### Version 3.4.0
 Released on **August 11,  2017**

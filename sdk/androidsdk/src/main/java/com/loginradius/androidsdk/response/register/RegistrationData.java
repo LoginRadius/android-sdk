@@ -4,7 +4,6 @@ package com.loginradius.androidsdk.response.register;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RegistrationData {
@@ -44,7 +43,7 @@ public class RegistrationData {
     private Object website;
     @SerializedName("Email")
     @Expose
-    private List<Email> email = new ArrayList<Email>();
+    private List<Email> email;
     @SerializedName("Country")
     @Expose
     private Country country;

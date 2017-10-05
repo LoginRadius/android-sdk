@@ -10,56 +10,58 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
-
-import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.activity.WebViewActivity;
-
-import com.loginradius.androidsdk.response.login.LoginParams;
-import com.loginradius.androidsdk.response.phone.PhoneResponse;
-import com.loginradius.androidsdk.response.register.DeleteResponse;
-import com.loginradius.androidsdk.response.register.RegisterResponse;
-import com.loginradius.androidsdk.response.socialinterface.Provider;
-import com.loginradius.androidsdk.api.SocialInterfaceAPI;
-import com.loginradius.androidsdk.response.socialinterface.SocialInterface;
 import com.loginradius.androidsdk.api.AddEmailAPI;
 import com.loginradius.androidsdk.api.ChangePasswordAPI;
 import com.loginradius.androidsdk.api.ContactAPI;
 import com.loginradius.androidsdk.api.GetSocialProfileAPI;
 import com.loginradius.androidsdk.api.LinkAPI;
 import com.loginradius.androidsdk.api.RemoveEmailAPI;
+import com.loginradius.androidsdk.api.SocialInterfaceAPI;
 import com.loginradius.androidsdk.api.StatusAPI;
 import com.loginradius.androidsdk.api.UnlinkAPI;
-import com.loginradius.androidsdk.api.UpdateProfileAPI;
 import com.loginradius.androidsdk.api.UpdatePhoneAPI;
+import com.loginradius.androidsdk.api.UpdateProfileAPI;
 import com.loginradius.androidsdk.api.UserProfileAPI;
 import com.loginradius.androidsdk.api.VerifyOtpAPI;
+import com.loginradius.androidsdk.handler.AsyncHandler;
+import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.response.LoginRadiusContactCursorResponse;
 import com.loginradius.androidsdk.response.contact.LoginRadiusContact;
+import com.loginradius.androidsdk.response.login.LoginParams;
 import com.loginradius.androidsdk.response.lrAccessToken;
+import com.loginradius.androidsdk.response.phone.PhoneResponse;
+import com.loginradius.androidsdk.response.register.DeleteResponse;
+import com.loginradius.androidsdk.response.register.RegisterResponse;
+import com.loginradius.androidsdk.response.socialinterface.Provider;
+import com.loginradius.androidsdk.response.socialinterface.SocialInterface;
 import com.loginradius.androidsdk.response.status.LoginRadiusStatus;
 import com.loginradius.androidsdk.response.userprofile.LoginRadiusUltimateUserProfile;
-import com.loginradius.androidsdk.handler.AsyncHandler;
+import com.loginradius.androidsdk.response.userprofile.identity.Identity;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ProfileActivity extends AppCompatActivity {
     private List<String> info;
     private ArrayAdapter<String> adapter;
+    private ListView listview;
     private List<Provider> providers;
+    private ProgressBar pbLoad;
+    private LoginRadiusUltimateUserProfile userProfile;
     EditText update1,update2,update3,changepass1,changepass2,updatephone,addemail,removeemail;
     Button updatebutton,changebutton,phonebutton,addemailbutton,removeemailbutton,btnlogout;
     Button unlinkFacebook,unlinkGoogle,unlinkTwitter,unlinkLinkedIn,unlinkYahoo,unlinkInstagram,unlinkAmazon,unlinkLive,unlinkVirgilio,unlinkWordpress,unlinkmailru;
@@ -156,14 +158,14 @@ public class ProfileActivity extends AppCompatActivity {
         unlinkXing=(Button)findViewById(R.id.unlinkXing);
         unlinkLine=(Button)findViewById(R.id.unlinkLine);
         unlinkStackexchange=(Button)findViewById(R.id.unlinkStackexchange);
-        Toast.makeText(ProfileActivity.this,"Welcome in Loginradius", Toast.LENGTH_LONG).show();
-        LinearLayout liemail=(LinearLayout)findViewById(R.id.lichangeemail);
+        pbLoad = (ProgressBar)findViewById(R.id.pbLoad);
+        NotifyToastUtil.showNotify(this,"Welcome in Loginradius");
         if (intent != null) {
             String token = intent.getStringExtra("accesstoken");
             String provider = intent.getStringExtra("provider");
             String apiKey = intent.getStringExtra("apikey");
             Log.d("token", token);
-            ListView listview = (ListView) findViewById(R.id.listView);
+            listview = (ListView) findViewById(R.id.listView);
             info = new ArrayList<>();
             adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, info);
             listview.setAdapter(adapter);
@@ -178,9 +180,7 @@ public class ProfileActivity extends AppCompatActivity {
             //   getContacts(accessToken);
             CheckIdentites(accessToken);
             final String is_mobile = "true";
-            if (is_mobile!=null && is_mobile.equals("true")) {
-                liemail.setVisibility(View.GONE);
-            }
+
             updatebutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -247,9 +247,10 @@ public class ProfileActivity extends AppCompatActivity {
      **/
     private void getUserData(lrAccessToken accessToken) {
         UserProfileAPI userAPI = new UserProfileAPI();
-        userAPI.getResponse(accessToken, new AsyncHandler<LoginRadiusUltimateUserProfile>() {
+        userAPI.getResponse(accessToken,new AsyncHandler<LoginRadiusUltimateUserProfile>() {
             @Override
             public void onSuccess(LoginRadiusUltimateUserProfile userProfile) {
+                ProfileActivity.this.userProfile = userProfile;
                 List<String> result = new ArrayList<String>();
                 String email = null;
                 if (userProfile.Email!=null) {
@@ -277,7 +278,10 @@ public class ProfileActivity extends AppCompatActivity {
                 info.add("Email: " + email);
                 info.add("UID: " + Uid);
                 info.addAll(result);
+                listview.setVisibility(View.VISIBLE);
                 adapter.notifyDataSetChanged();
+                setListViewHeightBasedOnChildren(listview);
+                pbLoad.setVisibility(View.GONE);
             }
 
             @Override
@@ -285,6 +289,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (errorcode.equals("lr_API_NOT_SUPPORTED")) {
                     info.add("UserProfileAPI is not supported by this provider.");
                     adapter.notifyDataSetChanged();
+                    pbLoad.setVisibility(View.GONE);
                 }
             }
         });
@@ -375,13 +380,13 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(RegisterResponse registerResponse) {
                 if (registerResponse.getIsPosted()) {
-                    Toast.makeText(ProfileActivity.this, "You have successfully Update your Profile", Toast.LENGTH_LONG).show();
+                    NotifyToastUtil.showNotify(ProfileActivity.this,"You have successfully Update your Profile");
                 }
 
             }
             @Override
             public void onFailure(Throwable error, String errorcode) {
-                Toast.makeText(ProfileActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                NotifyToastUtil.showNotify(ProfileActivity.this,error.getMessage());
             }
         });
     }
@@ -398,13 +403,13 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(RegisterResponse registerResponse) {
                 if (registerResponse.getIsPosted()) {
-                    Toast.makeText(ProfileActivity.this, "You have successfully Change your Password", Toast.LENGTH_LONG).show();
+                    NotifyToastUtil.showNotify(ProfileActivity.this,"You have successfully Change your Password");
                 }
             }
 
             @Override
             public void onFailure(Throwable error, String errorcode) {
-                Toast.makeText(ProfileActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                NotifyToastUtil.showNotify(ProfileActivity.this,error.getMessage());
             }
         });
     }
@@ -453,7 +458,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable error, String errorcode) {
-                Toast.makeText(ProfileActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                NotifyToastUtil.showNotify(ProfileActivity.this,error.getMessage());
             }
         });
     }
@@ -465,13 +470,13 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(RegisterResponse registerResponse) {
                 if (registerResponse.getIsPosted()) {
-                    Toast.makeText(ProfileActivity.this, "your phone is update successfully", Toast.LENGTH_LONG).show();
+                    NotifyToastUtil.showNotify(ProfileActivity.this,"your phone is update successfully");
                 }
             }
 
             @Override
             public void onFailure(Throwable error, String errorcode) {
-                Toast.makeText(ProfileActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                NotifyToastUtil.showNotify(ProfileActivity.this,error.getMessage());
             }
         });
     }
@@ -486,18 +491,23 @@ public class ProfileActivity extends AppCompatActivity {
         value.emailTemplate = emailTemplate;
         JsonObject update = new JsonObject();
         update.addProperty("Email", addemail.getText().toString());  // put your Email Address
+        if(userProfile.Email == null){
+            update.addProperty("Type","Primary");
+        }else{
+            update.addProperty("Type","Secondary");
+        }
         final AddEmailAPI addEmailAPI = new AddEmailAPI();
         addEmailAPI.getResponse(value, token, update, new AsyncHandler<RegisterResponse>() {
             @Override
             public void onSuccess(RegisterResponse registerResponse) {
                 if (registerResponse.getIsPosted()) {
-                    Toast.makeText(ProfileActivity.this, "Please verify your Email", Toast.LENGTH_LONG).show();
+                    NotifyToastUtil.showNotify(ProfileActivity.this,"Please verify your Email");
                 }
             }
 
             @Override
             public void onFailure(Throwable error, String errorcode) {
-                Toast.makeText(ProfileActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                NotifyToastUtil.showNotify(ProfileActivity.this,error.getMessage());
             }
         });
 
@@ -514,12 +524,12 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DeleteResponse deleteResponse) {
                 if (deleteResponse.getIsDeleted()) {
-                    Toast.makeText(ProfileActivity.this, "You have successfully RemoveEmail ", Toast.LENGTH_LONG).show();
+                    NotifyToastUtil.showNotify(ProfileActivity.this,"You have successfully RemoveEmail ");
                 }
             }
             @Override
             public void onFailure(Throwable error, String errorcode) {
-                Toast.makeText(ProfileActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                NotifyToastUtil.showNotify(ProfileActivity.this,error.getMessage());
             }
         });
     }
@@ -533,14 +543,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void CheckIdentites(final lrAccessToken token){
         UserProfileAPI userAPI = new UserProfileAPI();
-        userAPI.getResponse(token, new AsyncHandler<LoginRadiusUltimateUserProfile>() {
+        userAPI.getResponse(token, null,new AsyncHandler<LoginRadiusUltimateUserProfile>() {
             @Override
             public void onSuccess(LoginRadiusUltimateUserProfile userProfile) {
                 if (userProfile.getIdentities()!=null) {
-                    Object[] ad = ((ArrayList) userProfile.getIdentities()).toArray();
-                    for (Object i : ad) {
-                        LinkedTreeMap linkprovider = (LinkedTreeMap) i;
-                        switch (linkprovider.get("Provider").toString()) {
+                    List<Identity> identities = userProfile.getIdentities();
+                    for (Identity i : identities) {
+                        switch (i.getProvider()) {
 
                             case "facebook":
                                 vFacebook="VISIBLE";
@@ -670,7 +679,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if(providers !=null && providers.size() >0 ) {
                     for (final Provider provider : providers) {
                         final Intent intent = new Intent(getApplication(), WebViewActivity.class);
-                        intent.putExtra("keyName", getString(R.string.api_key));
+                        intent.putExtra("apikey", getString(R.string.api_key));
                         intent.putExtra("sitename", getString(R.string.site_name));
                         intent.putExtra("verificationUrl", getString(R.string.verification_url));
                         intent.putExtra("emailTemplate", getString(R.string.email_template));
@@ -693,11 +702,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Facebook.setImageResource(R.drawable.ic_facebook);
                                     Facebook.setVisibility(View.VISIBLE);
                                     Facebook.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Facebook");
+                                            intent.putExtra("provider", "Facebook");
                                             startActivityForResult(intent, 2);
                                         }
                                     });
@@ -719,11 +729,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Google.setImageResource(R.drawable.ic_google);
                                     Google.setVisibility(View.VISIBLE);
                                     Google.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Google");
+                                            intent.putExtra("provider", "Google");
                                             startActivityForResult(intent, 2);
                                         }
                                     });
@@ -745,11 +756,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Twitter.setImageResource(R.drawable.ic_twitter);
                                     Twitter.setVisibility(View.VISIBLE);
                                     Twitter.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Twitter");
+                                            intent.putExtra("provider", "Twitter");
                                             startActivityForResult(intent, 2);
                                         }
                                     });
@@ -771,11 +783,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    LinkedIn.setImageResource(R.drawable.ic_linkedin);
                                     LinkedIn.setVisibility(View.VISIBLE);
                                     LinkedIn.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "LinkedIn");
+                                            intent.putExtra("provider", "LinkedIn");
                                             startActivityForResult(intent, 2);
                                         }
                                     });
@@ -797,11 +810,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Yahoo.setImageResource(R.drawable.ic_yahoo);
                                     Yahoo.setVisibility(View.VISIBLE);
                                     Yahoo.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Yahoo");
+                                            intent.putExtra("provider", "Yahoo");
                                             startActivityForResult(intent, 2);
                                         }
                                     });
@@ -825,11 +839,12 @@ public class ProfileActivity extends AppCompatActivity {
                                     });
 
                                 }else {
+                                    Instagram.setImageResource(R.drawable.ic_instagram);
                                     Instagram.setVisibility(View.VISIBLE);
                                     Instagram.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Instagram");
+                                            intent.putExtra("provider", "Instagram");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -850,11 +865,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Amazon.setImageResource(R.drawable.ic_amazon);
                                     Amazon.setVisibility(View.VISIBLE);
                                     Amazon.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Amazon");
+                                            intent.putExtra("provider", "Amazon");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -875,11 +891,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Live.setImageResource(R.drawable.ic_live);
                                     Live.setVisibility(View.VISIBLE);
                                     Live.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Live");
+                                            intent.putExtra("provider", "Live");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -900,11 +917,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Vkontakte.setImageResource(R.drawable.ic_vkontakte);
                                     Vkontakte.setVisibility(View.VISIBLE);
                                     Vkontakte.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Vkontakte");
+                                            intent.putExtra("provider", "Vkontakte");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -925,11 +943,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Disqus.setImageResource(R.drawable.ic_disqus);
                                     Disqus.setVisibility(View.VISIBLE);
                                     Disqus.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Disqus");
+                                            intent.putExtra("provider", "Disqus");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -950,11 +969,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    AOL.setImageResource(R.drawable.ic_aol);
                                     AOL.setVisibility(View.VISIBLE);
                                     AOL.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "AOL");
+                                            intent.putExtra("provider", "AOL");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -975,11 +995,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Pinterest.setImageResource(R.drawable.ic_pinterest);
                                     Pinterest.setVisibility(View.VISIBLE);
                                     Pinterest.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Pinterest");
+                                            intent.putExtra("provider", "Pinterest");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -1000,11 +1021,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Mixi.setImageResource(R.drawable.ic_mixi);
                                     Mixi.setVisibility(View.VISIBLE);
                                     Mixi.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Mixi");
+                                            intent.putExtra("provider", "Mixi");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1026,11 +1048,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Steamcommunity.setImageResource(R.drawable.ic_steamcommunity);
                                     Steamcommunity.setVisibility(View.VISIBLE);
                                     Steamcommunity.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Steamcommunity");
+                                            intent.putExtra("provider", "Steamcommunity");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -1051,11 +1074,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Hyves.setImageResource(R.drawable.ic_hyves);
                                     Hyves.setVisibility(View.VISIBLE);
                                     Hyves.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Hyves");
+                                            intent.putExtra("provider", "Hyves");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -1076,11 +1100,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    LiveJournal.setImageResource(R.drawable.ic_livejournal);
                                     LiveJournal.setVisibility(View.VISIBLE);
                                     LiveJournal.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "LiveJournal");
+                                            intent.putExtra("provider", "LiveJournal");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1102,11 +1127,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Verisign.setImageResource(R.drawable.ic_verisign);
                                     Verisign.setVisibility(View.VISIBLE);
                                     Verisign.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Verisign");
+                                            intent.putExtra("provider", "Verisign");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1129,11 +1155,12 @@ public class ProfileActivity extends AppCompatActivity {
                                     });
 
                                 }else {
+                                    Virgilio.setImageResource(R.drawable.ic_virgilio);
                                     Virgilio.setVisibility(View.VISIBLE);
                                     Virgilio.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Virgilio");
+                                            intent.putExtra("provider", "Virgilio");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -1154,11 +1181,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    FourSquare.setImageResource(R.drawable.ic_foursquare);
                                     FourSquare.setVisibility(View.VISIBLE);
                                     FourSquare.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "FourSquare");
+                                            intent.putExtra("provider", "FourSquare");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -1179,11 +1207,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    GitHub.setImageResource(R.drawable.ic_github);
                                     GitHub.setVisibility(View.VISIBLE);
                                     GitHub.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "GitHub");
+                                            intent.putExtra("provider", "GitHub");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -1204,11 +1233,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    OpenID.setImageResource(R.drawable.ic_openid);
                                     OpenID.setVisibility(View.VISIBLE);
                                     OpenID.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "OpenID");
+                                            intent.putExtra("provider", "OpenID");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -1229,11 +1259,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Renren.setImageResource(R.drawable.ic_renren);
                                     Renren.setVisibility(View.VISIBLE);
                                     Renren.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Renren");
+                                            intent.putExtra("provider", "Renren");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1255,11 +1286,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Kaixin.setImageResource(R.drawable.ic_kaixin);
                                     Kaixin.setVisibility(View.VISIBLE);
-                                    Renren.setOnClickListener(new View.OnClickListener(){
+                                    Kaixin.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Kaixin");
+                                            intent.putExtra("provider", "Kaixin");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1281,11 +1313,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Qq.setImageResource(R.drawable.ic_qq);
                                     Qq.setVisibility(View.VISIBLE);
                                     Qq.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Qq");
+                                            intent.putExtra("provider", "Qq");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1307,11 +1340,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Stackexchange.setImageResource(R.drawable.ic_stackexchange);
                                     Stackexchange.setVisibility(View.VISIBLE);
                                     Stackexchange.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Stackexchange");
+                                            intent.putExtra("provider", "Stackexchange");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1333,11 +1367,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Salesforce.setImageResource(R.drawable.ic_saleforce);
                                     Salesforce.setVisibility(View.VISIBLE);
                                     Salesforce.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Salesforce");
+                                            intent.putExtra("provider", "Salesforce");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1359,11 +1394,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Odnoklassniki.setImageResource(R.drawable.ic_odnoklassniki);
                                     Odnoklassniki.setVisibility(View.VISIBLE);
                                     Odnoklassniki.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Odnoklassniki");
+                                            intent.putExtra("provider", "Odnoklassniki");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1385,11 +1421,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Paypal.setImageResource(R.drawable.ic_paypal);
                                     Paypal.setVisibility(View.VISIBLE);
                                     Paypal.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Paypal");
+                                            intent.putExtra("provider", "Paypal");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1411,11 +1448,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Sinaweibo.setImageResource(R.drawable.ic_sina_weibo);
                                     Sinaweibo.setVisibility(View.VISIBLE);
                                     Sinaweibo.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Sinaweibo");
+                                            intent.putExtra("provider", "Sinaweibo");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1437,11 +1475,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Wordpress.setImageResource(R.drawable.ic_wordpress);
                                     Wordpress.setVisibility(View.VISIBLE);
                                     Wordpress.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Wordpress");
+                                            intent.putExtra("provider", "Wordpress");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1463,11 +1502,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    mailru.setImageResource(R.drawable.ic_mail_ru);
                                     mailru.setVisibility(View.VISIBLE);
                                     mailru.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "mailru");
+                                            intent.putExtra("provider", "mailru");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1488,11 +1528,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Xing.setImageResource(R.drawable.ic_xing);
                                     Xing.setVisibility(View.VISIBLE);
                                     Xing.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Xing");
+                                            intent.putExtra("provider", "Xing");
                                             startActivityForResult(intent, 2);
 
                                         }
@@ -1514,11 +1555,12 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });
                                 }else {
+                                    Line.setImageResource(R.drawable.ic_line);
                                     Line.setVisibility(View.VISIBLE);
                                     Line.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
-                                            intent.putExtra("action", "Line");
+                                            intent.putExtra("provider", "Line");
                                             startActivityForResult(intent, 2);
                                         }
                                     });}
@@ -1572,7 +1614,7 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(RegisterResponse registerResponse) {
                         if (registerResponse.getIsPosted()){
-                            Toast.makeText(ProfileActivity.this, "you have successfully link with " +token.provider, Toast.LENGTH_LONG).show();
+                            NotifyToastUtil.showNotify(ProfileActivity.this,"you have successfully link with " +token.provider);
                             final SharedPreferences.Editor editor = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).edit();
                             switch (token.provider){
                                 case "Facebook":
@@ -2143,14 +2185,14 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure(Throwable error, String errorcode) {
-                        Toast.makeText(ProfileActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                        NotifyToastUtil.showNotify(ProfileActivity.this,error.getMessage());
 
                     }
                 });
             }
             @Override
             public void onFailure(Throwable error, String errorcode) {
-                Toast.makeText(ProfileActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                NotifyToastUtil.showNotify(ProfileActivity.this,error.getMessage());
             }
         });
     }
@@ -2172,7 +2214,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DeleteResponse deleteResponse) {
                 if (deleteResponse.getIsDeleted()){
-                    Toast.makeText(ProfileActivity.this, "you have successfully Unlink with " +token.provider, Toast.LENGTH_LONG).show();
+                    NotifyToastUtil.showNotify(ProfileActivity.this,"you have successfully Unlink with " +token.provider);
                     switch (token.provider){
                         case "Facebook":
                             Facebook.setVisibility(View.VISIBLE);
@@ -2314,13 +2356,33 @@ public class ProfileActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Throwable error, String errorcode) {
-                Toast.makeText(ProfileActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                NotifyToastUtil.showNotify(ProfileActivity.this,error.getMessage());
 
             }
         });
     }
 
+    private void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        int addHeight = 0;
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
 
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+            addHeight = listItem.getMeasuredHeight()*2;
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1)) + addHeight;
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
 
 }
 

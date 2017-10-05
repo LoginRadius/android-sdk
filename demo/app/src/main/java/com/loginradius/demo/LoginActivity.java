@@ -2,41 +2,35 @@ package com.loginradius.demo;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-
 import android.text.TextWatcher;
-
+import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.loginradius.androidsdk.activity.FacebookNativeActivity;
 import com.loginradius.androidsdk.activity.GoogleNativeActivity;
-import com.loginradius.androidsdk.activity.WebViewActivity;
-
 import com.loginradius.androidsdk.api.LoginAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
+import com.loginradius.androidsdk.handler.JsonDeserializer;
+import com.loginradius.androidsdk.helper.ErrorResponse;
 import com.loginradius.androidsdk.response.login.LoginData;
 import com.loginradius.androidsdk.response.login.LoginParams;
-
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
     String apikey, sitename, verificationUrl, emailTemplate;
     private EditText inputEmail, inputPassword;
     private TextInputLayout inputLayoutEmail, inputLayoutPassword;
+    private boolean isEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         inputLayoutPassword = (TextInputLayout) findViewById(R.id.input_layout_password);
         inputEmail = (EditText) findViewById(R.id.input_email);
         inputPassword = (EditText) findViewById(R.id.input_password);
-        inputEmail.addTextChangedListener(new MyTextWatcher(inputEmail));
+        //inputEmail.addTextChangedListener(new MyTextWatcher(inputEmail));
         inputPassword.addTextChangedListener(new MyTextWatcher(inputPassword));
 
         ImageButton facebook = (ImageButton) findViewById(R.id.facebook);
@@ -65,10 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         Button login = (Button) findViewById(R.id.btn_login);
         facebook.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getApplication(), WebViewActivity.class);
+                Intent intent = new Intent(getApplication(), FacebookNativeActivity.class);
                 intent.putExtra("apikey", apikey);
-                intent.putExtra("sitename", sitename);
-                intent.putExtra("provider", "facebook");
                 startActivityForResult(intent, 2);
             }
         });
@@ -106,9 +98,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private void doLogin() {
         showProgressDialog();
-        LoginParams value = new LoginParams();
+        final LoginParams value = new LoginParams();
         value.apikey = apikey; //put loginradius your apikey (required)
-        value.email = inputEmail.getText().toString();
+        final String inputString = inputEmail.getText().toString();
+        if(inputString.matches(Patterns.EMAIL_ADDRESS.pattern())){
+            value.email = inputString;
+            isEmail = true;
+        }else if(inputString.matches(Patterns.PHONE.pattern())){
+            value.phone = inputString;
+        }else {
+            value.username = inputString;
+        }
         value.password = inputPassword.getText().toString();
         value.verificationUrl = verificationUrl;// put your verificationUrl(required)
         value.emailTemplate = emailTemplate;//put your emailTemplate(optional)
@@ -117,17 +117,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginData logindata) {
                 hideProgressDialog();
-                List<String> result = new ArrayList<String>();
                 try {
-                    for (Field field : logindata.getClass().getDeclaredFields()) {
-                        field.setAccessible(true);
-                        Object value = field.get(logindata);
-                        Intent intent = new Intent(getApplication(), ProfileActivity.class);
-                        intent.putExtra("accesstoken", logindata.getAccessToken());
-                        intent.putExtra("provider", logindata.getProfile().getProvider().toLowerCase());
-                        intent.putExtra("apikey", getString(R.string.api_key));
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent(getApplication(), ProfileActivity.class);
+                    intent.putExtra("accesstoken", logindata.getAccessToken());
+                    intent.putExtra("provider", logindata.getProfile().getProvider().toLowerCase());
+                    intent.putExtra("apikey", getString(R.string.api_key));
+                    startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -136,7 +131,27 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Throwable error, String errorcode) {
                 hideProgressDialog();
-                Toast.makeText(LoginActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                NotifyToastUtil.showNotify(LoginActivity.this,error.getMessage());
+                ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(), ErrorResponse.class);
+                if (errorResponse.getErrorCode() == 1066){
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(new Intent(LoginActivity.this,OTPActivity.class).putExtra("phoneId",inputString));
+                            finish();
+                        }
+                    },1500);
+                }else if(errorResponse.getErrorCode() == 1148){
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(LoginActivity.this,SecurityQuestionsActivity.class);
+                            intent.putExtra("value",inputString);
+                            startActivity(intent);
+                            finish();
+                        }
+                    },1500);
+                }
             }
         });
     }

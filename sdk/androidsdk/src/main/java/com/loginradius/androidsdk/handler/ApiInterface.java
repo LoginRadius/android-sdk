@@ -5,6 +5,7 @@ import com.loginradius.androidsdk.response.CheckAvailability;
 import com.loginradius.androidsdk.response.GetSecurityQuestionsResponse;
 import com.loginradius.androidsdk.response.LoginRadiusContactCursorResponse;
 import com.loginradius.androidsdk.response.PostAPIResponse;
+import com.loginradius.androidsdk.response.VerifyAutoLoginResponse;
 import com.loginradius.androidsdk.response.album.LoginRadiusAlbum;
 import com.loginradius.androidsdk.response.audio.LoginRadiusAudio;
 import com.loginradius.androidsdk.response.checkin.LoginRadiusCheckIn;
@@ -40,17 +41,12 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
-import retrofit2.http.Header;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Url;
@@ -68,19 +64,19 @@ public interface ApiInterface {
 
 
     @GET
-    Observable<LoginRadiusUltimateUserProfile> getUserProfile(@Url String url,@Query("access_token") String access_token,@Query("apikey") String apikey);
+    Observable<LoginRadiusUltimateUserProfile> getUserProfile(@Url String url,@Query("access_token") String access_token,@Query("apikey") String apikey,@Query("fields") String fields);
 
 
     @GET
-    Observable<LoginRadiusAlbum[]> getAlbum(@Url String url,@Query("access_token") String access_token);
+    Observable<LoginRadiusAlbum[]> getAlbum(@Url String url,@Query("access_token") String access_token,@Query("fields") String fields);
 
 
     @GET
-    Observable<LoginRadiusAudio[]> getAudio(@Url String url,@Query("access_token") String access_token);
+    Observable<LoginRadiusAudio[]> getAudio(@Url String url,@Query("access_token") String access_token,@Query("fields") String fields);
 
 
     @GET
-    Observable<LoginRadiusCheckIn[]> getCheckin(@Url String url,@Query("access_token") String access_token);
+    Observable<LoginRadiusCheckIn[]> getCheckin(@Url String url,@Query("access_token") String access_token,@Query("fields") String fields);
 
 
     @GET
@@ -88,43 +84,43 @@ public interface ApiInterface {
 
 
     @GET
-    Observable<LoginRadiusContactCursorResponse> getContact(@Url String url,@Query("access_token") String access_token);
+    Observable<LoginRadiusContactCursorResponse> getContact(@Url String url,@Query("access_token") String access_token,@Query("fields") String fields);
 
 
     @GET
-    Observable<LoginRadiusEvent[]> getEvent(@Url String url,@Query("access_token") String access_token);
+    Observable<LoginRadiusEvent[]> getEvent(@Url String url,@Query("access_token") String access_token,@Query("fields") String fields);
 
 
     @GET
-    Observable<LoginRadiusFollowing[]> getFollowing(@Url String url,@Query("access_token") String access_token);
+    Observable<LoginRadiusFollowing[]> getFollowing(@Url String url,@Query("access_token") String access_token,@Query("fields") String fields);
 
 
     @GET
-    Observable<LoginRadiusGroup[]> getGroup(@Url String url,@Query("access_token") String access_token);
+    Observable<LoginRadiusGroup[]> getGroup(@Url String url,@Query("access_token") String access_token,@Query("fields") String fields);
 
 
     @GET
-    Observable<LoginRadiusLike[]> getLike(@Url String url,@Query("access_token") String access_token);
+    Observable<LoginRadiusLike[]> getLike(@Url String url,@Query("access_token") String access_token,@Query("fields") String fields);
 
 
     @GET
-    Observable<LoginRadiusMention[]> getMention(@Url String url,@Query("access_token") String access_token);
+    Observable<LoginRadiusMention[]> getMention(@Url String url,@Query("access_token") String access_token,@Query("fields") String fields);
 
 
     @GET
-    Observable<LoginRadiusPhoto[]> getPhoto(@Url String url,@Query("access_token") String access_token,@Query("albumId") String albumId);
+    Observable<LoginRadiusPhoto[]> getPhoto(@Url String url,@Query("access_token") String access_token,@Query("albumId") String albumId,@Query("fields") String fields);
 
 
     @GET
-    Observable<LoginRadiusPost[]> getPost(@Url String url,@Query("access_token") String access_token);
+    Observable<LoginRadiusPost[]> getPost(@Url String url,@Query("access_token") String access_token,@Query("fields") String fields);
 
 
     @GET
-    Observable<LoginRadiusStatus[]> getStatus(@Url String url,@Query("access_token") String access_token);
+    Observable<LoginRadiusStatus[]> getStatus(@Url String url,@Query("access_token") String access_token,@Query("fields") String fields);
 
 
     @GET
-    Observable<LoginRadiusVideo[]> getVideo(@Url String url,@Query("access_token") String access_token);
+    Observable<LoginRadiusVideo[]> getVideo(@Url String url,@Query("access_token") String access_token,@Query("fields") String fields);
 
 
     @GET
@@ -142,9 +138,11 @@ public interface ApiInterface {
     @GET
     Observable<lrAccessToken> getNativeLogin(@Url String url,@QueryMap Map<String, String> options);
 
-
     @GET
     Observable<LoginData> getTraditionalLogin(@Url String url,@QueryMap Map<String, String> options);
+
+    @POST
+    Observable<LoginData> getTraditionalLogin(@Url String url,@QueryMap Map<String, String> options,@Body JsonObject value);
 
 
     @GET
@@ -166,6 +164,8 @@ public interface ApiInterface {
     @GET
     Observable<LoginData> getEmailPromptAutoLoginPing(@Url String url,@QueryMap Map<String, String> options);
 
+    @GET
+    Observable<VerifyAutoLoginResponse> getVerifyAutoLoginEmail(@Url String url, @QueryMap Map<String, String> options);
 
     @GET
     Observable<lrAccessToken> getValidateAccessToken(@Url String url,@QueryMap Map<String, String> options);

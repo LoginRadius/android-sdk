@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearNotify"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/str_lr_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:padding="10dp"
+        android:text="Hello"
+        android:background="@android:color/black" />
+
+</LinearLayout>

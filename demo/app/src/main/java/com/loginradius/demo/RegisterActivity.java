@@ -2,23 +2,21 @@ package com.loginradius.demo;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.loginradius.androidsdk.api.RegistrationAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
-import com.loginradius.androidsdk.handler.JsonDeserializer;
-import com.loginradius.androidsdk.helper.ErrorResponse;
 import com.loginradius.androidsdk.response.login.LoginParams;
 import com.loginradius.androidsdk.response.register.Country;
 import com.loginradius.androidsdk.response.register.Email;
@@ -29,7 +27,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class RegisterActivity extends AppCompatActivity {
-    EditText firstname,lastname,country,countrycode,email,password,confirmpassword;
+    boolean phoneLogin;
+    EditText firstname,lastname,country,countrycode,email,mobile,username,password,confirmpassword;
     private TextInputLayout inputfirstname,inputlastname,inputcountry,inputcountrycode,inputemail,inputpassword,inputconfirmpassword;
     private ProgressDialog pDialog;
     String apikey ,verificationUrl,emailTemplate;
@@ -50,6 +49,8 @@ public class RegisterActivity extends AppCompatActivity {
         country = (EditText) findViewById(R.id.country);
         countrycode = (EditText) findViewById(R.id.countrycode);
         email = (EditText) findViewById(R.id.email);
+        mobile = (EditText)findViewById(R.id.mobile);
+        username = (EditText)findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
         confirmpassword = (EditText) findViewById(R.id.confpassword);
         inputfirstname = (TextInputLayout) findViewById(R.id.input_layout_firstname);
@@ -62,7 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
         firstname.addTextChangedListener(new MyTextWatcher(firstname));
         lastname.addTextChangedListener(new MyTextWatcher(lastname));
         country.addTextChangedListener(new MyTextWatcher(country));
-        email.addTextChangedListener(new MyTextWatcher(email));
+        //email.addTextChangedListener(new MyTextWatcher(email));
         password.addTextChangedListener(new MyTextWatcher(password));
         confirmpassword.addTextChangedListener(new MyTextWatcher(confirmpassword));
         Button btnSignUp = (Button) findViewById(R.id.btn_signup);
@@ -76,12 +77,23 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     private void submitForm() {
-        String confermpassword = confirmpassword.getText().toString();
+        String confermpassword = confirmpassword.getText().toString().trim();
         String password1= password.getText().toString().trim();
+        String emailAddress = email.getText().toString().trim();
+        String mobileNumber = mobile.getText().toString().trim();
         if (!password1.equals(confermpassword)){
-            Toast.makeText(RegisterActivity.this, "The Confirm Password field does not match the Password field", Toast.LENGTH_LONG).show();
-        }else {
-
+            NotifyToastUtil.showNotify(RegisterActivity.this,"The Confirm Password field does not match the Password field");
+        }else if(emailAddress.length() == 0){
+            NotifyToastUtil.showNotify(RegisterActivity.this,"Please fill email");
+        }else if(!emailAddress.matches(Patterns.EMAIL_ADDRESS.pattern())){
+            NotifyToastUtil.showNotify(RegisterActivity.this,"Email address is not correct");
+        }else if(username.getText().toString().trim().length() == 0){
+            NotifyToastUtil.showNotify(RegisterActivity.this,"Please fill username");
+        }else if(mobileNumber.length() == 0){
+            NotifyToastUtil.showNotify(RegisterActivity.this,"Please fill mobile number");
+        }else if(!mobileNumber.matches(Patterns.PHONE.pattern())){
+            NotifyToastUtil.showNotify(RegisterActivity.this,"Mobile number is not correct");
+        }else{
             doRegistration();
         }
     }
@@ -148,23 +160,49 @@ public class RegisterActivity extends AppCompatActivity {
         Country countryObj = new Country();
         countryObj.setCode(countrycode.getText().toString());
         countryObj.setName(country.getText().toString());
+
+        final String inputString = email.getText().toString();
+
         Email emailObj = new Email();
         emailObj.setType("Primary");
         emailObj.setValue(email.getText().toString());
         data.setEmail(new ArrayList<Email>(Arrays.asList(emailObj)));
+        data.setPhoneId(mobile.getText().toString().trim());
+        data.setUserName(username.getText().toString().trim());
+
+        /*if(inputString.matches(Patterns.EMAIL_ADDRESS.pattern())){
+
+        }else if(inputString.matches(Patterns.PHONE.pattern())){
+            data.setPhoneId(inputString);
+            phoneLogin = true;
+        }else{
+            data.setUserName(inputString);
+        }*/
 
         RegistrationAPI registrationAPI = new RegistrationAPI();
         registrationAPI.getResponse(value,data,new AsyncHandler<RegisterResponse>() {
             @Override
             public void onSuccess(RegisterResponse registerResponse) {
                 hideProgressDialog();
-                Toast.makeText(RegisterActivity.this, "Please Verify Your Email", Toast.LENGTH_LONG).show();
                 Log.e("data",registerResponse.getIsPosted().toString());
+                NotifyToastUtil.showNotify(RegisterActivity.this,"OTP successfully sent to your phone");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(RegisterActivity.this,OTPActivity.class).putExtra("phoneId",data.getPhoneId().toString()));
+                        finish();
+                    }
+                },1500);
+                /*if(phoneLogin){
+
+                }else{
+                    NotifyToastUtil.showNotify(RegisterActivity.this,"Please Verify Your Email");
+                }*/
             }
             @Override
             public void onFailure(Throwable error, String errorcode) {
                 hideProgressDialog();
-                Toast.makeText(RegisterActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                NotifyToastUtil.showNotify(RegisterActivity.this,error.getMessage());
             }
         });
     }

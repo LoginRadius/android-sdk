@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.loginradius.demo.QuestionAnswerView xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tvQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textAppearance="?android:textAppearanceMedium"/>
+
+    <EditText
+        android:id="@+id/etAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/grey_border"
+        android:inputType="text"
+        android:textColor="@android:color/black"
+        android:padding="5dp"/>
+
+</com.loginradius.demo.QuestionAnswerView>

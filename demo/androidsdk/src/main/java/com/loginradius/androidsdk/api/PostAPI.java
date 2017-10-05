@@ -8,13 +8,11 @@ import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.response.lrAccessToken;
 import com.loginradius.androidsdk.response.post.LoginRadiusPost;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.HttpException;
 
 /**
  * Retrieve posted messages from the user's social account.
@@ -37,7 +35,52 @@ public class PostAPI
 		}
 
 		ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
-		apiService.getPost(Endpoint.API_V2_POST,token.access_token).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+		apiService.getPost(Endpoint.API_V2_POST,token.access_token,null).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+				.subscribe(new DisposableObserver<LoginRadiusPost[]>() {
+					@Override
+					public void onComplete() {}
+
+					@Override
+					public void onError(Throwable e) {
+						ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
+						handler.onFailure(exceptionResponse.t, exceptionResponse.message);
+					}
+
+					@Override
+					public void onNext(LoginRadiusPost[] response) {
+						handler.onSuccess(response);
+					}
+
+				});
+	}
+
+	/**
+	 * Gives user's post on social providers
+	 * @param token Authentication token from LoginRadius
+	 * @param fields Projection of fields
+	 * @param handler Used to handle the success and failure events
+	 */
+	public void getResponse(lrAccessToken token,String fields[],final AsyncHandler<LoginRadiusPost[]> handler)
+	{
+		if (!Arrays.asList(providers).contains(token.provider.toLowerCase())) {
+			handler.onFailure(new Throwable(), "lr_API_NOT_SUPPORTED");
+			return;
+		}
+
+		String strFields = null;
+		if(fields!=null && fields.length>0){
+			strFields = "";
+			for(int i=0;i<fields.length;i++){
+				if(i == (fields.length-1)){
+					strFields = strFields + fields[i];
+				}else{
+					strFields = strFields + fields[i] + ",";
+				}
+			}
+		}
+
+		ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
+		apiService.getPost(Endpoint.API_V2_POST,token.access_token,strFields).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 				.subscribe(new DisposableObserver<LoginRadiusPost[]>() {
 					@Override
 					public void onComplete() {}

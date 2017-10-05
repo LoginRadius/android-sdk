@@ -49,6 +49,7 @@ public class Endpoint {
 	public static final String API_V2_ACCESS_TOKEN_FB = "api/v2/access_token/facebook";
 	public static final String API_V2_ACCESS_TOKEN_GOOGLE = "api/v2/access_token/google";
 	public static final String API_V2_EMAIL_PROMPT_AUTO_LOGIN="identity/v2/auth/login/autologin";
+	public static final String API_V2_VERIFY_AUTO_LOGIN_EMAIL="identity/v2/auth/email/autologin";
 	public static final String API_V2_VALIDATE_ACCESS_TOKEN="identity/v2/auth/access_token/validate";
 	public static final String API_V2_INVALIDATE_ACCESS_TOKEN="identity/v2/auth/access_token/invalidate";
 	public static final String API_V2_SIMPLIFIED_REGISTRATION="identity/v2/auth/noregistration";

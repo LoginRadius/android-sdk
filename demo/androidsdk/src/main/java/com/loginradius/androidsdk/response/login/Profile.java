@@ -6,8 +6,9 @@ package com.loginradius.androidsdk.response.login;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.loginradius.androidsdk.response.userprofile.UnverifiedEmail;
+import com.loginradius.androidsdk.response.userprofile.identity.Identity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,7 +16,7 @@ public class Profile {
 
     @SerializedName("Identities")
     @Expose
-    private Object identities;
+    private List<Identity> identities;
     @SerializedName("PasswordExpirationDate")
     @Expose
     private Object passwordExpirationDate;
@@ -93,7 +94,7 @@ public class Profile {
     private Object website;
     @SerializedName("Email")
     @Expose
-    private List<Email> email = new ArrayList<Email>();
+    private List<Email> email;
     @SerializedName("Country")
     @Expose
     private Object country;
@@ -153,7 +154,7 @@ public class Profile {
     private Object educations;
     @SerializedName("PhoneNumbers")
     @Expose
-    private List<PhoneNumber> phoneNumbers = new ArrayList<PhoneNumber>();
+    private List<PhoneNumber> phoneNumbers;
     @SerializedName("IMAccounts")
     @Expose
     private Object iMAccounts;
@@ -376,6 +377,8 @@ public class Profile {
     @SerializedName("LikesCount")
     @Expose
     private Integer likesCount;
+    @SerializedName("UnverifiedEmail")
+    private List<UnverifiedEmail> unverifiedEmail = null;
 
     /**
      *
@@ -391,7 +394,7 @@ public class Profile {
      * @param identities
      * The Identities
      */
-    public void setIdentities(Object identities) {
+    public void setIdentities(List<Identity> identities) {
         this.identities = identities;
     }
 
@@ -2555,4 +2558,23 @@ public class Profile {
         this.likesCount = likesCount;
     }
 
+    /**
+     *
+     * @return
+     * List of unverified emails
+     */
+
+    public List<UnverifiedEmail> getUnverifiedEmail() {
+        return unverifiedEmail;
+    }
+
+    /**
+     *
+     * @param unverifiedEmail
+     * List of unverified emails
+     */
+
+    public void setUnverifiedEmail(List<UnverifiedEmail> unverifiedEmail) {
+        this.unverifiedEmail = unverifiedEmail;
+    }
 }

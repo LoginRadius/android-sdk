@@ -234,7 +234,7 @@ public class GoogleNativeActivity extends AppCompatActivity {
 
     private void getUserProfile() {
         UserProfileAPI api = new UserProfileAPI();
-        api.getResponse(accessToken, new AsyncHandler<LoginRadiusUltimateUserProfile>() {
+        api.getResponse(accessToken, null, new AsyncHandler<LoginRadiusUltimateUserProfile>() {
             @Override
             public void onSuccess(LoginRadiusUltimateUserProfile data) {
                 userProfile = data;

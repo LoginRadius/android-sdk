@@ -33,8 +33,6 @@ import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.handler.JsonDeserializer;
 import com.loginradius.androidsdk.handler.URLHelper;
 import com.loginradius.androidsdk.helper.ErrorResponse;
-import com.loginradius.androidsdk.ui.FieldViewUtil;
-import com.loginradius.androidsdk.ui.RequiredFieldsViewGenerator;
 import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.response.login.LoginData;
 import com.loginradius.androidsdk.response.login.LoginParams;
@@ -42,6 +40,8 @@ import com.loginradius.androidsdk.response.lrAccessToken;
 import com.loginradius.androidsdk.response.register.RegisterResponse;
 import com.loginradius.androidsdk.response.traditionalinterface.UserRegisteration;
 import com.loginradius.androidsdk.response.userprofile.LoginRadiusUltimateUserProfile;
+import com.loginradius.androidsdk.ui.FieldViewUtil;
+import com.loginradius.androidsdk.ui.RequiredFieldsViewGenerator;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -175,7 +175,7 @@ public class WebViewActivity extends AppCompatActivity {
 
     private void getUserProfile() {
         UserProfileAPI api = new UserProfileAPI();
-        api.getResponse(accessToken, new AsyncHandler<LoginRadiusUltimateUserProfile>() {
+        api.getResponse(accessToken, null, new AsyncHandler<LoginRadiusUltimateUserProfile>() {
             @Override
             public void onSuccess(LoginRadiusUltimateUserProfile data) {
                 userProfile = data;
