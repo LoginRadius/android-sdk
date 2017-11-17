@@ -3,6 +3,48 @@
 ### Version 4.0.0
 Released on **November 17,  2017**
 
+##### Breaking Changes
+
+For developers migrating from v3.x.x, there will be some breaking changes in terms of SDK implementation. In the previous versions, you've to define the common variables everytime while making API calls. But, from this release onwards, you can initialize them once and they'll be automatically reflected in every single API call you make. It can be done using LoginRadiusSDK.Initialize class.
+
+Also, you'll find some major restructuring while using APIs. For example, till v3.x.x, for getting a user profile, you've to use the code similar to the following:
+
+```
+lrAccessToken token = new lrAccessToken();
+token.access_token = "<your-access-token>";
+token.apikey="<your-api-key>";
+UserProfileAPI api = new UserProfileAPI();
+api.getResponse(token, new AsyncHandler <LoginRadiusUltimateUserProfile> () {
+ @Override
+ public void onSuccess(LoginRadiusUltimateUserProfile userProfile) {
+     Toast.makeText(context,"First Name: "+userProfile.FirstName+" Last Name:"+userProfile.LastName,Toast.LENGTH_SHORT).show();
+ }
+
+ @Override
+ public void onFailure(Throwable error, String errorcode) {
+     Toast.makeText(context,error.getMessage(),Toast.LENGTH_SHORT).show();
+ }
+});
+```
+
+From v4.x.x, for fetching user profile, you've to use code similar to the following:
+
+```
+QueryParams params = new QueryParams();
+params.setAccess_token(access_token);
+AuthenticationAPI api = new AuthenticationAPI();
+api.readAllUserProfile(params, new AsyncHandler < LoginRadiusUltimateUserProfile > () {
+	@Override
+	public void onSuccess(LoginRadiusUltimateUserProfile userProfile) {
+		Toast.makeText(context, "First Name: " + userProfile.FirstName + " Last Name:" + userProfile.LastName, Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onFailure(Throwable error, String errorcode) {
+		Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+	}
+});
+```
 
 ##### Enhancements
 
@@ -10,7 +52,6 @@ Released on **November 17,  2017**
   - Initialize required values with LoginRadiusSDK.Initialize class.
   - Added LoginRadiusSDK.NativeLogin and LoginRadiusSDK.WebLogin classes for better social login usage.
   - Added constant strings for social providers.
-  - Added Vkontakte native login
   - SOTT as header in Registration API
   - Added password strength indicator field in Profile class
   - Added more APIs
@@ -217,8 +258,3 @@ Released on **July 12,  2016**
   
 ##### Bug Fixes
   - Handled social ID provider Empty email address scenario. 
-
-
- 
- 
-  
