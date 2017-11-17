@@ -5,15 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Patterns;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.gson.JsonObject;
-import com.loginradius.androidsdk.api.ResetPasswordBySecurityQuestionAPI;
+import com.loginradius.androidsdk.api.AuthenticationAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
-import com.loginradius.androidsdk.response.login.LoginParams;
+import com.loginradius.androidsdk.resource.QueryParams;
 import com.loginradius.androidsdk.response.register.RegisterResponse;
 
 public class ResetPasswordBySecurityQuestionActivity extends AppCompatActivity implements OnClickListener{
@@ -60,26 +61,32 @@ public class ResetPasswordBySecurityQuestionActivity extends AppCompatActivity i
                 }else if(!newPassword.equals(confirmPassword)){
                     NotifyToastUtil.showNotify(this,"Password mismatch");
                 }else{
-                    resetPasswordBySecurityQuestions(newPassword);
+                    resetPasswordBySecurityQuestions(newPassword,confirmPassword);
                 }
                 break;
         }
     }
 
-    private void resetPasswordBySecurityQuestions(String newPassword) {
+    private void resetPasswordBySecurityQuestions(String newPassword,String confirmPassword) {
         showProgressDialog();
-        ResetPasswordBySecurityQuestionAPI api = new ResetPasswordBySecurityQuestionAPI();
-        LoginParams params = new LoginParams();
-        params.apikey = getString(R.string.api_key);
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams params = new QueryParams();
+        if(value.matches(Patterns.EMAIL_ADDRESS.pattern())){
+            params.setEmail(value);
+        }else if(value.matches(Patterns.PHONE.pattern())){
+            params.setPhone(value);
+        }else {
+            params.setUsername(value);
+        }
+        params.setPassword(newPassword);
+        params.setConfirmPassword(confirmPassword);
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("userid",value);
-        jsonObject.addProperty("password",newPassword);
         JsonObject qaJson = new JsonObject();
         for(int i = 0;i<arrQuestionId.length;i++){
             qaJson.addProperty(arrQuestionId[i],arrAnswer[i]);
         }
         jsonObject.add("securityanswer",qaJson);
-        api.getResponse(params, jsonObject, new AsyncHandler<RegisterResponse>() {
+        api.resetPasswordBySecurityQuestions(params,jsonObject, new AsyncHandler<RegisterResponse>() {
             @Override
             public void onSuccess(RegisterResponse data) {
                 hideProgressDialog();

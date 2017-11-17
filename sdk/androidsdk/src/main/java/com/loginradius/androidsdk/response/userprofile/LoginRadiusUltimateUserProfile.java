@@ -212,7 +212,7 @@ public class LoginRadiusUltimateUserProfile
       @SerializedName("ProfessionalHeadline")
      public String ProfessionalHeadline;
       @SerializedName("ProviderAccessCredential")
-     public ProviderAccessCredential ProviderAccessCredential ;
+     public com.loginradius.androidsdk.response.userprofile.ProviderAccessCredential ProviderAccessCredential ;
       @SerializedName("RelatedProfileViews")
      public List<LoginRadiusRelatedProfileViews> RelatedProfileViews ;
       @SerializedName("KloutScore")

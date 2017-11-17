@@ -6,8 +6,10 @@ package com.loginradius.androidsdk.response.login;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 
-public class PhoneNumber {
+
+public class PhoneNumber implements Serializable{
 
     @SerializedName("PhoneType")
     @Expose

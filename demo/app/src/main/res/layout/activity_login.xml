@@ -4,137 +4,128 @@
              android:layout_height="match_parent"
              android:padding="16dp">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:weightSum="3">
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/socialbutton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.2"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <ImageButton
-                android:id="@+id/facebook"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/facebook"
-                android:onClick="selfDestruct"/>
-
-
-            <ImageButton
-                android:id="@+id/google"
-                android:layout_width="0dp"
-                android:layout_height="45dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginLeft="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/google"
-                android:onClick="selfDestruct"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/or"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_weight="0.3"
-            android:orientation="horizontal"
-            android:weightSum="1">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_gravity="left|center_vertical"
-                android:layout_weight="0.4"
-                android:background="#B6B6B4"/>
-
-            <TextView
-                android:id="@+id/tvText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_weight="0.2"
-
-                android:gravity="center_horizontal"
-                android:text="or"
-                android:textColor="#657383"
-                android:textSize="20dp"/>
-
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_gravity="right|center_vertical"
-                android:layout_weight="0.4"
-                android:background="#B6B6B4"/>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/rasssinterface"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp">
-
-                <EditText
-                    android:id="@+id/input_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Email/Phone/Username"
-                    android:inputType="textEmailAddress"/>
-            </android.support.design.widget.TextInputLayout>
-
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/input_layout_password"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/input_password"
+                <LinearLayout
+                    android:id="@+id/linearSocial"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
-                    android:inputType="textPassword"/>
-            </android.support.design.widget.TextInputLayout>
+                    android:visibility="gone"
+                    android:orientation="vertical"/>
 
+                <ProgressBar
+                    android:id="@+id/pbLoad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
 
-            <Button
-                android:id="@+id/btn_login"
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/or"
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="25dp"
-                android:background="@color/actionButtoncolor"
-                android:gravity="center_horizontal|center_vertical"
-                android:text="Login"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:textSize="20dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="30dp"
+                android:visibility="gone"
+                android:orientation="horizontal">
 
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_gravity="left|center_vertical"
+                    android:layout_weight="0.4"
+                    android:background="#B6B6B4"/>
+
+                <TextView
+                    android:id="@+id/tvText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_weight="0.2"
+
+                    android:gravity="center_horizontal"
+                    android:text="or"
+                    android:textColor="#657383"
+                    android:textSize="20dp"/>
+
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_weight="0.4"
+                    android:background="#B6B6B4"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rasssinterface"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:orientation="vertical">
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp">
+
+                    <EditText
+                        android:id="@+id/input_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Email/Phone/Username"
+                        android:inputType="textEmailAddress"/>
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/input_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Password"
+                        android:inputType="textPassword"/>
+                </android.support.design.widget.TextInputLayout>
+
+
+                <Button
+                    android:id="@+id/btn_login"
+                    android:layout_width="fill_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@color/actionButtoncolor"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="Login"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="20dp"/>
+
+
+            </LinearLayout>
 
         </LinearLayout>
-    </LinearLayout>
+
+    </ScrollView>
 
     <include
         layout="@layout/notify_layout"

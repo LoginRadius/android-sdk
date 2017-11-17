@@ -295,7 +295,7 @@ public class RegistrationData {
     private Object phoneId;
 
     /**
-     * 
+     *
      * @return
      *     The prefix
      */
@@ -304,7 +304,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param prefix
      *     The Prefix
      */
@@ -313,7 +313,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The firstName
      */
@@ -322,7 +322,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param firstName
      *     The FirstName
      */
@@ -331,7 +331,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The middleName
      */
@@ -340,7 +340,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param middleName
      *     The MiddleName
      */
@@ -349,7 +349,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The lastName
      */
@@ -358,7 +358,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param lastName
      *     The LastName
      */
@@ -367,7 +367,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The suffix
      */
@@ -376,7 +376,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param suffix
      *     The Suffix
      */
@@ -385,7 +385,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The fullName
      */
@@ -394,7 +394,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param fullName
      *     The FullName
      */
@@ -403,7 +403,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The nickName
      */
@@ -412,7 +412,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param nickName
      *     The NickName
      */
@@ -421,7 +421,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The profileName
      */
@@ -430,7 +430,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param profileName
      *     The ProfileName
      */
@@ -439,7 +439,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The birthDate
      */
@@ -448,7 +448,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param birthDate
      *     The BirthDate
      */
@@ -457,7 +457,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The gender
      */
@@ -466,7 +466,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param gender
      *     The Gender
      */
@@ -475,7 +475,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The website
      */
@@ -484,7 +484,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param website
      *     The Website
      */
@@ -493,7 +493,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The email
      */
@@ -502,7 +502,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param email
      *     The Email
      */
@@ -511,7 +511,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The country
      */
@@ -520,7 +520,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param country
      *     The Country
      */
@@ -529,7 +529,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The thumbnailImageUrl
      */
@@ -538,7 +538,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param thumbnailImageUrl
      *     The ThumbnailImageUrl
      */
@@ -547,7 +547,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The imageUrl
      */
@@ -556,7 +556,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param imageUrl
      *     The ImageUrl
      */
@@ -565,7 +565,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The favicon
      */
@@ -574,7 +574,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param favicon
      *     The Favicon
      */
@@ -583,7 +583,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The profileUrl
      */
@@ -592,7 +592,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param profileUrl
      *     The ProfileUrl
      */
@@ -601,7 +601,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The homeTown
      */
@@ -610,7 +610,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param homeTown
      *     The HomeTown
      */
@@ -619,7 +619,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The state
      */
@@ -628,7 +628,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param state
      *     The State
      */
@@ -637,7 +637,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The city
      */
@@ -646,7 +646,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param city
      *     The City
      */
@@ -655,7 +655,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The industry
      */
@@ -664,7 +664,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param industry
      *     The Industry
      */
@@ -673,7 +673,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The about
      */
@@ -682,7 +682,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param about
      *     The About
      */
@@ -691,7 +691,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The timeZone
      */
@@ -700,7 +700,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param timeZone
      *     The TimeZone
      */
@@ -709,7 +709,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The localLanguage
      */
@@ -718,7 +718,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param localLanguage
      *     The LocalLanguage
      */
@@ -727,7 +727,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The coverPhoto
      */
@@ -736,7 +736,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param coverPhoto
      *     The CoverPhoto
      */
@@ -745,7 +745,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The tagLine
      */
@@ -754,7 +754,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param tagLine
      *     The TagLine
      */
@@ -763,7 +763,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The mainAddress
      */
@@ -772,7 +772,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param mainAddress
      *     The MainAddress
      */
@@ -781,7 +781,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The localCity
      */
@@ -790,7 +790,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param localCity
      *     The LocalCity
      */
@@ -799,7 +799,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The profileCity
      */
@@ -808,7 +808,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param profileCity
      *     The ProfileCity
      */
@@ -817,7 +817,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The localCountry
      */
@@ -826,7 +826,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param localCountry
      *     The LocalCountry
      */
@@ -835,7 +835,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The profileCountry
      */
@@ -844,7 +844,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param profileCountry
      *     The ProfileCountry
      */
@@ -853,7 +853,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The isProtected
      */
@@ -862,7 +862,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param isProtected
      *     The IsProtected
      */
@@ -871,7 +871,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The relationshipStatus
      */
@@ -880,7 +880,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param relationshipStatus
      *     The RelationshipStatus
      */
@@ -889,7 +889,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The quota
      */
@@ -898,7 +898,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param quota
      *     The Quota
      */
@@ -907,7 +907,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The quote
      */
@@ -916,7 +916,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param quote
      *     The Quote
      */
@@ -925,7 +925,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The religion
      */
@@ -934,7 +934,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param religion
      *     The Religion
      */
@@ -943,7 +943,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The political
      */
@@ -952,7 +952,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param political
      *     The Political
      */
@@ -961,7 +961,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The httpsImageUrl
      */
@@ -970,7 +970,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param httpsImageUrl
      *     The HttpsImageUrl
      */
@@ -979,7 +979,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The followersCount
      */
@@ -988,7 +988,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param followersCount
      *     The FollowersCount
      */
@@ -997,7 +997,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The friendsCount
      */
@@ -1006,7 +1006,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param friendsCount
      *     The FriendsCount
      */
@@ -1015,7 +1015,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The isGeoEnabled
      */
@@ -1024,7 +1024,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param isGeoEnabled
      *     The IsGeoEnabled
      */
@@ -1033,7 +1033,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The totalStatusesCount
      */
@@ -1042,7 +1042,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param totalStatusesCount
      *     The TotalStatusesCount
      */
@@ -1051,7 +1051,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The associations
      */
@@ -1060,7 +1060,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param associations
      *     The Associations
      */
@@ -1069,7 +1069,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The numRecommenders
      */
@@ -1078,7 +1078,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param numRecommenders
      *     The NumRecommenders
      */
@@ -1087,7 +1087,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The honors
      */
@@ -1096,7 +1096,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param honors
      *     The Honors
      */
@@ -1105,7 +1105,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The awards
      */
@@ -1114,7 +1114,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param awards
      *     The Awards
      */
@@ -1123,7 +1123,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The skills
      */
@@ -1132,7 +1132,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param skills
      *     The Skills
      */
@@ -1141,7 +1141,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The currentStatus
      */
@@ -1150,7 +1150,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param currentStatus
      *     The CurrentStatus
      */
@@ -1159,7 +1159,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The certifications
      */
@@ -1168,7 +1168,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param certifications
      *     The Certifications
      */
@@ -1177,7 +1177,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The courses
      */
@@ -1186,7 +1186,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param courses
      *     The Courses
      */
@@ -1195,7 +1195,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The volunteer
      */
@@ -1204,7 +1204,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param volunteer
      *     The Volunteer
      */
@@ -1213,7 +1213,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The recommendationsReceived
      */
@@ -1222,7 +1222,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param recommendationsReceived
      *     The RecommendationsReceived
      */
@@ -1231,7 +1231,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The languages
      */
@@ -1240,7 +1240,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param languages
      *     The Languages
      */
@@ -1249,7 +1249,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The projects
      */
@@ -1258,7 +1258,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param projects
      *     The Projects
      */
@@ -1267,7 +1267,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The games
      */
@@ -1276,7 +1276,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param games
      *     The Games
      */
@@ -1285,7 +1285,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The family
      */
@@ -1294,7 +1294,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param family
      *     The Family
      */
@@ -1303,7 +1303,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The teleVisionShow
      */
@@ -1312,7 +1312,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param teleVisionShow
      *     The TeleVisionShow
      */
@@ -1321,7 +1321,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The mutualFriends
      */
@@ -1330,7 +1330,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param mutualFriends
      *     The MutualFriends
      */
@@ -1339,7 +1339,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The movies
      */
@@ -1348,7 +1348,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param movies
      *     The Movies
      */
@@ -1357,7 +1357,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The books
      */
@@ -1366,7 +1366,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param books
      *     The Books
      */
@@ -1375,7 +1375,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The ageRange
      */
@@ -1384,7 +1384,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param ageRange
      *     The AgeRange
      */
@@ -1393,7 +1393,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The publicRepository
      */
@@ -1402,7 +1402,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param publicRepository
      *     The PublicRepository
      */
@@ -1411,7 +1411,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The hireable
      */
@@ -1420,7 +1420,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param hireable
      *     The Hireable
      */
@@ -1429,7 +1429,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The repositoryUrl
      */
@@ -1438,7 +1438,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param repositoryUrl
      *     The RepositoryUrl
      */
@@ -1447,7 +1447,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The age
      */
@@ -1456,7 +1456,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param age
      *     The Age
      */
@@ -1465,7 +1465,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The patents
      */
@@ -1474,7 +1474,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param patents
      *     The Patents
      */
@@ -1483,7 +1483,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The favoriteThings
      */
@@ -1492,7 +1492,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param favoriteThings
      *     The FavoriteThings
      */
@@ -1501,7 +1501,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The professionalHeadline
      */
@@ -1510,7 +1510,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param professionalHeadline
      *     The ProfessionalHeadline
      */
@@ -1519,7 +1519,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The providerAccessCredential
      */
@@ -1528,7 +1528,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param providerAccessCredential
      *     The ProviderAccessCredential
      */
@@ -1537,7 +1537,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The relatedProfileViews
      */
@@ -1546,7 +1546,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param relatedProfileViews
      *     The RelatedProfileViews
      */
@@ -1555,7 +1555,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The kloutScore
      */
@@ -1564,7 +1564,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param kloutScore
      *     The KloutScore
      */
@@ -1573,7 +1573,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The lRUserID
      */
@@ -1582,7 +1582,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param lRUserID
      *     The LRUserID
      */
@@ -1591,7 +1591,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The placesLived
      */
@@ -1600,7 +1600,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param placesLived
      *     The PlacesLived
      */
@@ -1609,7 +1609,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The publications
      */
@@ -1618,7 +1618,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param publications
      *     The Publications
      */
@@ -1627,7 +1627,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The jobBookmarks
      */
@@ -1636,7 +1636,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param jobBookmarks
      *     The JobBookmarks
      */
@@ -1645,7 +1645,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The suggestions
      */
@@ -1654,7 +1654,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param suggestions
      *     The Suggestions
      */
@@ -1663,7 +1663,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The badges
      */
@@ -1672,7 +1672,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param badges
      *     The Badges
      */
@@ -1681,7 +1681,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The memberUrlResources
      */
@@ -1690,7 +1690,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param memberUrlResources
      *     The MemberUrlResources
      */
@@ -1699,7 +1699,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The totalPrivateRepository
      */
@@ -1708,7 +1708,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param totalPrivateRepository
      *     The TotalPrivateRepository
      */
@@ -1717,7 +1717,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The currency
      */
@@ -1726,7 +1726,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param currency
      *     The Currency
      */
@@ -1735,7 +1735,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The starredUrl
      */
@@ -1744,7 +1744,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param starredUrl
      *     The StarredUrl
      */
@@ -1753,7 +1753,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The gistsUrl
      */
@@ -1762,7 +1762,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param gistsUrl
      *     The GistsUrl
      */
@@ -1771,7 +1771,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The publicGists
      */
@@ -1780,7 +1780,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param publicGists
      *     The PublicGists
      */
@@ -1789,7 +1789,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The privateGists
      */
@@ -1798,7 +1798,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param privateGists
      *     The PrivateGists
      */
@@ -1807,7 +1807,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The subscription
      */
@@ -1816,7 +1816,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param subscription
      *     The Subscription
      */
@@ -1825,7 +1825,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The company
      */
@@ -1834,7 +1834,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param company
      *     The Company
      */
@@ -1843,7 +1843,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The gravatarImageUrl
      */
@@ -1852,7 +1852,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param gravatarImageUrl
      *     The GravatarImageUrl
      */
@@ -1861,7 +1861,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The profileImageUrls
      */
@@ -1870,7 +1870,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param profileImageUrls
      *     The ProfileImageUrls
      */
@@ -1879,7 +1879,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The webProfiles
      */
@@ -1888,7 +1888,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param webProfiles
      *     The WebProfiles
      */
@@ -1897,7 +1897,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The password
      */
@@ -1906,7 +1906,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param password
      *     The Password
      */
@@ -1915,7 +1915,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The uid
      */
@@ -1924,7 +1924,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param uid
      *     The Uid
      */
@@ -1933,7 +1933,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The customFields
      */
@@ -1942,7 +1942,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param customFields
      *     The CustomFields
      */
@@ -1951,7 +1951,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The isEmailSubscribed
      */
@@ -1960,7 +1960,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param isEmailSubscribed
      *     The IsEmailSubscribed
      */
@@ -1969,7 +1969,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The userName
      */
@@ -1978,7 +1978,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param userName
      *     The UserName
      */
@@ -1987,7 +1987,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @return
      *     The phoneId
      */
@@ -1996,7 +1996,7 @@ public class RegistrationData {
     }
 
     /**
-     * 
+     *
      * @param phoneId
      *     The PhoneId
      */

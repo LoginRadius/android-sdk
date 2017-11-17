@@ -10,11 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.gson.JsonObject;
-import com.loginradius.androidsdk.api.OtpVerificationAPI;
-import com.loginradius.androidsdk.api.ResendotpAPI;
+import com.loginradius.androidsdk.api.AuthenticationAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
+import com.loginradius.androidsdk.resource.LoginUtil;
+import com.loginradius.androidsdk.resource.QueryParams;
 import com.loginradius.androidsdk.response.login.LoginData;
-import com.loginradius.androidsdk.response.login.LoginParams;
 import com.loginradius.androidsdk.response.register.RegisterResponse;
 
 public class OTPActivity extends AppCompatActivity implements OnClickListener{
@@ -72,12 +72,10 @@ public class OTPActivity extends AppCompatActivity implements OnClickListener{
 
     private void resendOTP() {
         showProgressDialog();
-        LoginParams params = new LoginParams();
-        params.apikey = getString(R.string.api_key);
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("Phone", phoneId);
-        ResendotpAPI api = new ResendotpAPI();
-        api.getResponse(params, jsonObject, new AsyncHandler<RegisterResponse>() {
+        AuthenticationAPI api = new AuthenticationAPI();
+        api.resendOtp(null,jsonObject, new AsyncHandler<RegisterResponse>() {
 
             @Override
             public void onSuccess(RegisterResponse data) {
@@ -95,21 +93,20 @@ public class OTPActivity extends AppCompatActivity implements OnClickListener{
 
     private void submitOTP(String otp) {
         showProgressDialog();
-        LoginParams params = new LoginParams();
-        params.apikey = getString(R.string.api_key);
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("Phone", phoneId);
-        params.otp = otp;
-        OtpVerificationAPI api = new OtpVerificationAPI();
-        api.getResponse(params, jsonObject, new AsyncHandler<LoginData>() {
+        queryParams.setOtp(otp);
+        api.verifyOtp(queryParams, jsonObject, new AsyncHandler<LoginData>() {
 
             @Override
             public void onSuccess(LoginData data) {
                 hideProgressDialog();
+                LoginUtil loginUtil = new LoginUtil(OTPActivity.this);
+                loginUtil.setLogin(data.getAccessToken());
                 Intent intent = new Intent(getApplication(), ProfileActivity.class);
-                intent.putExtra("accesstoken", data.getAccessToken());
                 intent.putExtra("provider", data.getProfile().getProvider().toLowerCase());
-                intent.putExtra("apikey", getString(R.string.api_key));
                 startActivity(intent);
                 finish();
             }

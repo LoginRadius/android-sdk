@@ -3,6 +3,7 @@ package com.loginradius.demo;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -19,14 +20,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
-import com.loginradius.androidsdk.api.GetSecurityQuestionsAPI;
-import com.loginradius.androidsdk.api.LoginAPI;
+import com.loginradius.androidsdk.api.AuthenticationAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.handler.JsonDeserializer;
 import com.loginradius.androidsdk.helper.ErrorResponse;
-import com.loginradius.androidsdk.response.GetSecurityQuestionsResponse;
+import com.loginradius.androidsdk.resource.LoginUtil;
+import com.loginradius.androidsdk.resource.QueryParams;
+import com.loginradius.androidsdk.response.securityquestions.SecurityQuestionsResponse;
 import com.loginradius.androidsdk.response.login.LoginData;
-import com.loginradius.androidsdk.response.login.LoginParams;
 
 public class SecurityQuestionsActivity extends AppCompatActivity implements OnClickListener{
 
@@ -40,7 +41,7 @@ public class SecurityQuestionsActivity extends AppCompatActivity implements OnCl
     private String value,password;
     private boolean isForgotPassword;
     private String[] arrQuestionId,arrAnswer;
-    private GetSecurityQuestionsResponse[] securityQuestionsResponse;
+    private SecurityQuestionsResponse[] securityQuestionsResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,19 +77,18 @@ public class SecurityQuestionsActivity extends AppCompatActivity implements OnCl
     }
 
     private void getSecurityQuestions() {
-        GetSecurityQuestionsAPI api = new GetSecurityQuestionsAPI();
-        LoginParams params = new LoginParams();
-        params.apikey = getString(R.string.api_key);
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
         if(value.matches(Patterns.EMAIL_ADDRESS.pattern())){
-            params.email = value;
+            queryParams.setEmail(value);
         }else if(value.matches(Patterns.PHONE.pattern())){
-            params.phone = value;
+            queryParams.setPhone(value);
         }else{
-            params.username = value;
+            queryParams.setUsername(value);
         }
-        api.getResponse(params, new AsyncHandler<GetSecurityQuestionsResponse[]>() {
+        api.getSecurityQuestions(queryParams, new AsyncHandler<SecurityQuestionsResponse[]>() {
             @Override
-            public void onSuccess(GetSecurityQuestionsResponse[] data) {
+            public void onSuccess(SecurityQuestionsResponse[] data) {
                 pbLoad.setVisibility(View.GONE);
                 securityQuestionsResponse = data;
                 arrQuestionId = new String[data.length];
@@ -158,31 +158,31 @@ public class SecurityQuestionsActivity extends AppCompatActivity implements OnCl
 
     private void loginWithSecurityQuestions() {
         showProgressDialog();
-        LoginAPI api = new LoginAPI();
-        LoginParams params = new LoginParams();
-        params.apikey = getString(R.string.api_key);
-        params.verificationUrl = getString(R.string.verification_url);
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
         if(value.matches(Patterns.EMAIL_ADDRESS.pattern())){
-            params.email = value;
+            queryParams.setEmail(value);
         }else if(value.matches(Patterns.PHONE.pattern())){
-            params.phone = value;
+            queryParams.setPhone(value);
         }else{
-            params.username = value;
+            queryParams.setUsername(value);
         }
-        params.password = password;
+        queryParams.setPassword(password);
+        queryParams.setRequired(true);
+        queryParams.setFieldsColor(Color.parseColor("#000000"));
         JsonObject qaJson = new JsonObject();
         for(int i = 0;i<arrQuestionId.length;i++){
             qaJson.addProperty(arrQuestionId[i],arrAnswer[i]);
         }
-        api.getResponse(params, qaJson, new AsyncHandler<LoginData>() {
+        api.loginWithSecurityQuestion(SecurityQuestionsActivity.this, queryParams, qaJson, new AsyncHandler<LoginData>() {
             @Override
             public void onSuccess(LoginData data) {
                 hideProgressDialog();
                 try {
+                    LoginUtil loginUtil = new LoginUtil(SecurityQuestionsActivity.this);
+                    loginUtil.setLogin(data.getAccessToken());
                     Intent intent = new Intent(getApplication(), ProfileActivity.class);
-                    intent.putExtra("accesstoken", data.getAccessToken());
                     intent.putExtra("provider", data.getProfile().getProvider().toLowerCase());
-                    intent.putExtra("apikey", getString(R.string.api_key));
                     startActivity(intent);
                     finish();
                 } catch (Exception e) {

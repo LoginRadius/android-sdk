@@ -71,7 +71,26 @@
             android:name=".SecurityQuestionsActivity"
             android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".ResetPasswordBySecurityQuestionActivity">
+        <activity
+            android:name=".ResetPasswordBySecurityQuestionActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".DeepLinkVerifyActivity"
+            android:screenOrientation="portrait">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:host="auth.lrcontent.com"
+                    android:pathPrefix="/mobile/verification/index.html"
+                    android:scheme="https"/>
+            </intent-filter>
+
         </activity>
     </application>
 

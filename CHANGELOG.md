@@ -1,5 +1,24 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://docs.loginradius.com/api/v2/mobile-libraries/android)
 
+### Version 4.0.0
+Released on **November 17,  2017**
+
+
+##### Enhancements
+
+  - Restructuring of API calls and methods.
+  - Initialize required values with LoginRadiusSDK.Initialize class.
+  - Added LoginRadiusSDK.NativeLogin and LoginRadiusSDK.WebLogin classes for better social login usage.
+  - Added constant strings for social providers.
+  - Added Vkontakte native login
+  - SOTT as header in Registration API
+  - Added password strength indicator field in Profile class
+  - Added more APIs
+  
+##### Bug Fixes
+
+  - Minor bug fixes
+
 ### Version 3.5.0
 Released on **October 5,  2017**
 

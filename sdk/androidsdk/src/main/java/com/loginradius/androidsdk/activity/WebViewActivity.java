@@ -24,21 +24,20 @@ import android.widget.Toast;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.loginradius.androidsdk.R;
-import com.loginradius.androidsdk.api.OtpVerificationAPI;
-import com.loginradius.androidsdk.api.ResendotpAPI;
-import com.loginradius.androidsdk.api.TraditionalInterfaceAPI;
-import com.loginradius.androidsdk.api.UpdateProfileAPI;
-import com.loginradius.androidsdk.api.UserProfileAPI;
+import com.loginradius.androidsdk.api.AuthenticationAPI;
+import com.loginradius.androidsdk.api.ConfigurationAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.handler.JsonDeserializer;
 import com.loginradius.androidsdk.handler.URLHelper;
 import com.loginradius.androidsdk.helper.ErrorResponse;
+import com.loginradius.androidsdk.helper.LoginRadiusSDK;
 import com.loginradius.androidsdk.resource.Endpoint;
+import com.loginradius.androidsdk.resource.QueryParams;
+import com.loginradius.androidsdk.response.AccessTokenResponse;
+import com.loginradius.androidsdk.response.config.ConfigResponse;
 import com.loginradius.androidsdk.response.login.LoginData;
-import com.loginradius.androidsdk.response.login.LoginParams;
-import com.loginradius.androidsdk.response.lrAccessToken;
 import com.loginradius.androidsdk.response.register.RegisterResponse;
-import com.loginradius.androidsdk.response.traditionalinterface.UserRegisteration;
+import com.loginradius.androidsdk.response.traditionalinterface.UserRegistration;
 import com.loginradius.androidsdk.response.userprofile.LoginRadiusUltimateUserProfile;
 import com.loginradius.androidsdk.ui.FieldViewUtil;
 import com.loginradius.androidsdk.ui.RequiredFieldsViewGenerator;
@@ -58,11 +57,11 @@ import io.reactivex.schedulers.Schedulers;
 
 public class WebViewActivity extends AppCompatActivity {
     private WebView webView;
-    String apikey, sitename, provider, spinview, verificationurl, encodedURL;
+    String provider, spinview, encodedURL;
     int fieldsColor;
-    boolean isRequired,promptPassword,reloadOnError;
-    List<UserRegisteration> raasSchemaList;
-    lrAccessToken accessToken;
+    boolean isRequired,promptPassword,reloadOnError,askOptionalOnSocialLogin,customScopeEnabled;
+    List<UserRegistration> raasSchemaList;
+    AccessTokenResponse accessToken;
     RequiredFieldsViewGenerator gtr;
     FieldViewUtil fieldUtil;
     Context context;
@@ -72,24 +71,27 @@ public class WebViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
+
+        if(!LoginRadiusSDK.validate()){
+            throw new LoginRadiusSDK.InitializeException();
+        }
+
         spinview = "false";
         webView = (WebView) findViewById(R.id.webView1);
         context = webView.getContext();
         Intent i = getIntent();
         provider = i.getStringExtra("provider");
-        apikey = getIntent().getExtras().getString("apikey");
-        sitename = getIntent().getExtras().getString("sitename");
-        isRequired = i.getBooleanExtra("isRequired",false);
-        promptPassword = i.getBooleanExtra("promptPassword",false);
-        verificationurl = i.getStringExtra("verificationurl");
+        isRequired = i.getBooleanExtra("isRequired",true);
         fieldsColor = i.getIntExtra("fieldsColor",0);
         reloadOnError = i.getBooleanExtra("reloadOnError",false);
-        String sitebuilder = "https://" + sitename;
+        customScopeEnabled = i.getBooleanExtra("customScopeEnabled",false);
+        String sitebuilder = "https://" + LoginRadiusSDK.getSiteName();
         HashMap<String, String> params = new LinkedHashMap<>();
-        params.put("apikey", apikey);
+        params.put("apikey", LoginRadiusSDK.getApiKey());
         params.put("provider", provider.toLowerCase());
         params.put("is_access_token", "true");
         params.put("ismobile", "true");
+        params.put("is_custom_scope",String.valueOf(customScopeEnabled));
         encodedURL = sitebuilder + URLHelper.URLBuilder(Endpoint.webviewlogin, params);
         if (i != null) {
             startWebView(encodedURL);
@@ -107,10 +109,10 @@ public class WebViewActivity extends AppCompatActivity {
                     if (Token != null) {
                         String[] temp = Token.split("#");
                         Token = temp[0];
-                        accessToken = new lrAccessToken();
+                        accessToken = new AccessTokenResponse();
                         accessToken.access_token = Token;
                         accessToken.provider = provider;
-                        accessToken.apikey = apikey;
+                        accessToken.apikey = LoginRadiusSDK.getApiKey();
                         if(isRequired){
                             getRaasSchema();
                         }else{
@@ -120,7 +122,10 @@ public class WebViewActivity extends AppCompatActivity {
                 } else if (url.contains("error=access_denied"))
                 {
                     finish();
-                }else if(url.contains("error=server_error") && provider.equals("linkedin")){
+                } else if(url.contains("/socialauth/validate.sauth?denied")){
+                    finish();
+                }
+                else if(url.contains("error=server_error") && provider.equals("linkedin")){
                     if(reloadOnError){
                         Toast.makeText(context,"Your email contains a white space character, please try again with a proper email",Toast.LENGTH_SHORT).show();
                         startWebView(encodedURL);
@@ -130,11 +135,20 @@ public class WebViewActivity extends AppCompatActivity {
                         setResult(2,intent);
                         finish();
                     }
-                } else
+                }else
                 {
                     view.loadUrl(url);
                 }
                 return true;
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                if(url.startsWith("https://api.twitter.com/oauth") && !url.contains("oauth_token")){
+                    finish();
+                }else{
+                    super.onPageFinished(view, url);
+                }
             }
         });
 
@@ -145,24 +159,14 @@ public class WebViewActivity extends AppCompatActivity {
     private void getRaasSchema() {
         gtr = new RequiredFieldsViewGenerator(WebViewActivity.this, fieldsColor);
         setContentView(gtr.generateProgressBar());
-        LoginParams params = new LoginParams();
-        params.apikey = apikey;
-        TraditionalInterfaceAPI api = new TraditionalInterfaceAPI();
-        api.getResponse(params, new AsyncHandler<List<UserRegisteration>>() {
+        ConfigurationAPI api = new ConfigurationAPI();
+        api.getResponse(new AsyncHandler<ConfigResponse>() {
             @Override
-            public void onSuccess(List<UserRegisteration> data) {
-                boolean containsRequired = false;
-                raasSchemaList = data;
-                for(int i=0;i<raasSchemaList.size();i++){
-                    if(raasSchemaList.get(i).getRules()!=null && raasSchemaList.get(i).getRules().contains("required") && !containsRequired){
-                        containsRequired = true;
-                    }
-                }
-                if(containsRequired){
-                    getUserProfile();
-                }else{
-                    sendAccessToken(accessToken);
-                }
+            public void onSuccess(ConfigResponse data) {
+                raasSchemaList = data.getRegistrationFormSchema();
+                promptPassword = data.getAskPasswordOnSocialLogin();
+                askOptionalOnSocialLogin = data.getAskOptionalFieldsOnSocialSignup();
+                validateRaasSchema();
             }
 
             @Override
@@ -173,9 +177,25 @@ public class WebViewActivity extends AppCompatActivity {
         });
     }
 
+    private void validateRaasSchema() {
+        boolean containsRequired = false;
+        for(int i=0;i<raasSchemaList.size();i++){
+            if(raasSchemaList.get(i).getRules().contains("required") && !containsRequired){
+                containsRequired = true;
+            }
+        }
+        if(containsRequired){
+            getUserProfile();
+        }else{
+            sendAccessToken(accessToken);
+        }
+    }
+
     private void getUserProfile() {
-        UserProfileAPI api = new UserProfileAPI();
-        api.getResponse(accessToken, null, new AsyncHandler<LoginRadiusUltimateUserProfile>() {
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(accessToken.access_token);
+        api.readAllUserProfile(queryParams, new AsyncHandler<LoginRadiusUltimateUserProfile>() {
             @Override
             public void onSuccess(LoginRadiusUltimateUserProfile data) {
                 userProfile = data;
@@ -241,7 +261,7 @@ public class WebViewActivity extends AppCompatActivity {
         tvLabel.setGravity(Gravity.CENTER_HORIZONTAL);
         linearContainer.addView(tvLabel);
         for(int i = 0;i<raasSchemaList.size();i++){
-            UserRegisteration userField=raasSchemaList.get(i);
+            UserRegistration userField=raasSchemaList.get(i);
 
             if(userField.getRules()!=null){
                 if(userField.getRules().contains("required") && !isRequiredAdded){
@@ -252,7 +272,7 @@ public class WebViewActivity extends AppCompatActivity {
             }
         }
 
-        if(isRequiredAdded){
+        if(isRequiredAdded || (askOptionalOnSocialLogin && userProfile.getNoOfLogins() == 1)){
             Button submitButton = gtr.generateSubmitButton("Register");
             submitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -276,12 +296,11 @@ public class WebViewActivity extends AppCompatActivity {
         Log.i("AccessToken",accessToken.access_token);
         if(fieldUtil.validateFields(gtr,linearContainer)){
             setContentView(gtr.generateProgressBar());
-            UpdateProfileAPI api = new UpdateProfileAPI();
-            LoginParams params = new LoginParams();
-            params.apikey = apikey;
-            params.verificationUrl= verificationurl;
+            AuthenticationAPI api = new AuthenticationAPI();
+            QueryParams queryParams = new QueryParams();
+            queryParams.setAccess_token(accessToken.access_token);
             JsonObject jsonData = fieldUtil.getData(gtr,linearContainer);
-            api.getResponse(params, accessToken, jsonData, new AsyncHandler<RegisterResponse>() {
+            api.updateProfile(queryParams, jsonData, new AsyncHandler<RegisterResponse>() {
                 @Override
                 public void onSuccess(RegisterResponse data) {
                     if(fieldUtil.getPhone()!=null){
@@ -368,12 +387,10 @@ public class WebViewActivity extends AppCompatActivity {
 
     private void resendOTP() {
         setContentView(gtr.generateProgressBar());
-        LoginParams params = new LoginParams();
-        params.apikey = apikey;
+        AuthenticationAPI api = new AuthenticationAPI();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("Phone", fieldUtil.getPhone());
-        ResendotpAPI api = new ResendotpAPI();
-        api.getResponse(params, jsonObject, new AsyncHandler<RegisterResponse>() {
+        api.resendOtp(null, jsonObject, new AsyncHandler<RegisterResponse>() {
             @Override
             public void onSuccess(RegisterResponse data) {
                 Toast.makeText(context,"OTP sent to your mobile number",Toast.LENGTH_SHORT).show();
@@ -393,15 +410,17 @@ public class WebViewActivity extends AppCompatActivity {
 
     private void submitOTP(String otp) {
         setContentView(gtr.generateProgressBar());
-        LoginParams params = new LoginParams();
-        params.apikey = apikey;
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setOtp(otp);
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("Phone", fieldUtil.getPhone());
-        params.otp = otp;
-        OtpVerificationAPI api = new OtpVerificationAPI();
-        api.getResponse(params, jsonObject, new AsyncHandler<LoginData>() {
+        api.verifyOtp(queryParams, jsonObject, new AsyncHandler<LoginData>() {
             @Override
             public void onSuccess(LoginData data) {
+                AccessTokenResponse accessToken = new AccessTokenResponse();
+                accessToken.setAccess_token(data.getAccessToken());
+                accessToken.setProvider(provider);
                 sendAccessToken(accessToken);
             }
 
@@ -465,7 +484,7 @@ public class WebViewActivity extends AppCompatActivity {
         return object;
     }
 
-    public void sendAccessToken(lrAccessToken accessToken) {
+    public void sendAccessToken(AccessTokenResponse accessToken) {
         Intent intent = new Intent();
         if(accessToken!=null){
             intent.putExtra("accesstoken", accessToken.access_token);
@@ -493,6 +512,5 @@ public class WebViewActivity extends AppCompatActivity {
             }
         }
     }
-
 }
 

@@ -8,18 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.loginradius.androidsdk.response.GetSecurityQuestionsResponse;
+import com.loginradius.androidsdk.response.securityquestions.SecurityQuestionsResponse;
 
 /**
  * Created by loginradius on 9/8/2017.
  */
 
-public class SecurityQuestionsAdapter extends ArrayAdapter<GetSecurityQuestionsResponse> {
+public class SecurityQuestionsAdapter extends ArrayAdapter<SecurityQuestionsResponse> {
 
-    private GetSecurityQuestionsResponse[] objects;
+    private SecurityQuestionsResponse[] objects;
     private LayoutInflater inflater;
 
-    public SecurityQuestionsAdapter(@NonNull Context context, @NonNull GetSecurityQuestionsResponse[] objects) {
+    public SecurityQuestionsAdapter(@NonNull Context context, @NonNull SecurityQuestionsResponse[] objects) {
         super(context, R.layout.item_question_answer, objects);
         this.objects = objects;
         inflater = LayoutInflater.from(context);

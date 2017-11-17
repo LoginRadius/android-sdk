@@ -39,7 +39,6 @@
                 android:inputType="textPassword"/>
         </android.support.design.widget.TextInputLayout>
 
-
         <ListView
             android:id="@+id/lvQuestions"
             android:layout_width="match_parent"

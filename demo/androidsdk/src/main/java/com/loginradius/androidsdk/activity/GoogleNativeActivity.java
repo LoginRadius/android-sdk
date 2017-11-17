@@ -27,26 +27,25 @@ import com.facebook.CallbackManager;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.loginradius.androidsdk.R;
-import com.loginradius.androidsdk.api.OtpVerificationAPI;
-import com.loginradius.androidsdk.api.ResendotpAPI;
-import com.loginradius.androidsdk.api.TraditionalInterfaceAPI;
-import com.loginradius.androidsdk.api.UpdateProfileAPI;
-import com.loginradius.androidsdk.api.UserProfileAPI;
+import com.loginradius.androidsdk.api.AuthenticationAPI;
+import com.loginradius.androidsdk.api.ConfigurationAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.handler.JsonDeserializer;
 import com.loginradius.androidsdk.helper.ErrorResponse;
-import com.loginradius.androidsdk.ui.FieldViewUtil;
+import com.loginradius.androidsdk.helper.LoginRadiusAuthManager;
+import com.loginradius.androidsdk.helper.LoginRadiusSDK;
 import com.loginradius.androidsdk.helper.ProviderPermissions;
-import com.loginradius.androidsdk.ui.RequiredFieldsViewGenerator;
-import com.loginradius.androidsdk.helper.lrLoginManager;
+import com.loginradius.androidsdk.resource.QueryParams;
+import com.loginradius.androidsdk.response.AccessTokenResponse;
+import com.loginradius.androidsdk.response.config.ConfigResponse;
 import com.loginradius.androidsdk.response.login.LoginData;
-import com.loginradius.androidsdk.response.login.LoginParams;
-import com.loginradius.androidsdk.response.lrAccessToken;
 import com.loginradius.androidsdk.response.register.RegisterResponse;
 import com.loginradius.androidsdk.response.socialinterface.Provider;
 import com.loginradius.androidsdk.response.socialinterface.SocialInterface;
-import com.loginradius.androidsdk.response.traditionalinterface.UserRegisteration;
+import com.loginradius.androidsdk.response.traditionalinterface.UserRegistration;
 import com.loginradius.androidsdk.response.userprofile.LoginRadiusUltimateUserProfile;
+import com.loginradius.androidsdk.ui.FieldViewUtil;
+import com.loginradius.androidsdk.ui.RequiredFieldsViewGenerator;
 
 import java.util.List;
 
@@ -68,15 +67,13 @@ public class GoogleNativeActivity extends AppCompatActivity {
     private NetworkChangeReceiver receiver;
     private boolean isConnected = false;
 
-    private lrAccessToken accessToken;
-    private boolean isRequired,promptPassword;
-    private String verificationurl;
+    private AccessTokenResponse accessToken;
+    private boolean isRequired,promptPassword,askOptionalOnSocialLogin;
     private int fieldsColor;
     RequiredFieldsViewGenerator gtr;
     FieldViewUtil fieldUtil;
     Context context;
-    List<UserRegisteration> raasSchemaList;
-    String apikey;
+    List<UserRegistration> raasSchemaList;
     LoginRadiusUltimateUserProfile userProfile;
 
 
@@ -84,24 +81,25 @@ public class GoogleNativeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_native);
+
+        if(!LoginRadiusSDK.validate()){
+            throw new LoginRadiusSDK.InitializeException();
+        }
+
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         receiver = new NetworkChangeReceiver();
         registerReceiver(receiver, filter);
         bar = (ProgressBar) findViewById(R.id.progressBar);
         bar.setVisibility(View.VISIBLE);
-        lrLoginManager.nativeLogin = true;
+        LoginRadiusAuthManager.nativeLogin = true;
 
         Intent i = getIntent();
-        isRequired = i.getBooleanExtra("isRequired",false);
-        promptPassword = i.getBooleanExtra("promptPassword",false);
-        verificationurl = i.getStringExtra("verificationurl");
+        isRequired = i.getBooleanExtra("isRequired",true);
         fieldsColor = i.getIntExtra("fieldsColor",0);
         context = GoogleNativeActivity.this;
 
-        apikey = getIntent().getExtras().getString("apikey");
-
         ProviderPermissions.resetPermissions();
-        lrLoginManager.getNativeAppConfiguration(apikey, callManager,
+        LoginRadiusAuthManager.getNativeAppConfiguration(LoginRadiusSDK.getApiKey(), callManager,
                 new AsyncHandler<SocialInterface>() {
                     @Override
                     public void onSuccess(SocialInterface socialInterface) {
@@ -177,12 +175,12 @@ public class GoogleNativeActivity extends AppCompatActivity {
 
 
     public void showdialog(final Provider p) {
-        lrLoginManager.performLogin(GoogleNativeActivity.this, p, new AsyncHandler<lrAccessToken>() {
+        LoginRadiusAuthManager.performLogin(GoogleNativeActivity.this, p, new AsyncHandler<AccessTokenResponse>() {
 
             @Override
-            public void onSuccess(lrAccessToken data) {
+            public void onSuccess(AccessTokenResponse data) {
                 accessToken = data;
-                accessToken.apikey = apikey;
+                accessToken.apikey = LoginRadiusSDK.getApiKey();
                 accessToken.provider = "google";
                 if(isRequired){
                     getRaasSchema();
@@ -204,24 +202,14 @@ public class GoogleNativeActivity extends AppCompatActivity {
     private void getRaasSchema() {
         gtr = new RequiredFieldsViewGenerator(context, fieldsColor);
         setContentView(gtr.generateProgressBar());
-        LoginParams params = new LoginParams();
-        params.apikey = apikey;
-        TraditionalInterfaceAPI api = new TraditionalInterfaceAPI();
-        api.getResponse(params, new AsyncHandler<List<UserRegisteration>>() {
+        ConfigurationAPI api = new ConfigurationAPI();
+        api.getResponse(new AsyncHandler<ConfigResponse>() {
             @Override
-            public void onSuccess(List<UserRegisteration> data) {
-                boolean containsRequired = false;
-                raasSchemaList = data;
-                for(int i=0;i<raasSchemaList.size();i++){
-                    if(raasSchemaList.get(i).getRules()!=null && raasSchemaList.get(i).getRules().contains("required") && !containsRequired){
-                        containsRequired = true;
-                    }
-                }
-                if(containsRequired){
-                    getUserProfile();
-                }else{
-                    sendAccessToken(accessToken.access_token);
-                }
+            public void onSuccess(ConfigResponse data) {
+                raasSchemaList = data.getRegistrationFormSchema();
+                promptPassword = data.getAskPasswordOnSocialLogin();
+                askOptionalOnSocialLogin = data.getAskOptionalFieldsOnSocialSignup();
+                validateRaasSchema();
             }
 
             @Override
@@ -232,9 +220,25 @@ public class GoogleNativeActivity extends AppCompatActivity {
         });
     }
 
+    private void validateRaasSchema() {
+        boolean containsRequired = false;
+        for(int i=0;i<raasSchemaList.size();i++){
+            if(raasSchemaList.get(i).getRules().contains("required") && !containsRequired){
+                containsRequired = true;
+            }
+        }
+        if(containsRequired){
+            getUserProfile();
+        }else{
+            sendAccessToken(accessToken.access_token);
+        }
+    }
+
     private void getUserProfile() {
-        UserProfileAPI api = new UserProfileAPI();
-        api.getResponse(accessToken, null, new AsyncHandler<LoginRadiusUltimateUserProfile>() {
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(accessToken.access_token);
+        api.readAllUserProfile(queryParams, new AsyncHandler<LoginRadiusUltimateUserProfile>() {
             @Override
             public void onSuccess(LoginRadiusUltimateUserProfile data) {
                 userProfile = data;
@@ -300,7 +304,7 @@ public class GoogleNativeActivity extends AppCompatActivity {
         tvLabel.setGravity(Gravity.CENTER_HORIZONTAL);
         linearContainer.addView(tvLabel);
         for(int i = 0;i<raasSchemaList.size();i++){
-            UserRegisteration userField=raasSchemaList.get(i);
+            UserRegistration userField=raasSchemaList.get(i);
 
             if(userField.getRules()!=null){
                 if(userField.getRules().contains("required") && !isRequiredAdded){
@@ -311,7 +315,7 @@ public class GoogleNativeActivity extends AppCompatActivity {
             }
         }
 
-        if(isRequiredAdded){
+        if(isRequiredAdded || (askOptionalOnSocialLogin && userProfile.getNoOfLogins() == 1)){
             Button submitButton = gtr.generateSubmitButton("Register");
             submitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -335,12 +339,11 @@ public class GoogleNativeActivity extends AppCompatActivity {
         Log.i("AccessToken",accessToken.access_token);
         if(fieldUtil.validateFields(gtr,linearContainer)){
             setContentView(gtr.generateProgressBar());
-            UpdateProfileAPI api = new UpdateProfileAPI();
-            LoginParams params = new LoginParams();
-            params.apikey = apikey;
-            params.verificationUrl= verificationurl;
+            AuthenticationAPI api = new AuthenticationAPI();
+            QueryParams queryParams = new QueryParams();
+            queryParams.setAccess_token(accessToken.access_token);
             JsonObject jsonData = fieldUtil.getData(gtr,linearContainer);
-            api.getResponse(params, accessToken, jsonData, new AsyncHandler<RegisterResponse>() {
+            api.updateProfile(queryParams, jsonData, new AsyncHandler<RegisterResponse>() {
                 @Override
                 public void onSuccess(RegisterResponse data) {
                     if(fieldUtil.getPhone()!=null){
@@ -442,12 +445,10 @@ public class GoogleNativeActivity extends AppCompatActivity {
 
     private void resendOTP() {
         setContentView(gtr.generateProgressBar());
-        LoginParams params = new LoginParams();
-        params.apikey = apikey;
+        AuthenticationAPI api = new AuthenticationAPI();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("Phone", fieldUtil.getPhone());
-        ResendotpAPI api = new ResendotpAPI();
-        api.getResponse(params, jsonObject, new AsyncHandler<RegisterResponse>() {
+        api.resendOtp(null,jsonObject, new AsyncHandler<RegisterResponse>() {
             @Override
             public void onSuccess(RegisterResponse data) {
                 Toast.makeText(context,"OTP sent to your mobile number",Toast.LENGTH_SHORT).show();
@@ -467,16 +468,15 @@ public class GoogleNativeActivity extends AppCompatActivity {
 
     private void submitOTP(String otp) {
         setContentView(gtr.generateProgressBar());
-        LoginParams params = new LoginParams();
-        params.apikey = apikey;
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setOtp(otp);
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("Phone", fieldUtil.getPhone());
-        params.otp = otp;
-        OtpVerificationAPI api = new OtpVerificationAPI();
-        api.getResponse(params, jsonObject, new AsyncHandler<LoginData>() {
+        api.verifyOtp(queryParams, jsonObject, new AsyncHandler<LoginData>() {
             @Override
             public void onSuccess(LoginData data) {
-                sendAccessToken(accessToken.access_token);
+                sendAccessToken(data.getAccessToken());
             }
 
             @Override
@@ -496,12 +496,12 @@ public class GoogleNativeActivity extends AppCompatActivity {
 
     public void sendAccessToken(String accessToken) {
 
-        lrAccessToken accesstoken = new lrAccessToken();
+        AccessTokenResponse accesstoken = new AccessTokenResponse();
         accesstoken.access_token = accessToken;
         accesstoken.provider = "google";
         Intent intent = new Intent();
         intent.putExtra("accesstoken", accessToken);
-        intent.putExtra("provider", "Google");
+        intent.putExtra("provider", "google");
         setResult(2, intent);
         finish();//finishing activity
     }

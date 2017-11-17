@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.loginradius.androidsdk.response.GetSecurityQuestionsResponse;
+import com.loginradius.androidsdk.response.securityquestions.SecurityQuestionsResponse;
 
 /**
  * Created by loginradius on 9/8/2017.
@@ -44,7 +44,7 @@ public class QuestionAnswerView extends LinearLayout {
         etAnswer = (EditText)findViewById(R.id.etAnswer);
     }
 
-    public void setContent(GetSecurityQuestionsResponse response){
+    public void setContent(SecurityQuestionsResponse response){
         tvQuestion.setText(response.getQuestion());
     }
 

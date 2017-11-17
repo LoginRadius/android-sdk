@@ -15,7 +15,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.loginradius.androidsdk.R;
 import com.loginradius.androidsdk.ui.CountriesDialog.OnCountrySelectedListener;
-import com.loginradius.androidsdk.response.traditionalinterface.UserRegisteration;
+import com.loginradius.androidsdk.response.traditionalinterface.UserRegistration;
 import com.loginradius.androidsdk.response.userprofile.LoginRadiusUltimateUserProfile;
 
 import java.text.ParseException;
@@ -44,7 +44,7 @@ public class FieldViewUtil {
         fieldMap = new HashMap<>();
     }
 
-    public boolean addFieldView(RequiredFieldsViewGenerator gtr, LoginRadiusUltimateUserProfile userProfile, UserRegisteration userField, LinearLayout linearContainer, LinkedTreeMap customFields,boolean promptPassword) {
+    public boolean addFieldView(RequiredFieldsViewGenerator gtr, LoginRadiusUltimateUserProfile userProfile, UserRegistration userField, LinearLayout linearContainer, LinkedTreeMap customFields, boolean promptPassword) {
         switch (userField.getName()){
             case "firstname":
                 if(userProfile.FirstName==null || userProfile.FirstName.length()==0){
@@ -233,6 +233,38 @@ public class FieldViewUtil {
                     return true;
                 }
                 break;
+            case "school_startDate":
+                if(userProfile.BirthDate==null || userProfile.BirthDate.length()==0){
+                    linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                    linearContainer.addView(gtr.generateDateTextView(userField.getName()));
+                    addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                    return true;
+                }
+                break;
+            case "school_endDate":
+                if(userProfile.BirthDate==null || userProfile.BirthDate.length()==0){
+                    linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                    linearContainer.addView(gtr.generateDateTextView(userField.getName()));
+                    addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                    return true;
+                }
+                break;
+            case "position_startDate":
+                if(userProfile.BirthDate==null || userProfile.BirthDate.length()==0){
+                    linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                    linearContainer.addView(gtr.generateDateTextView(userField.getName()));
+                    addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                    return true;
+                }
+                break;
+            case "position_endDate":
+                if(userProfile.BirthDate==null || userProfile.BirthDate.length()==0){
+                    linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                    linearContainer.addView(gtr.generateDateTextView(userField.getName()));
+                    addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                    return true;
+                }
+                break;
             case "company":
                 if(userProfile.Positions==null || userProfile.Positions.size()==0 || userProfile.Positions.get(0) == null || userProfile.Positions.get(0).Company == null || userProfile.Positions.get(0).Company.Name == null || userProfile.Positions.get(0).Company.Name.length()==0){
                     linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
@@ -294,6 +326,209 @@ public class FieldViewUtil {
                         addFieldMap(userField.getName(),userField.getRules().contains("required"));
                         return true;
                     }
+                }
+                break;
+        }
+        return false;
+    }
+
+    public boolean addFieldView(RequiredFieldsViewGenerator gtr, String fieldName, UserRegistration userField, LinearLayout linearContainer){
+        switch (fieldName){
+            case "firstname":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateEditText(userField.getName(),false));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "lastname":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateEditText(userField.getName(),false));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "prefix":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateEditText(userField.getName(),false));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "suffix":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateEditText(userField.getName(),false));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "username":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateEditText(userField.getName(),false));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "phonenumber":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                //linearContainer.addView(gtr.generateEditText(userField.getName(),true));
+                linearContainer.addView(gtr.generatePhoneNumberView(userField.getName()));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "state":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateEditText(userField.getName(),false));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "city":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateEditText(userField.getName(),false));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "PostalCode":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateEditText(userField.getName(),true));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "address1":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateEditText(userField.getName(),false));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "address2":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateEditText(userField.getName(),false));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "phoneid":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                //linearContainer.addView(gtr.generateEditText(userField.getName(),true));
+                linearContainer.addView(gtr.generatePhoneNumberView(userField.getName()));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "nickname":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateEditText(userField.getName(),false));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "emailid":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateEmailEditText(userField.getName()));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "password":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generatePasswordEditText(userField.getName(),10));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "confirmpassword":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generatePasswordEditText("confirmpassword",10));
+                addFieldMap("confirmpassword",userField.getRules().contains("required"));
+                return true;
+            case "country":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                final ArrayList<String> countries = new ArrayList<>();
+                Map<String,String> map = new CountryCodes().map;
+                for(Entry<String,String> entry:map.entrySet()){
+                    countries.add(entry.getKey());
+                }
+                Collections.sort(countries,new CountryCodes.StringComparator());
+                final TextView textView = gtr.generateTextView("country","Select");
+                textView.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.down_arrow,0);
+                textView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CountriesDialog dialog = new CountriesDialog(textView.getContext(),countries);
+                        dialog.setOnCountrySelectedListener(new OnCountrySelectedListener() {
+                            @Override
+                            public void onCountrySelected(String country) {
+                                FieldViewUtil.this.country = country;
+                                textView.setText(country);
+                            }
+                        });
+                        dialog.show();
+                    }
+                });
+                linearContainer.addView(textView);
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "gender":
+                Log.i("Gender",userField.getOptions().toString());
+                final ArrayList<LinkedTreeMap<String,String>> options = (ArrayList<LinkedTreeMap<String,String>>)userField.getOptions();
+                gender = new String[options.size()];
+                for(int j = 0 ; j < options.size() ; j++){
+                    gender[j] = options.get(j).get("text");
+                }
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateOptionsTextView("gender", "Select Gender", gender, new OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        genderCode = options.get(which).get("value");
+                    }
+                }));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "birthdate":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateDateTextView(userField.getName()));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "school_startDate":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateDateTextView(userField.getName()));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "school_endDate":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateDateTextView(userField.getName()));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "position_startDate":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateDateTextView(userField.getName()));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "position_endDate":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateDateTextView(userField.getName()));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "company":
+                linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                linearContainer.addView(gtr.generateEditText(userField.getName(),false));
+                addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                return true;
+            case "emailsubscription":
+                linearContainer.addView(gtr.generateCheckBox("IsEmailSubscribed",userField.getDisplay(),false));
+                addFieldMap("IsEmailSubscribed",userField.getRules().contains("required"));
+                return true;
+            default:
+                if(userField.getType().equals("string") || userField.getType().equals("text")){
+                    linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                    if(userField.getRules().contains("numeric")){
+                        linearContainer.addView(gtr.generateEditText(userField.getName(),true));
+                    }else{
+                        linearContainer.addView(gtr.generateEditText(userField.getName(),false));
+                    }
+                    addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                    return true;
+                }else if(userField.getType().equals("option")){
+                    if(userField.getOptions()!=null){
+                        final ArrayList<LinkedTreeMap<String,String>> optionsList = (ArrayList<LinkedTreeMap<String,String>>)userField.getOptions();
+                        String[] arrOptions = new String[optionsList.size()];
+                        for(int j = 0 ; j < optionsList.size() ; j++){
+                            arrOptions[j] = optionsList.get(j).get("text");
+                        }
+                        linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                        linearContainer.addView(gtr.generateOptionsTextView(userField.getName(), "Select " + userField.getDisplay(), arrOptions, null));
+                        addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                        return true;
+                    }
+                }else if(userField.getType().equals("multi")){
+                    linearContainer.addView(gtr.generateCheckBox(userField.getName(),userField.getDisplay(),false));
+                    addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                    return true;
+                }else if(userField.getType().equals("password")){
+                    linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                    linearContainer.addView(gtr.generatePasswordEditText(userField.getName(),10));
+                    addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                    return true;
+                }else if(userField.getType().equals("email")){
+                    linearContainer.addView(gtr.generateLabelTextView(userField.getDisplay()));
+                    linearContainer.addView(gtr.generateEmailEditText(userField.getName()));
+                    addFieldMap(userField.getName(),userField.getRules().contains("required"));
+                    return true;
                 }
                 break;
         }
@@ -371,7 +606,16 @@ public class FieldViewUtil {
         JsonObject jsonCustom = new JsonObject();
         JsonArray arrAddress = new JsonArray();
         JsonObject address = new JsonObject();
-        address.addProperty("Type","Primary");
+        JsonObject jsonPosition = new JsonObject();
+        JsonArray arrPositions = new JsonArray();
+        JsonObject jsonEducation = new JsonObject();
+        JsonArray arrEducation = new JsonArray();
+        JsonObject jsonIMAccount = new JsonObject();
+        JsonArray arrIMAccount = new JsonArray();
+        JsonObject jsonInterest = new JsonObject();
+        JsonArray arrInterest = new JsonArray();
+        JsonObject jsonSport = new JsonObject();
+        JsonArray arrSport = new JsonArray();
         for(Map.Entry<String,String> entry:map.entrySet()){
             String key = entry.getKey();
             if(key!=null && !key.equals("submit")){
@@ -387,15 +631,49 @@ public class FieldViewUtil {
                     jsonData.addProperty("gender",genderCode);
                 }else if(key.equals("company")){
                     JsonObject jsonCompany = new JsonObject();
-                    JsonObject jsonPosition = new JsonObject();
-                    JsonArray arrPositions = new JsonArray();
                     jsonCompany.addProperty("Type","Primary");
                     jsonCompany.addProperty("Industry","");
                     jsonCompany.addProperty("Name",map.get(key));
                     jsonPosition.add("Company",jsonCompany);
-                    arrPositions.add(jsonPosition);
-                    jsonData.add("Positions",arrPositions);
-                }else if(key.equals("address1")){
+                }else if(key.equals("position")){
+                    jsonPosition.addProperty("Positions",map.get(key));
+                }else if(key.equals("position_summary")){
+                    jsonPosition.addProperty("Summary",map.get(key));
+                }else if(key.equals("position_startDate")){
+                    jsonPosition.addProperty("StartDate",getApiDate(map.get(key)));
+                }else if(key.equals("position_endDate")){
+                    jsonPosition.addProperty("EndDate",getApiDate(map.get(key)));
+                }else if(key.equals("school")){
+                    jsonEducation.addProperty("School",map.get(key));
+                }else if(key.equals("school_year")){
+                    jsonEducation.addProperty("year",map.get(key));
+                }else if(key.equals("school_type")){
+                    jsonEducation.addProperty("type",map.get(key));
+                }else if(key.equals("school_notes")){
+                    jsonEducation.addProperty("notes",map.get(key));
+                }else if(key.equals("school_activities")){
+                    jsonEducation.addProperty("activities",map.get(key));
+                }else if(key.equals("school_degree")){
+                    jsonEducation.addProperty("degree",map.get(key));
+                }else if(key.equals("school_fieldofstudy")){
+                    jsonEducation.addProperty("fieldofstudy",map.get(key));
+                }else if(key.equals("school_startDate")){
+                    jsonEducation.addProperty("StartDate",getApiDate(map.get(key)));
+                }else if(key.equals("school_endDate")){
+                    jsonEducation.addProperty("EndDate",getApiDate(map.get(key)));
+                }else if(key.equals("accountType")){
+                    jsonIMAccount.addProperty("AccountType",map.get(key));
+                }else if(key.equals("accountName")){
+                    jsonIMAccount.addProperty("AccountName",map.get(key));
+                }else if(key.equals("interestedType")){
+                    jsonInterest.addProperty("InterestedType",map.get(key));
+                }else if(key.equals("interestedName")){
+                    jsonInterest.addProperty("InterestedName",map.get(key));
+                }else if(key.equals("sport_id")){
+                    jsonSport.addProperty("Id",map.get(key));
+                }else if(key.equals("sport_name")){
+                    jsonSport.addProperty("Name",map.get(key));
+                } else if(key.equals("address1")){
                     address.addProperty("Address1",map.get(key));
                 }else if(key.equals("address2")){
                     address.addProperty("Address2",map.get(key));
@@ -443,8 +721,32 @@ public class FieldViewUtil {
                 }
             }
         }
-        arrAddress.add(address);
-        jsonData.add("Addresses",arrAddress);
+
+        if(address.size()>0){
+            address.addProperty("Type","Primary");
+            arrAddress.add(address);
+            jsonData.add("Addresses",arrAddress);
+        }
+        if(jsonPosition.size()>0){
+            arrPositions.add(jsonPosition);
+            jsonData.add("Positions",arrPositions);
+        }
+        if(jsonEducation.size()>0){
+            arrEducation.add(jsonEducation);
+            jsonData.add("Educations",arrEducation);
+        }
+        if(jsonIMAccount.size()>0){
+            arrIMAccount.add(jsonIMAccount);
+            jsonData.add("IMAccounts",arrIMAccount);
+        }
+        if(jsonInterest.size()>0){
+            arrInterest.add(jsonInterest);
+            jsonData.add("Interests",arrInterest);
+        }
+        if(jsonSport.size()>0){
+            arrSport.add(jsonSport);
+            jsonData.add("Sports",arrSport);
+        }
         return jsonData;
     }
 

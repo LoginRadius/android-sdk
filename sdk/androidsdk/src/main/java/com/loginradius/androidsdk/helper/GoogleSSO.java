@@ -13,7 +13,7 @@ import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 import com.loginradius.androidsdk.handler.AsyncHandler;
-import com.loginradius.androidsdk.response.lrAccessToken;
+import com.loginradius.androidsdk.response.AccessTokenResponse;
 
 
 /**
@@ -76,16 +76,15 @@ public class GoogleSSO extends Activity
 	}
 	
 	private void executeForResult(String token){
-		TokenHelper helper = new TokenHelper();
-		helper.getResponseGoogle((String)token, new AsyncHandler<lrAccessToken>() {
+		LoginRadiusAuthManager.getResponseGoogle((String)token, new AsyncHandler<AccessTokenResponse>() {
 			@Override
-			public void onSuccess(lrAccessToken data) {
+			public void onSuccess(AccessTokenResponse data) {
 				data.provider = "google";
-				lrLoginManager.asyncHandler.onSuccess(data);
+				LoginRadiusAuthManager.asyncHandler.onSuccess(data);
 			}
 			@Override
 			public void onFailure(Throwable error, String response) {
-				lrLoginManager.asyncHandler.onFailure(error, response);
+				LoginRadiusAuthManager.asyncHandler.onFailure(error, response);
 			}
 		});
 	}
@@ -100,7 +99,7 @@ public class GoogleSSO extends Activity
 			String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 			requestToken(accountName);
 		} else if (resultCode == Activity.RESULT_CANCELED) {
-			lrLoginManager.asyncHandler.onFailure(new Throwable("GoogleSSO cancelled"), "lr_LOGIN_CANCELLED");
+			LoginRadiusAuthManager.asyncHandler.onFailure(new Throwable("GoogleSSO cancelled"), "lr_LOGIN_CANCELLED");
 			finish();
 		} else if (requestCode == REQUEST_AUTHORIZATION){//Handling the UserRecoverableAuthException
 			 Bundle b = data.getExtras();

@@ -9,7 +9,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class Email {
+public class Email{
 
     @SerializedName("Type")
     @Expose

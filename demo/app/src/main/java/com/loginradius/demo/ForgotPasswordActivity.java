@@ -16,27 +16,22 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.loginradius.androidsdk.api.ForgotPasswordByEmailAPI;
-import com.loginradius.androidsdk.api.ForgotPasswordByPhoneNumberAPI;
+import com.loginradius.androidsdk.api.AuthenticationAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
-import com.loginradius.androidsdk.response.login.LoginParams;
-import com.loginradius.androidsdk.response.password.ForgotPasswordData;
-import com.loginradius.androidsdk.response.password.ForgotResponse;
+import com.loginradius.androidsdk.resource.QueryParams;
+import com.loginradius.androidsdk.response.password.ForgotPasswordResponse;
 import com.loginradius.androidsdk.response.phone.PhoneForgotPasswordResponse;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
     private EditText inputEmail;
     private TextInputLayout inputLayoutEmail;
     private ProgressDialog pDialog;
-    String apikey,sitename,resetPasswordUrl,emailTemplate;
+    String emailTemplate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
-        resetPasswordUrl=getString(R.string.reset_password_url);
         emailTemplate=getString(R.string.email_template);
-        apikey=getString(R.string.api_key);
-
 
         inputLayoutEmail = (TextInputLayout) findViewById(R.id.input_layout_email);
         inputEmail = (EditText) findViewById(R.id.input_email);
@@ -146,12 +141,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private void doForgotPasswordByEmail() {
         showProgressDialog();
-        LoginParams value = new LoginParams();
-        value.apikey = apikey; //put loginradius your apikey (required)
-        value.resetPasswordUrl=resetPasswordUrl;// put your resetPasswordUrl(required)
-        value.emailTemplate=emailTemplate;//put your emailTemplate(optional)
+        QueryParams value = new QueryParams();
+        value.setEmailTemplate(emailTemplate);//put your emailTemplate(optional)
 
-        ForgotPasswordData forgotPassworddata = new ForgotPasswordData();
 
         final String inputString = inputEmail.getText().toString();
 
@@ -159,11 +151,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             hideProgressDialog();
             inputEmail.setError("Required");
         }else if(inputString.matches(Patterns.EMAIL_ADDRESS.pattern())){
-            forgotPassworddata.setEmail(inputString);
-            startForgotPasswordByEmailAPI(value,forgotPassworddata);
+            value.setEmail(inputString);
+            startForgotPasswordByEmailAPI(value);
         }else if(inputString.matches(Patterns.PHONE.pattern())){
-            forgotPassworddata.setPhone(inputString);
-            startForgotPasswordByPhoneAPI(value,forgotPassworddata);
+            value.setPhone(inputString);
+            startForgotPasswordByPhoneAPI(value);
         }else{
             hideProgressDialog();
             inputEmail.setError("Invalid");
@@ -172,11 +164,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     }
 
-    private void startForgotPasswordByEmailAPI(LoginParams value,ForgotPasswordData forgotPassworddata){
-        ForgotPasswordByEmailAPI forgotPasswordByEmailAPI = new ForgotPasswordByEmailAPI();
-        forgotPasswordByEmailAPI.getResponse(value,forgotPassworddata,new AsyncHandler<ForgotResponse>() {
+    private void startForgotPasswordByEmailAPI(QueryParams value){
+        showProgressDialog();
+        AuthenticationAPI api = new AuthenticationAPI();
+        api.forgotPasswordByEmail(value,new AsyncHandler<ForgotPasswordResponse>() {
             @Override
-            public void onSuccess(ForgotResponse response) {
+            public void onSuccess(ForgotPasswordResponse response) {
                 hideProgressDialog();
                 NotifyToastUtil.showNotify(ForgotPasswordActivity.this,"Please Check Your Email");
             }
@@ -189,9 +182,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
     }
 
-    private void startForgotPasswordByPhoneAPI(final LoginParams value, final ForgotPasswordData forgotPasswordData){
-        ForgotPasswordByPhoneNumberAPI api = new ForgotPasswordByPhoneNumberAPI();
-        api.getResponse(value, forgotPasswordData, new AsyncHandler<PhoneForgotPasswordResponse>() {
+    private void startForgotPasswordByPhoneAPI(final QueryParams value){
+        showProgressDialog();
+        AuthenticationAPI api = new AuthenticationAPI();
+        api.forgotPasswordByPhone(value,new AsyncHandler<PhoneForgotPasswordResponse>() {
             @Override
             public void onSuccess(PhoneForgotPasswordResponse data) {
                 hideProgressDialog();
@@ -201,7 +195,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     public void run() {
                         startActivity(new Intent(ForgotPasswordActivity.this,OTPActivity.class)
                                 .putExtra("isForgotPassword",true)
-                                .putExtra("phoneId",forgotPasswordData.getPhone()));
+                                .putExtra("phoneId",value.getPhone()));
                         finish();
                     }
                 },1500);

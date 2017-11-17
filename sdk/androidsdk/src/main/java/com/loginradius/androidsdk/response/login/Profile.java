@@ -9,10 +9,11 @@ import com.google.gson.annotations.SerializedName;
 import com.loginradius.androidsdk.response.userprofile.UnverifiedEmail;
 import com.loginradius.androidsdk.response.userprofile.identity.Identity;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class Profile {
+public class Profile implements Serializable{
 
     @SerializedName("Identities")
     @Expose
@@ -378,7 +379,11 @@ public class Profile {
     @Expose
     private Integer likesCount;
     @SerializedName("UnverifiedEmail")
+    @Expose
     private List<UnverifiedEmail> unverifiedEmail = null;
+    @SerializedName("IsSecurePassword")
+    @Expose
+    private Boolean isSecurePassword;
 
     /**
      *
@@ -2576,5 +2581,25 @@ public class Profile {
 
     public void setUnverifiedEmail(List<UnverifiedEmail> unverifiedEmail) {
         this.unverifiedEmail = unverifiedEmail;
+    }
+
+    /**
+     *
+     * @return
+     * Value of IsSecurePassword
+     */
+
+    public Boolean getSecurePassword() {
+        return isSecurePassword;
+    }
+
+    /**
+     *
+     * @param securePassword
+     * Value of IsSecurePassword
+     */
+
+    public void setSecurePassword(Boolean securePassword) {
+        isSecurePassword = securePassword;
     }
 }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,37 +16,31 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.loginradius.androidsdk.activity.WebViewActivity;
-import com.loginradius.androidsdk.api.AddEmailAPI;
-import com.loginradius.androidsdk.api.ChangePasswordAPI;
-import com.loginradius.androidsdk.api.ContactAPI;
-import com.loginradius.androidsdk.api.GetSocialProfileAPI;
-import com.loginradius.androidsdk.api.LinkAPI;
-import com.loginradius.androidsdk.api.RemoveEmailAPI;
-import com.loginradius.androidsdk.api.SocialInterfaceAPI;
-import com.loginradius.androidsdk.api.StatusAPI;
-import com.loginradius.androidsdk.api.UnlinkAPI;
-import com.loginradius.androidsdk.api.UpdatePhoneAPI;
-import com.loginradius.androidsdk.api.UpdateProfileAPI;
-import com.loginradius.androidsdk.api.UserProfileAPI;
-import com.loginradius.androidsdk.api.VerifyOtpAPI;
+import com.loginradius.androidsdk.api.AuthenticationAPI;
+import com.loginradius.androidsdk.api.ConfigurationAPI;
+import com.loginradius.androidsdk.api.SocialAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
+import com.loginradius.androidsdk.helper.LoginRadiusSDK;
 import com.loginradius.androidsdk.resource.Endpoint;
+import com.loginradius.androidsdk.resource.LoginUtil;
+import com.loginradius.androidsdk.resource.QueryParams;
+import com.loginradius.androidsdk.response.AccessTokenResponse;
 import com.loginradius.androidsdk.response.LoginRadiusContactCursorResponse;
+import com.loginradius.androidsdk.response.config.ConfigResponse;
 import com.loginradius.androidsdk.response.contact.LoginRadiusContact;
-import com.loginradius.androidsdk.response.login.LoginParams;
-import com.loginradius.androidsdk.response.lrAccessToken;
 import com.loginradius.androidsdk.response.phone.PhoneResponse;
 import com.loginradius.androidsdk.response.register.DeleteResponse;
 import com.loginradius.androidsdk.response.register.RegisterResponse;
 import com.loginradius.androidsdk.response.socialinterface.Provider;
-import com.loginradius.androidsdk.response.socialinterface.SocialInterface;
 import com.loginradius.androidsdk.response.status.LoginRadiusStatus;
 import com.loginradius.androidsdk.response.userprofile.LoginRadiusUltimateUserProfile;
 import com.loginradius.androidsdk.response.userprofile.identity.Identity;
@@ -56,13 +51,16 @@ import java.util.List;
 
 
 public class ProfileActivity extends AppCompatActivity {
+    private ScrollView svContent;
+    private AccessTokenResponse accessToken;
+    private LinearLayout linearPhone;
     private List<String> info;
     private ArrayAdapter<String> adapter;
     private ListView listview;
     private List<Provider> providers;
-    private ProgressBar pbLoad;
+    private ProgressBar pbLoad,pbInitLoad;
     private LoginRadiusUltimateUserProfile userProfile;
-    EditText update1,update2,update3,changepass1,changepass2,updatephone,addemail,removeemail;
+    EditText update1,update2,update3,changepass1,changepass2,confirm_pwd,updatephone,addemail,removeemail,addtype;
     Button updatebutton,changebutton,phonebutton,addemailbutton,removeemailbutton,btnlogout;
     Button unlinkFacebook,unlinkGoogle,unlinkTwitter,unlinkLinkedIn,unlinkYahoo,unlinkInstagram,unlinkAmazon,unlinkLive,unlinkVirgilio,unlinkWordpress,unlinkmailru;
     Button unlinkPinterest,unlinkVkontakte,unlinkDisqus,unlinkAOL,unlinkMixi,unlinkSteamcommunity,unlinkHyves,unlinkLiveJournal,unlinkVerisign,unlinkXing,unlinkStackexchange;
@@ -77,14 +75,18 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         final Intent intent = getIntent();
         setContentView(R.layout.activity_profile);
+        svContent = (ScrollView)findViewById(R.id.svContent);
+        linearPhone = (LinearLayout)findViewById(R.id.linearPhone);
         update1=(EditText) findViewById(R.id.udateedit1);
         update2=(EditText) findViewById(R.id.udateedit2);
         update3=(EditText) findViewById(R.id.udateedit3);
         changepass1=(EditText) findViewById(R.id.changepass1);
         changepass2=(EditText) findViewById(R.id.changepass2);
+        confirm_pwd = (EditText)findViewById(R.id.confirm_pwd);
         updatephone=(EditText) findViewById(R.id.phonenumber);
         addemail=(EditText) findViewById(R.id.addemail);
         removeemail=(EditText) findViewById(R.id.removeemail);
+        addtype=(EditText)findViewById(R.id.addtype);
         updatebutton= (Button) findViewById(R.id.updatebutton);
         changebutton= (Button) findViewById(R.id.changebutton);
         phonebutton=(Button) findViewById(R.id.phonebutton);
@@ -159,26 +161,26 @@ public class ProfileActivity extends AppCompatActivity {
         unlinkLine=(Button)findViewById(R.id.unlinkLine);
         unlinkStackexchange=(Button)findViewById(R.id.unlinkStackexchange);
         pbLoad = (ProgressBar)findViewById(R.id.pbLoad);
+        pbInitLoad = (ProgressBar)findViewById(R.id.pbInitLoad);
         NotifyToastUtil.showNotify(this,"Welcome in Loginradius");
         if (intent != null) {
-            String token = intent.getStringExtra("accesstoken");
+            LoginUtil loginUtil = new LoginUtil(this);
+            String token = loginUtil.getAccessToken();
             String provider = intent.getStringExtra("provider");
-            String apiKey = intent.getStringExtra("apikey");
             Log.d("token", token);
             listview = (ListView) findViewById(R.id.listView);
             info = new ArrayList<>();
             adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, info);
             listview.setAdapter(adapter);
-            final lrAccessToken accessToken = new lrAccessToken();
+            accessToken = new AccessTokenResponse();
             accessToken.access_token = token;
             accessToken.provider = provider;
-            accessToken.apikey=apiKey;
-            getUserData(accessToken);
+            accessToken.apikey = LoginRadiusSDK.getApiKey();
+            getConfiguration();
 
 
             //  getStatus(accessToken);
             //   getContacts(accessToken);
-            CheckIdentites(accessToken);
             final String is_mobile = "true";
 
             updatebutton.setOnClickListener(new View.OnClickListener() {
@@ -190,7 +192,18 @@ public class ProfileActivity extends AppCompatActivity {
             changebutton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Changepassword(accessToken);
+                    String oldPassword = changepass1.getText().toString().trim();
+                    String newPassword = changepass2.getText().toString().trim();
+                    String confirmPassword = confirm_pwd.getText().toString().trim();
+                    if(oldPassword.length()==0){
+                        changepass1.setError("Required");
+                    }else if(newPassword.length()==0){
+                        changepass2.setError("Required");
+                    } else if(confirmPassword.equals(newPassword)){
+                        Changepassword(accessToken);
+                    }else{
+                        confirm_pwd.setError("Passwords don't match");
+                    }
                 }
             });
             phonebutton.setOnClickListener(new View.OnClickListener() {
@@ -242,19 +255,49 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    private void getConfiguration() {
+        ConfigurationAPI api = new ConfigurationAPI();
+        api.getResponse(new AsyncHandler<ConfigResponse>() {
+            @Override
+            public void onSuccess(ConfigResponse data) {
+                if(data.getIsPhoneLogin()){
+                    linearPhone.setVisibility(View.VISIBLE);
+                }
+                getUserData(accessToken);
+                CheckIdentites(accessToken);
+            }
+
+            @Override
+            public void onFailure(Throwable error, String errorcode) {
+                NotifyToastUtil.showNotify(ProfileActivity.this,error.getMessage());
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                },1500);
+            }
+        });
+    }
+
     /**
      * Get Profile Info
      **/
-    private void getUserData(lrAccessToken accessToken) {
-        UserProfileAPI userAPI = new UserProfileAPI();
-        userAPI.getResponse(accessToken,new AsyncHandler<LoginRadiusUltimateUserProfile>() {
+    private void getUserData(AccessTokenResponse accessToken) {
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(accessToken.access_token);
+        api.readAllUserProfile(queryParams,new AsyncHandler<LoginRadiusUltimateUserProfile>() {
             @Override
             public void onSuccess(LoginRadiusUltimateUserProfile userProfile) {
                 ProfileActivity.this.userProfile = userProfile;
                 List<String> result = new ArrayList<String>();
-                String email = null;
+                String email = "";
                 if (userProfile.Email!=null) {
-                    email = userProfile.Email.get(0).Value;
+                    for(int i=0;i<userProfile.Email.size();i++){
+                        email += userProfile.Email.get(i).Value+", ";
+                    }
+                    email = email.substring(0,email.length()-2);
                 }else {
                    email ="Email Field Empty";
                 }
@@ -281,7 +324,18 @@ public class ProfileActivity extends AppCompatActivity {
                 listview.setVisibility(View.VISIBLE);
                 adapter.notifyDataSetChanged();
                 setListViewHeightBasedOnChildren(listview);
+                if(userProfile.FirstName!=null){
+                    update1.setText(userProfile.FirstName);
+                }
+                if(userProfile.LastName!=null){
+                    update2.setText(userProfile.LastName);
+                }
+                if(userProfile.getUserName()!=null){
+                    update3.setText(userProfile.getUserName().toString());
+                }
                 pbLoad.setVisibility(View.GONE);
+                pbInitLoad.setVisibility(View.GONE);
+                svContent.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -290,6 +344,7 @@ public class ProfileActivity extends AppCompatActivity {
                     info.add("UserProfileAPI is not supported by this provider.");
                     adapter.notifyDataSetChanged();
                     pbLoad.setVisibility(View.GONE);
+                    pbInitLoad.setVisibility(View.GONE);
                 }
             }
         });
@@ -306,9 +361,11 @@ public class ProfileActivity extends AppCompatActivity {
      * Some APIs are Provider-specific (such as StatusAPI). If the API is not available
      * for the provider, it will just return 'onFailure' with an errorcode.
      */
-    private void getStatus(lrAccessToken token) {
-        StatusAPI statusAPI = new StatusAPI();
-        statusAPI.getResponse(token, new AsyncHandler<LoginRadiusStatus[]>() {
+    private void getStatus(AccessTokenResponse token) {
+        SocialAPI api = new SocialAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(token.access_token);
+        api.getStatus(queryParams, new AsyncHandler<LoginRadiusStatus[]>() {
             @Override
             public void onSuccess(LoginRadiusStatus[] data) {
                 if (data.length == 0 || data[0] == null) return;
@@ -334,10 +391,11 @@ public class ProfileActivity extends AppCompatActivity {
      *
      * @param token
      */
-    private void getContacts(lrAccessToken token) {
-
-        ContactAPI contactAPI = new ContactAPI();
-        contactAPI.getResponse(token, new AsyncHandler<LoginRadiusContactCursorResponse>() {
+    private void getContacts(AccessTokenResponse token) {
+        SocialAPI api = new SocialAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(token.access_token);
+        api.getContact(queryParams, new AsyncHandler<LoginRadiusContactCursorResponse>() {
             @Override
             public void onSuccess(LoginRadiusContactCursorResponse data) {
                 int index = 0;
@@ -363,20 +421,18 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
-    private void UpdateProfile(lrAccessToken token) {
-        String lrapikey = getString(R.string.api_key);                 //get loginradius api key from string.xml
+    private void UpdateProfile(AccessTokenResponse token) {
         String verificationUrl = getString(R.string.verification_url);   //get verificationUrl from string.xml(optional)
         String emailTemplate = getString(R.string.email_template);       //get emailTemplate url from string.xml(optional)
-        LoginParams value = new LoginParams();
-        value.apikey = lrapikey;
-        value.verificationUrl = verificationUrl;  //optional if update email
-        value.emailTemplate = emailTemplate;     // optional if update email
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(token.access_token);
+        queryParams.setEmailTemplate(emailTemplate);        //optional if update email
         JsonObject update = new JsonObject();
         update.addProperty("firstname", update1.getText().toString());
         update.addProperty("lastname", update2.getText().toString());
         update.addProperty("username", update3.getText().toString());
-        final UpdateProfileAPI updateProfileAPI = new UpdateProfileAPI();
-        updateProfileAPI.getResponse(value, token, update, new AsyncHandler<RegisterResponse>() {
+        api.updateProfile(queryParams, update, new AsyncHandler<RegisterResponse>() {
             @Override
             public void onSuccess(RegisterResponse registerResponse) {
                 if (registerResponse.getIsPosted()) {
@@ -391,15 +447,15 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void Changepassword(lrAccessToken token) {
-        String lrapikey = getString(R.string.api_key);                 //get loginradius api key from string.xml
-        LoginParams value = new LoginParams();
-        value.apikey = lrapikey;
+    private void Changepassword(AccessTokenResponse token) {
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(token.access_token);
         JsonObject change = new JsonObject();
         change.addProperty("OldPassword", changepass1.getText().toString());  // put your old password
         change.addProperty("NewPassword", changepass2.getText().toString());     // put your new password
-        final ChangePasswordAPI changepasswordAPI = new ChangePasswordAPI();
-        changepasswordAPI.getResponse(value, token, change, new AsyncHandler<RegisterResponse>() {
+        change.addProperty("ConfirmPassword",confirm_pwd.getText().toString());
+        api.changePassword(queryParams, change, new AsyncHandler<RegisterResponse>() {
             @Override
             public void onSuccess(RegisterResponse registerResponse) {
                 if (registerResponse.getIsPosted()) {
@@ -418,15 +474,14 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
-    private void UpdatePhone(final lrAccessToken token) {
-        final String lrapikey = getString(R.string.api_key);                 //get loginradius api key from string.xml
-        final LoginParams value = new LoginParams();
-        value.apikey = lrapikey;
+    private void UpdatePhone(final AccessTokenResponse token) {
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(token.access_token);
         JsonObject update = new JsonObject();
         update.addProperty("Phone", updatephone.getText().toString());  // put your phone number
         final Context context = this;
-        final UpdatePhoneAPI updatephoneAPI = new UpdatePhoneAPI();
-        updatephoneAPI.getResponse(value, token, update, new AsyncHandler<PhoneResponse>() {
+        api.updatePhone(queryParams, update, new AsyncHandler<PhoneResponse>() {
             @Override
             public void onSuccess(PhoneResponse updtephone) {
                 if (updtephone.getIsPosted()) {
@@ -441,7 +496,7 @@ public class ProfileActivity extends AppCompatActivity {
                             //You will get as string input data in this variable.
                             // here we convert the input to a string and show in a toast.
                             String otp = input.getEditableText().toString();
-                            VerifyOTP(token, value, otp);
+                            VerifyOTP(token,otp);
                         } // End of onClick(DialogInterface dialog, int whichButton)
                     }); //End of alert.setPositiveButton
                     alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -463,10 +518,13 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void VerifyOTP(lrAccessToken token, LoginParams value, String otp) {
-        value.smsTemplate = ""; //put your smstemplate(optional)
-        final VerifyOtpAPI verifyotpAPI = new VerifyOtpAPI();
-        verifyotpAPI.getResponse(value, token, otp, new AsyncHandler<RegisterResponse>() {
+    private void VerifyOTP(AccessTokenResponse token, String otp) {
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(token.access_token);
+        queryParams.setSmsTemplate(""); //put your smstemplate(optional)
+        queryParams.setOtp(otp);
+        api.verifyOtpByToken(queryParams, new AsyncHandler<RegisterResponse>() {
             @Override
             public void onSuccess(RegisterResponse registerResponse) {
                 if (registerResponse.getIsPosted()) {
@@ -481,23 +539,17 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void AddEmail(lrAccessToken token) {
-        String lrapikey = getString(R.string.api_key);                 //get loginradius api key from string.xml
+    private void AddEmail(AccessTokenResponse token) {
         String verificationUrl = getString(R.string.verification_url);   //get verificationUrl from string.xml(optional)
         String emailTemplate = getString(R.string.email_template);       //get emailTemplate url from string.xml(optional)
-        LoginParams value = new LoginParams();
-        value.apikey = lrapikey;
-        value.verificationUrl = verificationUrl;
-        value.emailTemplate = emailTemplate;
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(token.access_token);
+        queryParams.setEmailTemplate(emailTemplate);
         JsonObject update = new JsonObject();
-        update.addProperty("Email", addemail.getText().toString());  // put your Email Address
-        if(userProfile.Email == null){
-            update.addProperty("Type","Primary");
-        }else{
-            update.addProperty("Type","Secondary");
-        }
-        final AddEmailAPI addEmailAPI = new AddEmailAPI();
-        addEmailAPI.getResponse(value, token, update, new AsyncHandler<RegisterResponse>() {
+        update.addProperty("Email", addemail.getText().toString().trim());  // put your Email Address
+        update.addProperty("Type",addtype.getText().toString().trim());
+        api.addEmail(queryParams, update, new AsyncHandler<RegisterResponse>() {
             @Override
             public void onSuccess(RegisterResponse registerResponse) {
                 if (registerResponse.getIsPosted()) {
@@ -513,14 +565,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void RemoveEmail(lrAccessToken token) {
-        String apikey = getString(R.string.api_key);    //get loginradius api key from string.xml
-        LoginParams value = new LoginParams();
-        value.apikey = apikey;
+    private void RemoveEmail(AccessTokenResponse token) {
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(token.access_token);
         JsonObject delete = new JsonObject();
         delete.addProperty("Email", removeemail.getText().toString());  // put your Email Address
-        final RemoveEmailAPI removeEmailAPI = new RemoveEmailAPI();
-        removeEmailAPI.getResponse(value, token, delete, new AsyncHandler<DeleteResponse>() {
+        api.removeEmail(queryParams, delete, new AsyncHandler<DeleteResponse>() {
             @Override
             public void onSuccess(DeleteResponse deleteResponse) {
                 if (deleteResponse.getIsDeleted()) {
@@ -541,15 +592,17 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
-    private void CheckIdentites(final lrAccessToken token){
-        UserProfileAPI userAPI = new UserProfileAPI();
-        userAPI.getResponse(token, null,new AsyncHandler<LoginRadiusUltimateUserProfile>() {
+    private void CheckIdentites(final AccessTokenResponse token){
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(token.access_token);
+        api.readAllUserProfile(queryParams, new AsyncHandler<LoginRadiusUltimateUserProfile>() {
             @Override
             public void onSuccess(LoginRadiusUltimateUserProfile userProfile) {
                 if (userProfile.getIdentities()!=null) {
                     List<Identity> identities = userProfile.getIdentities();
                     for (Identity i : identities) {
-                        switch (i.getProvider()) {
+                        switch (i.getProvider().toLowerCase()) {
 
                             case "facebook":
                                 vFacebook="VISIBLE";
@@ -664,38 +717,34 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void SocialIdentities(final lrAccessToken token) {
+    private void SocialIdentities(final AccessTokenResponse token) {
         final SharedPreferences.Editor editor = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).edit();
         editor.putString("login_token", token.access_token);
         editor.putString("login_provider",token.provider);
         editor.commit();
-        LoginParams value = new LoginParams();
-        value.apikey=getString(R.string.api_key);
-        final SocialInterfaceAPI socialapi = new SocialInterfaceAPI();
-        socialapi.getResponse(value,new AsyncHandler<SocialInterface>() {
+        ConfigurationAPI api = new ConfigurationAPI();
+        api.getResponse(new AsyncHandler<ConfigResponse>() {
             @Override
-            public void onSuccess(SocialInterface socialInterface) {
-                providers = socialInterface.getProviders();
+            public void onSuccess(ConfigResponse data) {
+                providers = data.getSocialSchema().getProviders();
                 if(providers !=null && providers.size() >0 ) {
                     for (final Provider provider : providers) {
                         final Intent intent = new Intent(getApplication(), WebViewActivity.class);
-                        intent.putExtra("apikey", getString(R.string.api_key));
-                        intent.putExtra("sitename", getString(R.string.site_name));
                         intent.putExtra("verificationUrl", getString(R.string.verification_url));
                         intent.putExtra("emailTemplate", getString(R.string.email_template));
                         intent.putExtra("smsTemplate", getString(R.string.sms_template));
 
-                        switch (provider.getName()){
-                            case "Facebook":
+                        switch (provider.getName().toLowerCase()){
+                            case "facebook":
                                 if (vFacebook!=null &&vFacebook.equals("VISIBLE")) {
                                     unlinkFacebook.setVisibility(View.VISIBLE);
-                                    unlinkFacebook.setText("Unlink Facebook Click Hear");
+                                    unlinkFacebook.setText("Unlink Facebook Click Here");
                                     Facebook.setVisibility(View.GONE);
                                     unlinkFacebook.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkFacebookid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Facebook";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -713,16 +762,16 @@ public class ProfileActivity extends AppCompatActivity {
                                     });
                                 }
                                 break;
-                            case "Google":
+                            case "google":
                                 if (vGoogle!=null&&vGoogle.equals("VISIBLE")) {
                                     Google.setVisibility(View.GONE);
                                     unlinkGoogle.setVisibility(View.VISIBLE);
-                                    unlinkGoogle.setText("Unlink Google Click Hear");
+                                    unlinkGoogle.setText("Unlink Google Click Here");
                                     unlinkGoogle.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkGoogleid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Google";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -740,16 +789,16 @@ public class ProfileActivity extends AppCompatActivity {
                                     });
                                 }
                                 break;
-                            case "Twitter":
+                            case "twitter":
                                 if (vTwitter!=null &&vTwitter.equals("VISIBLE")) {
                                     Twitter.setVisibility(View.GONE);
                                     unlinkTwitter.setVisibility(View.VISIBLE);
-                                    unlinkTwitter.setText("Unlink Twitter Click Hear");
+                                    unlinkTwitter.setText("Unlink Twitter Click Here");
                                     unlinkTwitter.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkTwitterid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Twitter";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -767,16 +816,16 @@ public class ProfileActivity extends AppCompatActivity {
                                     });
                                 }
                                 break;
-                            case "LinkedIn":
+                            case "linkedin":
                                 if (vLinkedIn!=null &&vLinkedIn.equals("VISIBLE")) {
                                     LinkedIn.setVisibility(View.GONE);
                                     unlinkLinkedIn.setVisibility(View.VISIBLE);
-                                    unlinkLinkedIn.setText("Unlink LinkedIn Click Hear");
+                                    unlinkLinkedIn.setText("Unlink LinkedIn Click Here");
                                     unlinkLinkedIn.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkLinkedInid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="LinkedIn";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -794,16 +843,16 @@ public class ProfileActivity extends AppCompatActivity {
                                     });
                                 }
                                 break;
-                            case "Yahoo":
+                            case "yahoo":
                                 if (vYahoo!=null && vYahoo.equals("VISIBLE")) {
                                     Yahoo.setVisibility(View.GONE);
                                     unlinkYahoo.setVisibility(View.VISIBLE);
-                                    unlinkYahoo.setText("Unlink Yahoo Click Hear");
+                                    unlinkYahoo.setText("Unlink Yahoo Click Here");
                                     unlinkYahoo.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkYahooid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Yahoo";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -822,16 +871,16 @@ public class ProfileActivity extends AppCompatActivity {
                                 }
                                 break;
 
-                            case "Instagram":
+                            case "instagram":
                                 if (vInstagram!=null &&vInstagram.equals("VISIBLE")) {
                                     Instagram.setVisibility(View.GONE);
                                     unlinkInstagram.setVisibility(View.VISIBLE);
-                                    unlinkInstagram.setText("Unlink Instagram Click Hear");
+                                    unlinkInstagram.setText("Unlink Instagram Click Here");
                                     unlinkInstagram.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkInstagramid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Instagram";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -849,16 +898,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Amazon":
+                            case "amazon":
                                 if (vAmazon!=null&&vAmazon.equals("VISIBLE")) {
                                     Amazon.setVisibility(View.GONE);
                                     unlinkAmazon.setVisibility(View.VISIBLE);
-                                    unlinkAmazon.setText("Unlink Amazon Click Hear");
+                                    unlinkAmazon.setText("Unlink Amazon Click Here");
                                     unlinkAmazon.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkAmazonid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Amazon";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -875,16 +924,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Live":
+                            case "live":
                                 if (vLive!=null&&vLive.equals("VISIBLE")) {
                                     Live.setVisibility(View.GONE);
                                     unlinkLive.setVisibility(View.VISIBLE);
-                                    unlinkLive.setText("Unlink Live Click Hear");
+                                    unlinkLive.setText("Unlink Live Click Here");
                                     unlinkLive.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkLiveid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Live";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -901,16 +950,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Vkontakte":
+                            case "vkontakte":
                                 if (vVkontakte!=null&&vVkontakte.equals("VISIBLE")) {
                                     Vkontakte.setVisibility(View.GONE);
                                     unlinkVkontakte.setVisibility(View.VISIBLE);
-                                    unlinkVkontakte.setText("Unlink Vkontakte Click Hear");
+                                    unlinkVkontakte.setText("Unlink Vkontakte Click Here");
                                     unlinkVkontakte.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkVkontakteid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Vkontakte";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -927,16 +976,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Disqus":
+                            case "disqus":
                                 if (vDisqus!=null&&vDisqus.equals("VISIBLE")) {
                                     Disqus.setVisibility(View.GONE);
                                     unlinkDisqus.setVisibility(View.VISIBLE);
-                                    unlinkDisqus.setText("Unlink Disqus Click Hear");
+                                    unlinkDisqus.setText("Unlink Disqus Click Here");
                                     unlinkDisqus.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkDisqusid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Disqus";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -953,16 +1002,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "AOL":
+                            case "aol":
                                 if (vAOL!=null&&vAOL.equals("VISIBLE")) {
                                     AOL.setVisibility(View.GONE);
                                     unlinkAOL.setVisibility(View.VISIBLE);
-                                    unlinkAOL.setText("Unlink AOL Click Hear");
+                                    unlinkAOL.setText("Unlink AOL Click Here");
                                     unlinkAOL.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkAOLid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="AOL";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -979,16 +1028,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Pinterest":
+                            case "pinterest":
                                 if (vPinterest!=null&&vPinterest.equals("VISIBLE")) {
                                     Pinterest.setVisibility(View.GONE);
                                     unlinkPinterest.setVisibility(View.VISIBLE);
-                                    unlinkPinterest.setText("Unlink Pinterest Click Hear");
+                                    unlinkPinterest.setText("Unlink Pinterest Click Here");
                                     unlinkPinterest.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkPinterestid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Pinterest";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1005,16 +1054,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Mixi":
+                            case "mixi":
                                 if (vMixi!=null&&vMixi.equals("VISIBLE")) {
                                     Mixi.setVisibility(View.GONE);
                                     unlinkMixi.setVisibility(View.VISIBLE);
-                                    unlinkMixi.setText("Unlink Mixi Click Hear");
+                                    unlinkMixi.setText("Unlink Mixi Click Here");
                                     unlinkMixi.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkMixiid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Mixi";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1032,16 +1081,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Steamcommunity":
+                            case "steamcommunity":
                                 if (vSteamcommunity!=null&&vSteamcommunity.equals("VISIBLE")) {
                                     Steamcommunity.setVisibility(View.GONE);
                                     unlinkSteamcommunity.setVisibility(View.VISIBLE);
-                                    unlinkSteamcommunity.setText("Unlink Steamcommunity Click Hear");
+                                    unlinkSteamcommunity.setText("Unlink Steamcommunity Click Here");
                                     unlinkSteamcommunity.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkSteamcommunityid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Steamcommunity";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1058,16 +1107,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Hyves":
+                            case "hyves":
                                 if (vHyves!=null&&vHyves.equals("VISIBLE")) {
                                     Hyves.setVisibility(View.GONE);
                                     unlinkHyves.setVisibility(View.VISIBLE);
-                                    unlinkHyves.setText("Unlink Hyves Click Hear");
+                                    unlinkHyves.setText("Unlink Hyves Click Here");
                                     unlinkHyves.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkHyvesid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Hyves";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1084,16 +1133,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "LiveJournal":
+                            case "livejournal":
                                 if (vLiveJournal!=null&&vLiveJournal.equals("VISIBLE")) {
                                     LiveJournal.setVisibility(View.GONE);
                                     unlinkLiveJournal.setVisibility(View.VISIBLE);
-                                    unlinkLiveJournal.setText("Unlink LiveJournal Click Hear");
+                                    unlinkLiveJournal.setText("Unlink LiveJournal Click Here");
                                     unlinkLiveJournal.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkLiveJournalid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="LiveJournal";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1111,16 +1160,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Verisign":
+                            case "verisign":
                                 if (vVerisign!=null&&vVerisign.equals("VISIBLE")) {
                                     Verisign.setVisibility(View.GONE);
                                     unlinkVerisign.setVisibility(View.VISIBLE);
-                                    unlinkVerisign.setText("Unlink Verisign Click Hear");
+                                    unlinkVerisign.setText("Unlink Verisign Click Here");
                                     unlinkVerisign.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkVerisignid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Verisign";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1138,16 +1187,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Virgilio":
+                            case "virgilio":
                                 if (vVirgilio!=null&&vVirgilio.equals("VISIBLE")) {
                                     Virgilio.setVisibility(View.GONE);
                                     unlinkVirgilio.setVisibility(View.VISIBLE);
-                                    unlinkVirgilio.setText("Unlink Virgilio Click Hear");
+                                    unlinkVirgilio.setText("Unlink Virgilio Click Here");
                                     unlinkVirgilio.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkVirgilioid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Virgilio";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1165,16 +1214,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "FourSquare":
+                            case "foursquare":
                                 if (vFourSquare!=null&&vFourSquare.equals("VISIBLE")) {
                                     FourSquare.setVisibility(View.GONE);
                                     unlinkFourSquare.setVisibility(View.VISIBLE);
-                                    unlinkFourSquare.setText("Unlink FourSquare Click Hear");
+                                    unlinkFourSquare.setText("Unlink FourSquare Click Here");
                                     unlinkFourSquare.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkFourSquareid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="FourSquare";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1191,16 +1240,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "GitHub":
+                            case "github":
                                 if (vGitHub!=null&&vGitHub.equals("VISIBLE")) {
                                     GitHub.setVisibility(View.GONE);
                                     unlinkGitHub.setVisibility(View.VISIBLE);
-                                    unlinkGitHub.setText("Unlink GitHub Click Hear");
+                                    unlinkGitHub.setText("Unlink GitHub Click Here");
                                     unlinkGitHub.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkGitHubid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="GitHub";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1217,16 +1266,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "OpenID":
+                            case "openid":
                                 if (vOpenID!=null&&vOpenID.equals("VISIBLE")) {
                                     OpenID.setVisibility(View.GONE);
                                     unlinkOpenID.setVisibility(View.VISIBLE);
-                                    unlinkOpenID.setText("Unlink OpenID Click Hear");
+                                    unlinkOpenID.setText("Unlink OpenID Click Here");
                                     unlinkOpenID.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkOpenIDid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="OpenID";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1243,16 +1292,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Renren":
+                            case "renren":
                                 if (vRenren!=null&&vRenren.equals("VISIBLE")) {
                                     Renren.setVisibility(View.GONE);
                                     unlinkRenren.setVisibility(View.VISIBLE);
-                                    unlinkRenren.setText("Unlink Renren Click Hear");
+                                    unlinkRenren.setText("Unlink Renren Click Here");
                                     unlinkRenren.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkRenrenid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Renren";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1270,16 +1319,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Kaixin":
+                            case "kaixin":
                                 if (vKaixin!=null&&vKaixin.equals("VISIBLE")) {
                                     Kaixin.setVisibility(View.GONE);
                                     unlinkKaixin.setVisibility(View.VISIBLE);
-                                    unlinkKaixin.setText("Unlink Kaixin Click Hear");
+                                    unlinkKaixin.setText("Unlink Kaixin Click Here");
                                     unlinkKaixin.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkKaixinid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Kaixin";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1297,16 +1346,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Qq":
+                            case "qq":
                                 if (vQq!=null&&vQq.equals("VISIBLE")) {
                                     Qq.setVisibility(View.GONE);
                                     unlinkQq.setVisibility(View.VISIBLE);
-                                    unlinkQq.setText("Unlink Qq Click Hear");
+                                    unlinkQq.setText("Unlink Qq Click Here");
                                     unlinkQq.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkQqid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Qq";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1324,16 +1373,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Stackexchange":
+                            case "stackexchange":
                                 if (vStackexchange!=null&&vStackexchange.equals("VISIBLE")) {
                                     Stackexchange.setVisibility(View.GONE);
                                     unlinkStackexchange.setVisibility(View.VISIBLE);
-                                    unlinkStackexchange.setText("Unlink Stackexchange Click Hear");
+                                    unlinkStackexchange.setText("Unlink Stackexchange Click Here");
                                     unlinkStackexchange.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkStackexchangeid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Stackexchange";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1351,16 +1400,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Salesforce":
+                            case "salesforce":
                                 if (vSalesforce!=null&&vSalesforce.equals("VISIBLE")) {
                                     Salesforce.setVisibility(View.GONE);
                                     unlinkSalesforce.setVisibility(View.VISIBLE);
-                                    unlinkSalesforce.setText("Unlink Salesforce Click Hear");
+                                    unlinkSalesforce.setText("Unlink Salesforce Click Here");
                                     unlinkSalesforce.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkSalesforceid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Salesforce";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1378,16 +1427,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Odnoklassniki":
+                            case "odnoklassniki":
                                 if (vOdnoklassniki!=null&&vOdnoklassniki.equals("VISIBLE")) {
                                     Odnoklassniki.setVisibility(View.GONE);
                                     unlinkOdnoklassniki.setVisibility(View.VISIBLE);
-                                    unlinkOdnoklassniki.setText("Unlink Odnoklassniki Click Hear");
+                                    unlinkOdnoklassniki.setText("Unlink Odnoklassniki Click Here");
                                     unlinkOdnoklassniki.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkOdnoklassnikiid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Odnoklassniki";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1405,16 +1454,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Paypal":
+                            case "paypal":
                                 if (vPaypal!=null&&vPaypal.equals("VISIBLE")) {
                                     Paypal.setVisibility(View.GONE);
                                     unlinkPaypal.setVisibility(View.VISIBLE);
-                                    unlinkPaypal.setText("Unlink Paypal Click Hear");
+                                    unlinkPaypal.setText("Unlink Paypal Click Here");
                                     unlinkPaypal.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkPaypalid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Paypal";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1432,16 +1481,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Sinaweibo":
+                            case "sinaweibo":
                                 if (vSinaweibo!=null&&vSinaweibo.equals("VISIBLE")) {
                                     Sinaweibo.setVisibility(View.GONE);
                                     unlinkSinaweibo.setVisibility(View.VISIBLE);
-                                    unlinkSinaweibo.setText("Unlink Sinaweibo Click Hear");
+                                    unlinkSinaweibo.setText("Unlink Sinaweibo Click Here");
                                     unlinkSinaweibo.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkSinaweiboid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Sinaweibo";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1459,16 +1508,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Wordpress":
+                            case "wordpress":
                                 if (vWordpress!=null&&vWordpress.equals("VISIBLE")) {
                                     Wordpress.setVisibility(View.GONE);
                                     unlinkWordpress.setVisibility(View.VISIBLE);
-                                    unlinkWordpress.setText("Unlink Wordpress Click Hear");
+                                    unlinkWordpress.setText("Unlink Wordpress Click Here");
                                     unlinkWordpress.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkWordpressid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Wordpress";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1490,12 +1539,12 @@ public class ProfileActivity extends AppCompatActivity {
                                 if (vmailru!=null&&vmailru.equals("VISIBLE")) {
                                     mailru.setVisibility(View.GONE);
                                     unlinkmailru.setVisibility(View.VISIBLE);
-                                    unlinkmailru.setText("Unlink mailru Click Hear");
+                                    unlinkmailru.setText("Unlink mailru Click Here");
                                     unlinkmailru.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkmailruid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="mailru";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1513,15 +1562,15 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Xing":
+                            case "xing":
                                 if (vXing!=null&&vXing.equals("VISIBLE")) {
                                     Xing.setVisibility(View.GONE);
-                                    unlinkXing.setText("Unlink Xing Click Hear");
+                                    unlinkXing.setText("Unlink Xing Click Here");
                                     unlinkXing.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkXingid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Xing";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1539,16 +1588,16 @@ public class ProfileActivity extends AppCompatActivity {
                                         }
                                     });}
                                 break;
-                            case "Line":
+                            case "line":
                                 if (vLine!=null&&vLine.equals("VISIBLE")) {
                                     Line.setVisibility(View.GONE);
                                     unlinkLine.setVisibility(View.VISIBLE);
-                                    unlinkLine.setText("Unlink Line Click Hear");
+                                    unlinkLine.setText("Unlink Line Click Here");
                                     unlinkLine.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkLineid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Line";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -1566,13 +1615,14 @@ public class ProfileActivity extends AppCompatActivity {
                                     });}
                                 break;
                             default:
-                                return;
+                                break;
                         }
 
 
                     }
                 }
             }
+
             @Override
             public void onFailure(Throwable error, String errorcode) {
 
@@ -1590,7 +1640,7 @@ public class ProfileActivity extends AppCompatActivity {
             if (data != null){
                 String token = data.getStringExtra("accesstoken");
                 String provider = data.getStringExtra("provider");
-                lrAccessToken accessToken = new lrAccessToken();
+                AccessTokenResponse accessToken = new AccessTokenResponse();
                 accessToken.access_token = token;
                 accessToken.provider = provider;
                 Link(accessToken);
@@ -1598,530 +1648,529 @@ public class ProfileActivity extends AppCompatActivity {
             }  }
     }
 
-    private void Link(final lrAccessToken token){
-        String apikey=getString(R.string.api_key);    //get loginradius api key from string.xml
-        final LoginParams value=new LoginParams();
-        value.apikey=apikey;
-        GetSocialProfileAPI getsocialprofileAPI = new GetSocialProfileAPI();
-        getsocialprofileAPI.getResponse(value,token,new AsyncHandler<LoginRadiusUltimateUserProfile>() {
+    private void Link(final AccessTokenResponse token){
+        final AuthenticationAPI api = new AuthenticationAPI();
+        final QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(token.access_token);
+        api.getSocialProfile(queryParams,new AsyncHandler<LoginRadiusUltimateUserProfile>() {
             @Override
             public void onSuccess(final LoginRadiusUltimateUserProfile ultimateUserProfile) {
                 final String logintoken = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("login_token", "");
                 JsonObject change = new JsonObject();
                 change.addProperty("candidateToken",token.access_token);  // put your new provider token
-                final LinkAPI linkAPI = new LinkAPI();
-                linkAPI.getResponse(value,logintoken,change,new AsyncHandler<RegisterResponse>() {
+                queryParams.setAccess_token(logintoken);
+                api.linkAccount(queryParams,change,new AsyncHandler<RegisterResponse>() {
                     @Override
                     public void onSuccess(RegisterResponse registerResponse) {
                         if (registerResponse.getIsPosted()){
                             NotifyToastUtil.showNotify(ProfileActivity.this,"you have successfully link with " +token.provider);
                             final SharedPreferences.Editor editor = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).edit();
-                            switch (token.provider){
-                                case "Facebook":
+                            switch (token.provider.toLowerCase()){
+                                case "facebook":
                                     Facebook.setVisibility(View.GONE);
                                     editor.putString("linkFacebookid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkFacebook.setVisibility(View.VISIBLE);
-                                    unlinkFacebook.setText("Unlink Facebook Click Hear");
+                                    unlinkFacebook.setText("Unlink Facebook Click Here");
                                     unlinkFacebook.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkFacebookid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Facebook";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Google":
+                                case "google":
                                     Google.setVisibility(View.GONE);
                                     editor.putString("linkGoogleid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkGoogle.setVisibility(View.VISIBLE);
-                                    unlinkGoogle.setText("Unlink Google Click Hear");
+                                    unlinkGoogle.setText("Unlink Google Click Here");
                                     unlinkGoogle.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkGoogleid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Google";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Twitter":
+                                case "twitter":
                                     Twitter.setVisibility(View.GONE);
                                     editor.putString("linkTwitterid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkTwitter.setVisibility(View.VISIBLE);
-                                    unlinkTwitter.setText("Unlink Twitter Click Hear");
+                                    unlinkTwitter.setText("Unlink Twitter Click Here");
                                     unlinkTwitter.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkTwitterid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Twitter";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "LinkedIn":
+                                case "linkedin":
                                     LinkedIn.setVisibility(View.GONE);
                                     editor.putString("linkLinkedInid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkLinkedIn.setVisibility(View.VISIBLE);
-                                    unlinkLinkedIn.setText("Unlink LinkedIn Click Hear");
+                                    unlinkLinkedIn.setText("Unlink LinkedIn Click Here");
                                     unlinkLinkedIn.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkLinkedInid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="LinkedIn";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Yahoo":
+                                case "yahoo":
                                     Yahoo.setVisibility(View.GONE);
                                     editor.putString("linkYahooid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkYahoo.setVisibility(View.VISIBLE);
-                                    unlinkYahoo.setText("Unlink Yahoo Click Hear");
+                                    unlinkYahoo.setText("Unlink Yahoo Click Here");
                                     unlinkYahoo.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkYahooid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Yahoo";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Instagram":
+                                case "instagram":
                                     Instagram.setVisibility(View.GONE);
                                     editor.putString("linkInstagramid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkInstagram.setVisibility(View.VISIBLE);
-                                    unlinkInstagram.setText("Unlink Instagram Click Hear");
+                                    unlinkInstagram.setText("Unlink Instagram Click Here");
                                     unlinkInstagram.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkInstagramid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Instagram";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Amazon":
+                                case "amazon":
                                     Amazon.setVisibility(View.GONE);
                                     editor.putString("linkAmazonid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkAmazon.setVisibility(View.VISIBLE);
-                                    unlinkAmazon.setText("Unlink Amazon Click Hear");
+                                    unlinkAmazon.setText("Unlink Amazon Click Here");
                                     unlinkAmazon.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkAmazonid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Amazon";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Live":
+                                case "live":
                                     Live.setVisibility(View.GONE);
                                     editor.putString("linkLiveid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkLive.setVisibility(View.VISIBLE);
-                                    unlinkLive.setText("Unlink Live Click Hear");
+                                    unlinkLive.setText("Unlink Live Click Here");
                                     unlinkLive.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkLiveid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Live";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Vkontakte":
+                                case "vkontakte":
                                     Vkontakte.setVisibility(View.GONE);
                                     editor.putString("linkVkontakteid",ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkVkontakte.setVisibility(View.VISIBLE);
-                                    unlinkVkontakte.setText("Unlink Vkontakte Click Hear");
+                                    unlinkVkontakte.setText("Unlink Vkontakte Click Here");
                                     unlinkVkontakte.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkVkontakteid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Vkontakte";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Disqus":
+                                case "disqus":
                                     Disqus.setVisibility(View.GONE);
                                     editor.putString("linkDisqusid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkDisqus.setVisibility(View.VISIBLE);
-                                    unlinkDisqus.setText("Unlink Disqus Click Hear");
+                                    unlinkDisqus.setText("Unlink Disqus Click Here");
                                     unlinkDisqus.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkDisqusid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Disqus";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "AOL":
+                                case "aol":
                                     AOL.setVisibility(View.GONE);
                                     editor.putString("linkAOLid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkAOL.setVisibility(View.VISIBLE);
-                                    unlinkAOL.setText("Unlink AOL Click Hear");
+                                    unlinkAOL.setText("Unlink AOL Click Here");
                                     unlinkAOL.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkAOLid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="AOL";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Pinterest":
+                                case "pinterest":
                                     Pinterest.setVisibility(View.GONE);
                                     editor.putString("linkPinterestid",ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkPinterest.setVisibility(View.VISIBLE);
-                                    unlinkPinterest.setText("Unlink Pinterest Click Hear");
+                                    unlinkPinterest.setText("Unlink Pinterest Click Here");
                                     unlinkPinterest.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkPinterestid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Pinterest";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Mixi":
+                                case "mixi":
                                     Mixi.setVisibility(View.GONE);
                                     editor.putString("linkMixiid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkMixi.setVisibility(View.VISIBLE);
-                                    unlinkMixi.setText("Unlink Mixi Click Hear");
+                                    unlinkMixi.setText("Unlink Mixi Click Here");
                                     unlinkMixi.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkMixiid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Mixi";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Steamcommunity":
+                                case "steamcommunity":
                                     Steamcommunity.setVisibility(View.GONE);
                                     editor.putString("linkSteamcommunityid",ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkSteamcommunity.setVisibility(View.VISIBLE);
-                                    unlinkSteamcommunity.setText("Unlink Steamcommunity Click Hear");
+                                    unlinkSteamcommunity.setText("Unlink Steamcommunity Click Here");
                                     unlinkSteamcommunity.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkSteamcommunityid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Steamcommunity";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Hyves":
+                                case "hyves":
                                     Hyves.setVisibility(View.GONE);
                                     editor.putString("linkHyvesid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkHyves.setVisibility(View.VISIBLE);
-                                    unlinkHyves.setText("Unlink Hyves Click Hear");
+                                    unlinkHyves.setText("Unlink Hyves Click Here");
                                     unlinkHyves.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkHyvesid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Hyves";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "LiveJournal":
+                                case "livejournal":
                                     LiveJournal.setVisibility(View.GONE);
                                     editor.putString("linkLiveJournalid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkLiveJournal.setVisibility(View.VISIBLE);
-                                    unlinkLiveJournal.setText("Unlink LiveJournal Click Hear");
+                                    unlinkLiveJournal.setText("Unlink LiveJournal Click Here");
                                     unlinkLiveJournal.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkLiveJournalid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="LiveJournal";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Verisign":
+                                case "verisign":
                                     Verisign.setVisibility(View.GONE);
                                     editor.putString("linkVerisignid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkVerisign.setVisibility(View.VISIBLE);
-                                    unlinkVerisign.setText("Unlink Verisign Click Hear");
+                                    unlinkVerisign.setText("Unlink Verisign Click Here");
                                     unlinkVerisign.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkVerisignid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Verisign";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Virgilio":
+                                case "virgilio":
                                     Virgilio.setVisibility(View.GONE);
                                     editor.putString("linkVirgilioid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkVirgilio.setVisibility(View.VISIBLE);
-                                    unlinkVirgilio.setText("Unlink Virgilio Click Hear");
+                                    unlinkVirgilio.setText("Unlink Virgilio Click Here");
                                     unlinkVirgilio.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linktonke = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkVirgilio", "");
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkVirgilioid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.access_token=linktonke;
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "FourSquare":
+                                case "foursquare":
                                     FourSquare.setVisibility(View.GONE);
                                     editor.putString("linkFourSquareid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkFourSquare.setVisibility(View.VISIBLE);
-                                    unlinkFourSquare.setText("Unlink FourSquare Click Hear");
+                                    unlinkFourSquare.setText("Unlink FourSquare Click Here");
                                     unlinkFourSquare.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkFourSquareid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="FourSquare";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "GitHub":
+                                case "github":
                                     GitHub.setVisibility(View.GONE);
                                     editor.putString("linkGitHubid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkGitHub.setVisibility(View.VISIBLE);
-                                    unlinkGitHub.setText("Unlink GitHub Click Hear");
+                                    unlinkGitHub.setText("Unlink GitHub Click Here");
                                     unlinkGitHub.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkGitHubid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="GitHub";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "OpenID":
+                                case "openid":
                                     OpenID.setVisibility(View.GONE);
                                     editor.putString("linkOpenIDid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkOpenID.setVisibility(View.VISIBLE);
-                                    unlinkOpenID.setText("Unlink OpenID Click Hear");
+                                    unlinkOpenID.setText("Unlink OpenID Click Here");
                                     unlinkOpenID.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkOpenIDid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="OpenID";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Renren":
+                                case "renren":
                                     Renren.setVisibility(View.GONE);
                                     editor.putString("linkRenrenid", ultimateUserProfile.ID);
                                     editor.commit();
                                     unlinkRenren.setVisibility(View.VISIBLE);
-                                    unlinkRenren.setText("Unlink Renren Click Hear");
+                                    unlinkRenren.setText("Unlink Renren Click Here");
                                     unlinkRenren.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkRenrenid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Renren";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Kaixin":
+                                case "kaixin":
                                     Kaixin.setVisibility(View.GONE);
                                     editor.putString("linkKaixinid", token.id);
                                     editor.commit();
                                     unlinkKaixin.setVisibility(View.VISIBLE);
-                                    unlinkKaixin.setText("Unlink Kaixin Click Hear");
+                                    unlinkKaixin.setText("Unlink Kaixin Click Here");
                                     unlinkKaixin.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkKaixinid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Kaixin";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Qq":
+                                case "qq":
                                     Qq.setVisibility(View.GONE);
                                     editor.putString("linkQqid", token.id);
                                     editor.commit();
                                     unlinkQq.setVisibility(View.VISIBLE);
-                                    unlinkQq.setText("Unlink Qq Click Hear");
+                                    unlinkQq.setText("Unlink Qq Click Here");
                                     unlinkQq.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkQqid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Qq";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Stackexchange":
+                                case "stackexchange":
                                     Stackexchange.setVisibility(View.GONE);
                                     editor.putString("linkStackexchangeid", token.id);
                                     editor.commit();
                                     unlinkStackexchange.setVisibility(View.VISIBLE);
-                                    unlinkStackexchange.setText("Unlink Stackexchange Click Hear");
+                                    unlinkStackexchange.setText("Unlink Stackexchange Click Here");
                                     unlinkStackexchange.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkStackexchangeid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Stackexchange";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Salesforce":
+                                case "salesforce":
                                     Salesforce.setVisibility(View.GONE);
                                     editor.putString("linkSalesforceid", token.id);
                                     editor.commit();
                                     unlinkSalesforce.setVisibility(View.VISIBLE);
-                                    unlinkSalesforce.setText("Unlink Salesforce Click Hear");
+                                    unlinkSalesforce.setText("Unlink Salesforce Click Here");
                                     unlinkSalesforce.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkSalesforceid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Salesforce";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Odnoklassniki":
+                                case "odnoklassniki":
                                     Odnoklassniki.setVisibility(View.GONE);
                                     editor.putString("linkOdnoklassnikiid", token.id);
                                     editor.commit();
                                     unlinkOdnoklassniki.setVisibility(View.VISIBLE);
-                                    unlinkOdnoklassniki.setText("Unlink Odnoklassniki Click Hear");
+                                    unlinkOdnoklassniki.setText("Unlink Odnoklassniki Click Here");
                                     unlinkOdnoklassniki.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkOdnoklassnikiid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Odnoklassniki";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Paypal":
+                                case "paypal":
                                     Paypal.setVisibility(View.GONE);
                                     editor.putString("linkPaypalid", token.id);
                                     editor.commit();
                                     unlinkPaypal.setVisibility(View.VISIBLE);
-                                    unlinkPaypal.setText("Unlink Paypal Click Hear");
+                                    unlinkPaypal.setText("Unlink Paypal Click Here");
                                     unlinkPaypal.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkPaypalid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Paypal";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Sinaweibo":
+                                case "sinaweibo":
                                     Sinaweibo.setVisibility(View.GONE);
                                     editor.putString("linkSinaweiboid", token.id);
                                     editor.commit();
                                     unlinkSinaweibo.setVisibility(View.VISIBLE);
-                                    unlinkSinaweibo.setText("Unlink Sinaweibo Click Hear");
+                                    unlinkSinaweibo.setText("Unlink Sinaweibo Click Here");
                                     unlinkSinaweibo.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkSinaweiboid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Sinaweibo";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Wordpress":
+                                case "wordpress":
                                     Wordpress.setVisibility(View.GONE);
                                     editor.putString("linkWordpressid", token.id);
                                     editor.commit();
                                     unlinkWordpress.setVisibility(View.VISIBLE);
-                                    unlinkWordpress.setText("Unlink Wordpress Click Hear");
+                                    unlinkWordpress.setText("Unlink Wordpress Click Here");
                                     unlinkWordpress.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkWordpressid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Wordpress";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -2133,46 +2182,46 @@ public class ProfileActivity extends AppCompatActivity {
                                     editor.putString("linkmailruid", token.id);
                                     editor.commit();
                                     unlinkmailru.setVisibility(View.VISIBLE);
-                                    unlinkmailru.setText("Unlink mailru Click Hear");
+                                    unlinkmailru.setText("Unlink mailru Click Here");
                                     unlinkmailru.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkmailruid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="mailru";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Xing":
+                                case "xing":
                                     Xing.setVisibility(View.GONE);
                                     editor.putString("linkXingid", token.id);
                                     editor.commit();
                                     unlinkXing.setVisibility(View.VISIBLE);
-                                    unlinkXing.setText("Unlink Xing Click Hear");
+                                    unlinkXing.setText("Unlink Xing Click Here");
                                     unlinkXing.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkXingid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Xing";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
                                         }
                                     });
                                     break;
-                                case "Line":
+                                case "line":
                                     Line.setVisibility(View.GONE);
                                     editor.putString("linkLineid", token.id);
                                     editor.commit();
                                     unlinkLine.setVisibility(View.VISIBLE);
-                                    unlinkLine.setText("Unlink Line Click Hear");
+                                    unlinkLine.setText("Unlink Line Click Here");
                                     unlinkLine.setOnClickListener(new View.OnClickListener(){
                                         @Override
                                         public void onClick(View view) {
                                             final String linkid = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("linkLineid", "");
-                                            lrAccessToken accessToken = new lrAccessToken();
+                                            AccessTokenResponse accessToken = new AccessTokenResponse();
                                             accessToken.provider="Line";
                                             accessToken.id = linkid;
                                             Unlink(accessToken);
@@ -2201,16 +2250,15 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
-    private void Unlink(final lrAccessToken token){
-        String lrapikey = getString(R.string.api_key);                 //get loginradius api key from string.xml
-        LoginParams value = new LoginParams();
-        value.apikey=lrapikey;
+    private void Unlink(final AccessTokenResponse token){
         final String logintoken = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).getString("login_token", "");
+        AuthenticationAPI api = new AuthenticationAPI();
+        QueryParams queryParams = new QueryParams();
+        queryParams.setAccess_token(logintoken);
         JsonObject change = new JsonObject();
         change.addProperty("Provider", token.provider.toLowerCase());
         change.addProperty("ProviderId", token.id); // put your new provider token
-        final UnlinkAPI unlinkAPI = new UnlinkAPI();
-        unlinkAPI.getResponse(value,logintoken, change,new AsyncHandler<DeleteResponse>() {
+        api.unlinkAccount(queryParams, change,new AsyncHandler<DeleteResponse>() {
             @Override
             public void onSuccess(DeleteResponse deleteResponse) {
                 if (deleteResponse.getIsDeleted()){

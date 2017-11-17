@@ -11,10 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.gson.JsonObject;
-import com.loginradius.androidsdk.api.OtpVerificationAPI;
+import com.loginradius.androidsdk.api.AuthenticationAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
-import com.loginradius.androidsdk.response.login.LoginData;
-import com.loginradius.androidsdk.response.login.LoginParams;
+import com.loginradius.androidsdk.response.register.RegisterResponse;
 
 public class ResetPasswordByOtpActivity extends AppCompatActivity implements OnClickListener{
 
@@ -66,25 +65,24 @@ public class ResetPasswordByOtpActivity extends AppCompatActivity implements OnC
                 }else if(!newPassword.equals(confirmPassword)){
                     NotifyToastUtil.showNotify(this,"Password mismatch");
                 }else{
-                    submitOtp(otp,newPassword);
+                    submitOtp(otp,newPassword,confirmPassword);
                 }
                 break;
         }
     }
 
-    private void submitOtp(String otp, String newPassword) {
+    private void submitOtp(String otp, String newPassword,String confirmPassword) {
         showProgressDialog();
-        LoginParams params = new LoginParams();
-        params.apikey = getString(R.string.api_key);
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("Phone", phoneId);
         jsonObject.addProperty("otp",otp);
         jsonObject.addProperty("password",newPassword);
-        OtpVerificationAPI api = new OtpVerificationAPI();
-        api.getResponse(params, jsonObject, new AsyncHandler<LoginData>() {
+        jsonObject.addProperty("confirmpassword",confirmPassword);
+        AuthenticationAPI api = new AuthenticationAPI();
+        api.verifyOtpForgotPassword(jsonObject, new AsyncHandler<RegisterResponse>() {
 
             @Override
-            public void onSuccess(LoginData data) {
+            public void onSuccess(RegisterResponse data) {
                 hideProgressDialog();
                 NotifyToastUtil.showNotify(ResetPasswordByOtpActivity.this,"Password changed successfully");
                 new Handler().postDelayed(new Runnable() {

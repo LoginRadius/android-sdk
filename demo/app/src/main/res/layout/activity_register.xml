@@ -93,40 +93,8 @@
                         android:paddingLeft="5dp"
                         android:textSize="15dp"
                         android:inputType="textEmailAddress"
-                        android:hint="Email"
+                        android:hint="Email/Phone/Username"
                         android:id="@+id/email"/>
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_mobile"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_marginBottom="5dp"
-                        android:paddingLeft="5dp"
-                        android:textSize="15dp"
-                        android:inputType="number"
-                        android:hint="Mobile Number"
-                        android:id="@+id/mobile"/>
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="45dp"
-                        android:layout_marginBottom="5dp"
-                        android:paddingLeft="5dp"
-                        android:textSize="15dp"
-                        android:inputType="text"
-                        android:hint="Username"
-                        android:id="@+id/username"/>
                 </android.support.design.widget.TextInputLayout>
 
 

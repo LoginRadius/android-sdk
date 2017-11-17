@@ -4,7 +4,7 @@ package com.loginradius.androidsdk.response.userprofile.identity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Book {
+public class Book{
 
     @SerializedName("Id")
     @Expose

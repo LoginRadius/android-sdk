@@ -4,7 +4,7 @@ package com.loginradius.androidsdk.response.userprofile.identity;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class AgeRange {
+public class AgeRange{
 
     @SerializedName("Min")
     @Expose

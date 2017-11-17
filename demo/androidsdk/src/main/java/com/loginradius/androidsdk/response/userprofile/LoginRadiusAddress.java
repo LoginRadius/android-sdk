@@ -8,4 +8,5 @@ public class LoginRadiusAddress
         public String State ;
         public String PostalCode ;
         public String Region ;
+        public String Country;
     }

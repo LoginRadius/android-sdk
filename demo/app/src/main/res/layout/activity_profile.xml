@@ -3,13 +3,15 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:background="#eeeeee"
              tools:context="com.loginradius.demo.ProfileActivity">
 
     <ScrollView
+        android:id="@+id/svContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#eeeeee"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -124,6 +126,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/changepass1"
                     android:layout_marginBottom="10dp"
+                    android:inputType="textPassword"
                     android:hint="Put your old password"/>
 
                 <EditText
@@ -131,8 +134,16 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/changepass2"
                     android:layout_marginBottom="10dp"
+                    android:inputType="textPassword"
                     android:hint="Put your new password"/>
 
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/confirm_pwd"
+                    android:layout_marginBottom="10dp"
+                    android:inputType="textPassword"
+                    android:hint="Confirm your new password"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -145,11 +156,13 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linearPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@android:color/white"
                 android:padding="10dp"
+                android:visibility="gone"
                 android:orientation="vertical">
 
                 <TextView
@@ -201,6 +214,12 @@
                     android:textStyle="bold"
                     android:textSize="20dp"/>
 
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addtype"
+                    android:layout_marginBottom="10dp"
+                    android:hint="Put your Email Type"/>
 
                 <EditText
                     android:layout_width="match_parent"
@@ -208,7 +227,6 @@
                     android:id="@+id/addemail"
                     android:layout_marginBottom="10dp"
                     android:hint="Put your Email ID"/>
-
 
                 <Button
                     android:layout_width="wrap_content"
@@ -1037,6 +1055,12 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/pbInitLoad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 
     <include
         layout="@layout/notify_layout"

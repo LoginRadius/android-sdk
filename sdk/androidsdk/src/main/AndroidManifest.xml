@@ -19,6 +19,10 @@
         <activity android:name=".activity.FacebookNativeActivity"/>
         <activity android:name=".activity.GoogleNativeActivity"/>
         <activity android:name=".activity.WebViewActivity"/>
+        <activity android:name=".activity.VkontakteNativeActivity">
+        </activity>
+        <activity android:name=".activity.RequiredFieldsActivity">
+        </activity>
     </application>
 
 </manifest>

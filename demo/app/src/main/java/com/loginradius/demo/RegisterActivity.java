@@ -1,210 +1,309 @@
 package com.loginradius.demo;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Patterns;
+import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.loginradius.androidsdk.api.RegistrationAPI;
+import com.google.gson.JsonObject;
+import com.loginradius.androidsdk.api.AuthenticationAPI;
+import com.loginradius.androidsdk.api.ConfigurationAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
-import com.loginradius.androidsdk.response.login.LoginParams;
-import com.loginradius.androidsdk.response.register.Country;
-import com.loginradius.androidsdk.response.register.Email;
+import com.loginradius.androidsdk.handler.JsonDeserializer;
+import com.loginradius.androidsdk.helper.ErrorResponse;
+import com.loginradius.androidsdk.resource.QueryParams;
+import com.loginradius.androidsdk.response.config.ConfigResponse;
+import com.loginradius.androidsdk.response.login.LoginData;
 import com.loginradius.androidsdk.response.register.RegisterResponse;
-import com.loginradius.androidsdk.response.register.RegistrationData;
+import com.loginradius.androidsdk.response.traditionalinterface.UserRegistration;
+import com.loginradius.androidsdk.ui.FieldViewUtil;
+import com.loginradius.androidsdk.ui.RequiredFieldsViewGenerator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class RegisterActivity extends AppCompatActivity {
-    boolean phoneLogin;
-    EditText firstname,lastname,country,countrycode,email,mobile,username,password,confirmpassword;
-    private TextInputLayout inputfirstname,inputlastname,inputcountry,inputcountrycode,inputemail,inputpassword,inputconfirmpassword;
-    private ProgressDialog pDialog;
-    String apikey ,verificationUrl,emailTemplate;
-    String sott="put your sott";
+
+    private String verificationurl;
+    private RequiredFieldsViewGenerator gtr;
+    private FieldViewUtil fieldUtil;
+    private Context context;
+    private List<UserRegistration> raasSchemaList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-        apikey=getString(R.string.api_key);
-        verificationUrl=getString(R.string.verification_url);
-        emailTemplate=getString(R.string.email_template);
-        pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Loading...");
-        pDialog.setTitle("Please wait");
-        pDialog.setCancelable(false);
-        firstname = (EditText) findViewById(R.id.firstname);
-        lastname = (EditText) findViewById(R.id.lastname);
-        country = (EditText) findViewById(R.id.country);
-        countrycode = (EditText) findViewById(R.id.countrycode);
-        email = (EditText) findViewById(R.id.email);
-        mobile = (EditText)findViewById(R.id.mobile);
-        username = (EditText)findViewById(R.id.username);
-        password = (EditText) findViewById(R.id.password);
-        confirmpassword = (EditText) findViewById(R.id.confpassword);
-        inputfirstname = (TextInputLayout) findViewById(R.id.input_layout_firstname);
-        inputlastname = (TextInputLayout) findViewById(R.id.input_layout_lastname);
-        inputcountry = (TextInputLayout) findViewById(R.id.input_layout_country);
-        inputcountrycode = (TextInputLayout) findViewById(R.id.input_layout_countrycode);
-        inputemail = (TextInputLayout) findViewById(R.id.input_layout_email);
-        inputpassword = (TextInputLayout) findViewById(R.id.input_layout_password);
-        inputconfirmpassword = (TextInputLayout) findViewById(R.id.input_layout_confpassword);
-        firstname.addTextChangedListener(new MyTextWatcher(firstname));
-        lastname.addTextChangedListener(new MyTextWatcher(lastname));
-        country.addTextChangedListener(new MyTextWatcher(country));
-        //email.addTextChangedListener(new MyTextWatcher(email));
-        password.addTextChangedListener(new MyTextWatcher(password));
-        confirmpassword.addTextChangedListener(new MyTextWatcher(confirmpassword));
-        Button btnSignUp = (Button) findViewById(R.id.btn_signup);
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
+        init();
+    }
+
+    private void init() {
+        context = RegisterActivity.this;
+        verificationurl = getString(R.string.verification_url);
+        getRaasSchema();
+    }
+
+    private void getRaasSchema() {
+        gtr = new RequiredFieldsViewGenerator(context, 0);
+        setContentView(gtr.generateProgressBar());
+        ConfigurationAPI api = new ConfigurationAPI();
+        api.getResponse(new AsyncHandler<ConfigResponse>() {
             @Override
-            public void onClick(View view) {
-                submitForm();
+            public void onSuccess(ConfigResponse data) {
+                raasSchemaList = data.getRegistrationFormSchema();
+                setRequiredFieldsView();
             }
-        });
-    }
 
-
-    private void submitForm() {
-        String confermpassword = confirmpassword.getText().toString().trim();
-        String password1= password.getText().toString().trim();
-        String emailAddress = email.getText().toString().trim();
-        String mobileNumber = mobile.getText().toString().trim();
-        if (!password1.equals(confermpassword)){
-            NotifyToastUtil.showNotify(RegisterActivity.this,"The Confirm Password field does not match the Password field");
-        }else if(emailAddress.length() == 0){
-            NotifyToastUtil.showNotify(RegisterActivity.this,"Please fill email");
-        }else if(!emailAddress.matches(Patterns.EMAIL_ADDRESS.pattern())){
-            NotifyToastUtil.showNotify(RegisterActivity.this,"Email address is not correct");
-        }else if(username.getText().toString().trim().length() == 0){
-            NotifyToastUtil.showNotify(RegisterActivity.this,"Please fill username");
-        }else if(mobileNumber.length() == 0){
-            NotifyToastUtil.showNotify(RegisterActivity.this,"Please fill mobile number");
-        }else if(!mobileNumber.matches(Patterns.PHONE.pattern())){
-            NotifyToastUtil.showNotify(RegisterActivity.this,"Mobile number is not correct");
-        }else{
-            doRegistration();
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-    private void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
-    }
-
-    private class MyTextWatcher implements TextWatcher {
-
-        private View view;
-
-        private MyTextWatcher(View view) {
-            this.view = view;
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2 ) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-            int i = view.getId();
-
-        }
-    }
-
-
-    private void showProgressDialog() {
-        if (!pDialog.isShowing()) {
-            pDialog.show();
-        }
-    }
-
-    private void hideProgressDialog() {
-        if(pDialog!=null && pDialog.isShowing()){
-            pDialog.dismiss();
-        }
-    }
-
-    private void doRegistration() {
-        showProgressDialog();
-        LoginParams value = new LoginParams();
-        value.apikey = apikey;//put loginradius your apikey(required)
-        value.sott=sott;//put your sott(required)
-        value.verificationUrl=verificationUrl; // put your verificationUrl(required)
-        value.emailTemplate=emailTemplate;  //put your emailTemplate(optional)
-        final RegistrationData data = new RegistrationData();
-        data.setFirstName(firstname.getText().toString());
-        data.setLastName(lastname.getText().toString());
-        data.setPassword(password.getText().toString());
-        Country countryObj = new Country();
-        countryObj.setCode(countrycode.getText().toString());
-        countryObj.setName(country.getText().toString());
-
-        final String inputString = email.getText().toString();
-
-        Email emailObj = new Email();
-        emailObj.setType("Primary");
-        emailObj.setValue(email.getText().toString());
-        data.setEmail(new ArrayList<Email>(Arrays.asList(emailObj)));
-        data.setPhoneId(mobile.getText().toString().trim());
-        data.setUserName(username.getText().toString().trim());
-
-        /*if(inputString.matches(Patterns.EMAIL_ADDRESS.pattern())){
-
-        }else if(inputString.matches(Patterns.PHONE.pattern())){
-            data.setPhoneId(inputString);
-            phoneLogin = true;
-        }else{
-            data.setUserName(inputString);
-        }*/
-
-        RegistrationAPI registrationAPI = new RegistrationAPI();
-        registrationAPI.getResponse(value,data,new AsyncHandler<RegisterResponse>() {
-            @Override
-            public void onSuccess(RegisterResponse registerResponse) {
-                hideProgressDialog();
-                Log.e("data",registerResponse.getIsPosted().toString());
-                NotifyToastUtil.showNotify(RegisterActivity.this,"OTP successfully sent to your phone");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startActivity(new Intent(RegisterActivity.this,OTPActivity.class).putExtra("phoneId",data.getPhoneId().toString()));
-                        finish();
-                    }
-                },1500);
-                /*if(phoneLogin){
-
-                }else{
-                    NotifyToastUtil.showNotify(RegisterActivity.this,"Please Verify Your Email");
-                }*/
-            }
             @Override
             public void onFailure(Throwable error, String errorcode) {
-                hideProgressDialog();
-                NotifyToastUtil.showNotify(RegisterActivity.this,error.getMessage());
+                Log.i("lr_api_error",error.getMessage());
+                Toast.makeText(context,error.getMessage(),Toast.LENGTH_LONG).show();
+                finish();
             }
         });
     }
 
+    private void setRequiredFieldsView() {
+        Observable<ScrollView> observable = Observable.create(new ObservableOnSubscribe<ScrollView>() {
+            @Override
+            public void subscribe(ObservableEmitter<ScrollView> e) throws Exception {
+                e.onNext(getFieldsView());
+                e.onComplete();
+            }
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+        Observer<ScrollView> observer = new Observer<ScrollView>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(ScrollView value) {
+                setContentView(value);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i("lr_api_error",e.getMessage());
+                Toast.makeText(context,e.getMessage(),Toast.LENGTH_LONG).show();
+                finish();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+        observable.subscribe(observer);
+    }
+
+    private ScrollView getFieldsView(){
+        fieldUtil = new FieldViewUtil();
+        ScrollView svParent = gtr.generateParentView();
+        final LinearLayout linearContainer = gtr.generateParentContainerView();
+        svParent.addView(linearContainer);
+        TextView tvLabel = gtr.generateLabelTextView("Please fill the required fields to continue");
+        tvLabel.setGravity(Gravity.CENTER_HORIZONTAL);
+        linearContainer.addView(tvLabel);
+        for(int i = 0;i<raasSchemaList.size();i++){
+            UserRegistration userField=raasSchemaList.get(i);
+
+            if(userField.getRules()!=null){
+                fieldUtil.addFieldView(gtr,userField.getName(),userField,linearContainer);
+            }
+        }
+
+        Button submitButton = gtr.generateSubmitButton("Register");
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Observable observable = Observable.create(new ObservableOnSubscribe() {
+                    @Override
+                    public void subscribe(ObservableEmitter e) throws Exception {
+                        startRegistrationProcess(linearContainer);
+                    }
+                });
+                observable.subscribe();
+            }
+        });
+        linearContainer.addView(submitButton);
+        return svParent;
+    }
+
+    private void startRegistrationProcess(LinearLayout linearContainer) {
+        if(fieldUtil.validateFields(gtr,linearContainer)){
+            setContentView(gtr.generateProgressBar());
+            AuthenticationAPI api = new AuthenticationAPI();
+            QueryParams queryParams = new QueryParams();
+            JsonObject jsonData = fieldUtil.getData(gtr,linearContainer);
+            api.register(queryParams, jsonData, new AsyncHandler<RegisterResponse>() {
+                @Override
+                public void onSuccess(RegisterResponse data) {
+                    if(fieldUtil.getPhone()!=null){
+                        showMobileInfoDialog();
+                        return;
+                    }
+                    if(fieldUtil.getEmail()!=null){
+                        showEmailInfoDialog();
+                        return;
+                    }
+                    Toast.makeText(context,"Registration successful",Toast.LENGTH_LONG).show();
+                    finish();
+                }
+
+                @Override
+                public void onFailure(Throwable error, String errorcode) {
+                    ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(), ErrorResponse.class);
+                    int errorCode = errorResponse.getErrorCode();
+                    Log.i("ErrorCode",String.valueOf(errorCode));
+                    switch (errorCode){
+                        case 936:
+                            Toast.makeText(context,"Email already exists",Toast.LENGTH_SHORT).show();
+                            setRequiredFieldsView();
+                            break;
+                        case 1058:
+                            Toast.makeText(context,"Mobile number already exists",Toast.LENGTH_SHORT).show();
+                            setRequiredFieldsView();
+                            break;
+                        case 970:
+                            showEmailInfoDialog();
+                            break;
+                        case 1066:
+                            showMobileInfoDialog();
+                            break;
+                        default:
+                            Toast.makeText(context,"Unable to complete the request at the moment",Toast.LENGTH_SHORT).show();
+                            setRequiredFieldsView();
+                            break;
+                    }
+                }
+            });
+        }
+    }
+
+    private void showEmailInfoDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle("Message");
+        alert.setMessage("We've sent a verification mail on your email address. Please verify your email address to login.");
+        alert.setPositiveButton("OK", new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    private void showMobileInfoDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle("Message");
+        alert.setMessage("We've sent an OTP on your mobile number. Please verify your mobile number to login.");
+        alert.setPositiveButton("OK", new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                setOTPView();
+            }
+        });
+        AlertDialog dialog = alert.create();
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    private void setOTPView(){
+        View view = gtr.generateOTPLayout();
+        Button btnSubmit = (Button)view.findViewWithTag("submit");
+        Button btnResend = (Button)view.findViewWithTag("resend_otp");
+        final EditText etOTP = (EditText)view.findViewWithTag("otp");
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String otp = etOTP.getText().toString().trim();
+                if(otp.length() == 0){
+                    etOTP.setError("Required");
+                    etOTP.setBackgroundResource(R.drawable.red_border);
+                }else{
+                    submitOTP(otp);
+                }
+            }
+        });
+        btnResend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resendOTP();
+            }
+        });
+        setContentView(view);
+    }
+
+    private void resendOTP() {
+        setContentView(gtr.generateProgressBar());
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("Phone", fieldUtil.getPhone());
+        AuthenticationAPI api = new AuthenticationAPI();
+        api.resendOtp(null, jsonObject, new AsyncHandler<RegisterResponse>() {
+            @Override
+            public void onSuccess(RegisterResponse data) {
+                Toast.makeText(context,"OTP sent to your mobile number",Toast.LENGTH_SHORT).show();
+                setOTPView();
+            }
+
+            @Override
+            public void onFailure(Throwable error, String errorcode) {
+                ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(), ErrorResponse.class);
+                int errorCode = errorResponse.getErrorCode();
+                Log.i("ErrorCode",String.valueOf(errorCode));
+                Toast.makeText(context,"Unable to complete the request at the moment",Toast.LENGTH_SHORT).show();
+                setOTPView();
+            }
+        });
+    }
+
+    private void submitOTP(String otp) {
+        setContentView(gtr.generateProgressBar());
+        QueryParams queryParams = new QueryParams();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("Phone", fieldUtil.getPhone());
+        queryParams.setOtp(otp);
+        AuthenticationAPI api = new AuthenticationAPI();
+        api.verifyOtp(queryParams,jsonObject, new AsyncHandler<LoginData>() {
+            @Override
+            public void onSuccess(LoginData data) {
+                Toast.makeText(context,"Registration successful",Toast.LENGTH_LONG).show();
+                finish();
+            }
+
+            @Override
+            public void onFailure(Throwable error, String errorcode) {
+                ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(), ErrorResponse.class);
+                int errorCode = errorResponse.getErrorCode();
+                Log.i("ErrorCode",String.valueOf(errorCode));
+                if(errorCode == 1067){
+                    Toast.makeText(context,"OTP is not correct. Please try again",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(context,"Unable to complete the request at the moment",Toast.LENGTH_SHORT).show();
+                }
+                setOTPView();
+            }
+        });
+    }
 }

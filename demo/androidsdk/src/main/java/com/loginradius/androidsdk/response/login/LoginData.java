@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class LoginData {
+public class LoginData{
 
     @SerializedName("Profile")
     @Expose
