@@ -45,5 +45,5 @@ compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
 compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 compile 'com.google.android.gms:play-services:11.0.4'
 compile 'com.android.support:appcompat-v7:25.2.0'
-
+compile 'com.vk:androidsdk:1.6.7'
 ```
