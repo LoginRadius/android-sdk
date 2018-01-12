@@ -24,7 +24,7 @@ public class ConfigurationAPI {
     }
 
     public void getResponse(final AsyncHandler<ConfigResponse> handler){
-        ApiInterface apiService = RestRequest.getClientCloud().create(ApiInterface.class);
+        ApiInterface apiService = RestRequest.getClientConfig().create(ApiInterface.class);
         apiService.getConfiguration(Endpoint.API_V2_CONFIG,LoginRadiusSDK.getApiKey()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<ConfigResponse>() {
                     @Override

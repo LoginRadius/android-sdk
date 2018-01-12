@@ -60,25 +60,9 @@ public class LoginRadiusAuthManager {
 	/**Callback handler for Face book Native Login **/
 	protected static CallbackManager lrCallbackManager;
 
-	/**
-	 * Authenticate api key with LoginRadiusSDK server.
-	 * @param key	apikey KEY given by the Loginradius
-	 * @param asyncHandler	callback returning AppInformation
-	 */
-	public static void getAppConfiguration(String key, final AsyncHandler<SocialInterface> asyncHandler) {
+	public static void setCallbackManager(String key,CallbackManager callback){
 		LoginRadiusAuthManager.AKey = key;
-		restHandler(key, asyncHandler);
-	}
-	/**
-	 * Authenticate api key with LoginRadiusSDK server.
-	 * @param key	apikey KEY given by the Loginradius
-	 * @param callback callback manager for Facebook Native Login
-	 * @param asyncHandler	callback returning AppInformation
-	 */
-	public static void getNativeAppConfiguration(String key, CallbackManager callback, final AsyncHandler<SocialInterface> asyncHandler) {
-		LoginRadiusAuthManager.AKey = key;
-		lrCallbackManager=callback;
-		restHandler(key, asyncHandler);
+		lrCallbackManager = callback;
 	}
 
 	/**
@@ -106,6 +90,11 @@ public class LoginRadiusAuthManager {
 		else {
 			performWebLogin(activity, provider);
 		}
+	}
+
+	public static void getNativeAppConfiguration(String key, CallbackManager callback) {
+		LoginRadiusAuthManager.AKey = key;
+		lrCallbackManager=callback;
 	}
 
 	/**
@@ -228,42 +217,6 @@ public class LoginRadiusAuthManager {
 		ConnectivityManager cm = (ConnectivityManager) c.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo ni = cm.getActiveNetworkInfo();
 		return (ni != null && ni.isAvailable() && ni.isConnected());
-	}
-
-	/**
-	 * Request for user's LoginRadiusSDK app settings
-	 * @param key	API-KEY provided by the loginradius
-	 * @param asyncHandler	callback handler
-	 */
-	private static void restHandler(String key, final AsyncHandler<SocialInterface> asyncHandler) {
-
-		// Format key into map
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("apikey", key);
-
-		// Send request to LoginRadiusSDK server
-		ApiInterface apiService = RestRequest.getClientCdn().create(ApiInterface.class);
-		apiService.getSocialProviderInterface(Endpoint.API_V2_SOCIALINTERFACE_URL+key+".json").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-				.subscribe(new DisposableObserver<SocialInterface>() {
-					@Override
-					public void onComplete() {
-					}
-
-					@Override
-					public void onError(Throwable e) {
-						ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
-						asyncHandler.onFailure(exceptionResponse.t, exceptionResponse.message);
-
-					}
-
-					@Override
-					public void onNext(SocialInterface response) {
-						asyncHandler.onSuccess(response);
-					}
-
-				});
-
-
 	}
 
 

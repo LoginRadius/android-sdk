@@ -45,6 +45,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class AuthenticationAPI {
     private ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
+    private boolean askRequiredFieldsOnTraditionalLogin = true;
 
     public AuthenticationAPI() {
         if(!LoginRadiusSDK.validate()){
@@ -327,29 +328,33 @@ public class AuthenticationAPI {
     }
 
     private void validateLoginConfiguration(final Context context, final QueryParams queryParams, final LoginData response, final AsyncHandler<LoginData> handler) {
-        ConfigurationAPI api = new ConfigurationAPI();
-        api.getResponse(new AsyncHandler<ConfigResponse>() {
-            @Override
-            public void onSuccess(ConfigResponse data) {
-                if(data.getAskRequiredFieldsOnTraditionalLogin()){
-                    Intent intent = new Intent(context, RequiredFieldsActivity.class);
-                    intent.putExtra("apikey",LoginRadiusSDK.getApiKey());
-                    intent.putExtra("verificationurl",LoginRadiusSDK.getVerificationUrl());
-                    intent.putExtra("fieldsColor",queryParams.getFieldsColor());
-                    LoginDataHandler loginDataHandler = LoginDataHandler.getInstance();
-                    loginDataHandler.setResponse(response);
-                    loginDataHandler.setHandler(handler);
-                    context.startActivity(intent);
-                }else{
-                    handler.onSuccess(response);
+        if(askRequiredFieldsOnTraditionalLogin){
+            ConfigurationAPI api = new ConfigurationAPI();
+            api.getResponse(new AsyncHandler<ConfigResponse>() {
+                @Override
+                public void onSuccess(ConfigResponse data) {
+                    if(data.getAskRequiredFieldsOnTraditionalLogin()){
+                        Intent intent = new Intent(context, RequiredFieldsActivity.class);
+                        intent.putExtra("apikey",LoginRadiusSDK.getApiKey());
+                        intent.putExtra("verificationurl",LoginRadiusSDK.getVerificationUrl());
+                        intent.putExtra("fieldsColor",queryParams.getFieldsColor());
+                        LoginDataHandler loginDataHandler = LoginDataHandler.getInstance();
+                        loginDataHandler.setResponse(response);
+                        loginDataHandler.setHandler(handler);
+                        context.startActivity(intent);
+                    }else{
+                        handler.onSuccess(response);
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Throwable error, String errorcode) {
-                handler.onFailure(error,errorcode);
-            }
-        });
+                @Override
+                public void onFailure(Throwable error, String errorcode) {
+                    handler.onFailure(error,errorcode);
+                }
+            });
+        }else{
+            handler.onSuccess(response);
+        }
     }
 
     public void login(final Context context, final QueryParams queryParams, final AsyncHandler<LoginData> handler){
@@ -883,5 +888,9 @@ public class AuthenticationAPI {
                     }
 
                 });
+    }
+
+    public void setAskRequiredFieldsOnTraditionalLogin(boolean askRequiredFieldsOnTraditionalLogin) {
+        this.askRequiredFieldsOnTraditionalLogin = askRequiredFieldsOnTraditionalLogin;
     }
 }

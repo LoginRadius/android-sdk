@@ -61,6 +61,5 @@ public class MainActivity extends AppCompatActivity {
         btnlogin.setOnClickListener(listener);
         btnregister.setOnClickListener(listener);
         btnforgotpassword.setOnClickListener(listener);
-
 }
 }

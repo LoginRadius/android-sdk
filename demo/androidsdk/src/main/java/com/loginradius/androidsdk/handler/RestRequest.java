@@ -12,11 +12,9 @@ public class RestRequest {
 
 
 	public static String API_V2_BASE_URL = "https://api.loginradius.com/";
-	public static String API_V2_BASE_URL_CDN = "http://cdn.loginradius.com/";
-	public static String API_V2_BASE_URL_CLOUD = "http://cloud-api.loginradius.com";
+	public static String API_V2_BASE_URL_CONFIG = "http://config.lrcontent.com/";
 	public static Retrofit retrofit = null;
-	public static Retrofit retrofitcdn = null;
-	public static Retrofit retrofitcloud = null;
+	public static Retrofit retrofitconfig = null;
 
 	public static Retrofit getClient() {
 		Gson gson = new GsonBuilder().setLenient().create();
@@ -30,29 +28,16 @@ public class RestRequest {
 		return retrofit;
 	}
 
-
-	public static Retrofit getClientCdn() {
+	public static Retrofit getClientConfig() {
 		Gson gson = new GsonBuilder().setLenient().create();
-		if (retrofitcdn==null) {
-			retrofitcdn = new Retrofit.Builder()
-					.baseUrl(API_V2_BASE_URL_CDN)
+		if (retrofitconfig ==null) {
+			retrofitconfig = new Retrofit.Builder()
+					.baseUrl(API_V2_BASE_URL_CONFIG)
 					.addConverterFactory(new JsonDeserializer(gson))
 					.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 					.build();
 		}
-		return retrofitcdn;
-	}
-
-	public static Retrofit getClientCloud() {
-		Gson gson = new GsonBuilder().setLenient().create();
-		if (retrofitcloud==null) {
-			retrofitcloud = new Retrofit.Builder()
-					.baseUrl(API_V2_BASE_URL_CLOUD)
-					.addConverterFactory(new JsonDeserializer(gson))
-					.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-					.build();
-		}
-		return retrofitcloud;
+		return retrofitconfig;
 	}
 }
 

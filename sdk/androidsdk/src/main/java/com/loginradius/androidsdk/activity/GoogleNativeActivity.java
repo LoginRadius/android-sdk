@@ -99,27 +99,8 @@ public class GoogleNativeActivity extends AppCompatActivity {
         context = GoogleNativeActivity.this;
 
         ProviderPermissions.resetPermissions();
-        LoginRadiusAuthManager.getNativeAppConfiguration(LoginRadiusSDK.getApiKey(), callManager,
-                new AsyncHandler<SocialInterface>() {
-                    @Override
-                    public void onSuccess(SocialInterface socialInterface) {
-                        providers = socialInterface.getProviders();
-                        for (Provider provider : providers) {
-                            if (provider.getName().equalsIgnoreCase("google")) {
-                                showdialog(provider);
-                                break;
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Throwable error,
-                                          String errorCode) {
-                    }
-                });
-
-
+        LoginRadiusAuthManager.setCallbackManager(LoginRadiusSDK.getApiKey(),null);
+        showdialog();
     }
 
 
@@ -174,8 +155,10 @@ public class GoogleNativeActivity extends AppCompatActivity {
     }
 
 
-    public void showdialog(final Provider p) {
-        LoginRadiusAuthManager.performLogin(GoogleNativeActivity.this, p, new AsyncHandler<AccessTokenResponse>() {
+    public void showdialog() {
+        Provider provider = new Provider();
+        provider.setName("google");
+        LoginRadiusAuthManager.performLogin(GoogleNativeActivity.this, provider, new AsyncHandler<AccessTokenResponse>() {
 
             @Override
             public void onSuccess(AccessTokenResponse data) {

@@ -90,36 +90,15 @@ public class FacebookNativeActivity extends AppCompatActivity {
         ProviderPermissions.addFbPermission(ProviderPermissions.FacebookPermission.USER_BASIC_INFO);
         ProviderPermissions.addFbPermission(ProviderPermissions.FacebookPermission.USER_BIRTHDAY);
         ProviderPermissions.addFbPermission(ProviderPermissions.FacebookPermission.USER_EMAIL);
-
-        LoginRadiusAuthManager.getNativeAppConfiguration(LoginRadiusSDK.getApiKey(), callManager,
-                new AsyncHandler<SocialInterface>() {
-                    @Override
-                    public void onSuccess(SocialInterface socialInterface) {
-
-                        providers = socialInterface.getProviders();
-                        for (Provider provider : providers) {
-                            if (provider.getName().equalsIgnoreCase("facebook")) {
-                                showdialog(provider);
-                                break;
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Throwable error,
-                                          String errorCode) {
-                    }
-                });
-
-
-
-
+        LoginRadiusAuthManager.setCallbackManager(LoginRadiusSDK.getApiKey(),callManager);
+        showdialog();
     }
 
 
-    public void showdialog(final Provider p) {
-        LoginRadiusAuthManager.performLogin(FacebookNativeActivity.this, p, new AsyncHandler<AccessTokenResponse>() {
+    public void showdialog() {
+        Provider provider = new Provider();
+        provider.setName("facebook");
+        LoginRadiusAuthManager.performLogin(FacebookNativeActivity.this, provider, new AsyncHandler<AccessTokenResponse>() {
 
             @Override
             public void onSuccess(AccessTokenResponse data) {

@@ -15,7 +15,7 @@ public class Endpoint {
 	 */
 
 	public static final String API_V2_SOCIALINTERFACE_URL = "interface/json/";
-	public static final String API_V2_CONFIG = "configuration/ciam/appInfo";
+	public static final String API_V2_CONFIG = "ciam/appInfo";
 	public static final String API_V2_LOGIN = "identity/v2/auth/login";
 	public static final String API_V2_REGISTER = "identity/v2/auth/register";
 	public static final String API_V2_RESET_PASSWORD="identity/v2/auth/password";

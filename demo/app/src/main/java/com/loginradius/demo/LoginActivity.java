@@ -66,27 +66,9 @@ public class LoginActivity extends AppCompatActivity {
         pbLoad = (ProgressBar)findViewById(R.id.pbLoad);
         linearSocial = (LinearLayout)findViewById(R.id.linearSocial);
         linearOr = (LinearLayout)findViewById(R.id.or);
-        //inputEmail.addTextChangedListener(new MyTextWatcher(inputEmail));
         inputPassword.addTextChangedListener(new MyTextWatcher(inputPassword));
 
-        /*ImageButton facebook = (ImageButton) findViewById(R.id.facebook);
-        ImageButton google = (ImageButton) findViewById(R.id.google);*/
         Button login = (Button) findViewById(R.id.btn_login);
-        /*facebook.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplication(), FacebookNativeActivity.class);
-                intent.putExtra("apikey", apikey);
-                startActivityForResult(intent, 2);
-            }
-        });
-        google.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                Intent intent = new Intent(getApplication(), GoogleNativeActivity.class);
-                intent.putExtra("apikey", apikey);
-                startActivityForResult(intent, 2);
-            }
-        });*/
 
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -149,6 +131,7 @@ public class LoginActivity extends AppCompatActivity {
     private void doLogin() {
         showProgressDialog();
         AuthenticationAPI api = new AuthenticationAPI();
+
         QueryParams queryParams = new QueryParams();
         final String inputString = inputEmail.getText().toString();
         if(inputString.matches(Patterns.EMAIL_ADDRESS.pattern())){

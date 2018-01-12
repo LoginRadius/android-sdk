@@ -1,5 +1,14 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://docs.loginradius.com/api/v2/mobile-libraries/android)
 
+### Version 4.0.1
+Released on **January 10,  2018**
+
+##### Enhancements
+
+  - Optimized native social login and enhanced it's performance.
+  - Added askRequiredFieldsOnTraditionalLogin (boolean) option in Authentication API for login process. It is used for enabling missing/required fields flow in traditional login.
+  - Updated Configuration API endpoint.
+
 ### Version 4.0.0
 Released on **November 17,  2017**
 

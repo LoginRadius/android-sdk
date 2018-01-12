@@ -89,31 +89,14 @@ public class VkontakteNativeActivity extends AppCompatActivity {
         fieldsColor = i.getIntExtra("fieldsColor",0);
 
         LoginRadiusAuthManager.nativeLogin = true;
-
-        LoginRadiusAuthManager.getNativeAppConfiguration(LoginRadiusSDK.getApiKey(), null,
-                new AsyncHandler<SocialInterface>() {
-                    @Override
-                    public void onSuccess(SocialInterface socialInterface) {
-
-                        providers = socialInterface.getProviders();
-                        for (Provider provider : providers) {
-                            if (provider.getName().equalsIgnoreCase("vkontakte")) {
-                                showdialog(provider);
-                                break;
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Throwable error,
-                                          String errorCode) {
-                    }
-                });
+        LoginRadiusAuthManager.setCallbackManager(LoginRadiusSDK.getApiKey(),null);
+        showdialog();
     }
 
-    public void showdialog(final Provider p) {
-        LoginRadiusAuthManager.performLogin(VkontakteNativeActivity.this, p, new AsyncHandler<AccessTokenResponse>() {
+    public void showdialog() {
+        Provider provider = new Provider();
+        provider.setName("vkontakte");
+        LoginRadiusAuthManager.performLogin(VkontakteNativeActivity.this, provider, new AsyncHandler<AccessTokenResponse>() {
             @Override
             public void onSuccess(AccessTokenResponse data) {
                 accessToken = data;
