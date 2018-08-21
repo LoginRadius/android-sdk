@@ -18,7 +18,8 @@ public class Endpoint {
 	public static final String API_V2_CONFIG = "ciam/appInfo";
 	public static final String API_V2_LOGIN = "identity/v2/auth/login";
 	public static final String API_V2_REGISTER = "identity/v2/auth/register";
-	public static final String API_V2_RESET_PASSWORD="identity/v2/auth/password";
+	public static final String API_V2_RESET_PASSWORD="identity/v2/auth/password/reset";
+	public static final String API_V2_CHANGE_PASSWORD="identity/v2/auth/password/change";
 	public static final String API_V2_FORGOTPASSWORD_EMAIL = "identity/v2/auth/password";
 	public static final String API_V2_FORGOTPASSWORD_PHONE = "identity/v2/auth/password/otp";
 	public static final String API_V2_VERIFY_OTP = "identity/v2/auth/phone/otp";
@@ -52,15 +53,19 @@ public class Endpoint {
 	public static final String API_V2_ACCESS_TOKEN_FB = "api/v2/access_token/facebook";
 	public static final String API_V2_ACCESS_TOKEN_GOOGLE = "api/v2/access_token/google";
 	public static final String API_V2_ACCESS_TOKEN_VKONTAKTE="/api/v2/access_token/vkontakte";
-	public static final String API_V2_EMAIL_PROMPT_AUTO_LOGIN="identity/v2/auth/login/autologin";
-	public static final String API_V2_VERIFY_AUTO_LOGIN_EMAIL="identity/v2/auth/email/autologin";
+	public static final String API_V2_SMART_LOGIN="identity/v2/auth/login/smartlogin";
+	public static final String API_V2_VERIFY_SMART_LOGIN="identity/v2/auth/email/smartlogin";
 	public static final String API_V2_VALIDATE_ACCESS_TOKEN="identity/v2/auth/access_token/validate";
 	public static final String API_V2_INVALIDATE_ACCESS_TOKEN="identity/v2/auth/access_token/invalidate";
-	public static final String API_V2_SIMPLIFIED_REGISTRATION="identity/v2/auth/noregistration";
+	public static final String API_V2_ONE_TOUCH_LOGIN="identity/v2/auth/onetouchlogin";
 	public static final String API_V2_GET_SECURITY_QUESTIONS="identity/v2/auth/securityquestion";
 	public static final String API_V2_RESET_PASSWORD_BY_SECURITY_QUESTION="identity/v2/auth/password/securityanswer";
-	public static final String API_V2_ONECLICKSIGNIN="identity/v2/auth/login/oneclicksignin";
-	public static final String API_V2_ONECLICKVERIFY="identity/v2/auth/login/oneclickverify";
+	public static final String API_V2_PASSWORDLESSLOGIN ="identity/v2/auth/login/passwordlesslogin/email";
+	public static final String API_V2_PASSWORDLESSVERIFY ="identity/v2/auth/login/passwordlesslogin/email/verify";
+	public static final String API_V2_PASSWORDLESSVERIFYOTP ="identity/v2/auth/login/passwordlesslogin/otp/verify";
+	public static final String API_V2_PASSWORDLESSSENDOTP="identity/v2/auth/login/passwordlesslogin/otp";
+	public static final String API_V2_ACCEPT_PRIVACY_POLICY="identity/v2/auth/privacypolicy/accept";
+	public static final String API_V2_SEND_WELCOME_EMAIL="identity/v2/auth/account/sendwelcomeemail";
 	public static final String API_V2_VERIFY_URL = "https://auth.lrcontent.com/mobile/verification/index.html";
 
 	public static final String SHAREDPREFERENCEFILEKEY = "com.loginradius.loginradiusraas.PREFERENCE_FILE_KEY";

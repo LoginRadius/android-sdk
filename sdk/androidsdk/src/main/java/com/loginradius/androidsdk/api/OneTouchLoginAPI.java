@@ -21,16 +21,16 @@ import io.reactivex.schedulers.Schedulers;
  * Created by loginradius on 13-Oct-17.
  */
 
-public class SimplifiedRegistrationAPI {
+public class OneTouchLoginAPI {
     ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
 
-    public SimplifiedRegistrationAPI() {
+    public OneTouchLoginAPI() {
         if (!LoginRadiusSDK.validate()) {
             throw new LoginRadiusSDK.InitializeException();
         }
     }
-    public void simplifiedRegistrationByEmail(QueryParams queryParams, final AsyncHandler<RegisterResponse> handler) {
-        apiService.getSimplifiedRegistrationByEmail(Endpoint.API_V2_SIMPLIFIED_REGISTRATION+"/email", QueryMapHelper.getMapSimplifiedRegistrationByEmail(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    public void loginByEmail(QueryParams queryParams, final AsyncHandler<RegisterResponse> handler) {
+        apiService.getOneTouchLoginByEmail(Endpoint.API_V2_ONE_TOUCH_LOGIN +"/email", QueryMapHelper.getMapOneTouchLoginByEmail(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(new DisposableObserver<RegisterResponse>() {
         @Override
         public void onComplete() {}
@@ -47,8 +47,8 @@ public class SimplifiedRegistrationAPI {
         }});}
 
 
-    public void simplifiedRegistrationByPhone(QueryParams queryParams, final AsyncHandler<PhoneDataResponse> handler) {
-        apiService.getSimplifiedRegistrationByPhone(Endpoint.API_V2_SIMPLIFIED_REGISTRATION+"/phone", QueryMapHelper.getMapSimplifiedRegistrationByPhone(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    public void loginByPhone(QueryParams queryParams, final AsyncHandler<PhoneDataResponse> handler) {
+        apiService.getOneTouchLoginByPhone(Endpoint.API_V2_ONE_TOUCH_LOGIN +"/phone", QueryMapHelper.getMapOneTouchLoginByPhone(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<PhoneDataResponse>() {
                     @Override
                     public void onComplete() {}
@@ -67,8 +67,8 @@ public class SimplifiedRegistrationAPI {
                 });}
 
 
-    public void simplifiedRegistrationOtpVerification(QueryParams queryParams, JsonObject json, final AsyncHandler<LoginData> handler) {
-        apiService.getSimplifiedRegistrationOtpVerification(Endpoint.API_V2_SIMPLIFIED_REGISTRATION+"/phone/verify", QueryMapHelper.getMapSimplifiedRegistrationOtpVerification(queryParams),json).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    public void verifyOTP(QueryParams queryParams, JsonObject json, final AsyncHandler<LoginData> handler) {
+        apiService.getOneTouchLoginVerifyOtp(Endpoint.API_V2_ONE_TOUCH_LOGIN +"/phone/verify", QueryMapHelper.getMapOneTouchLoginVerifyOTP(queryParams),json).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<LoginData>() {
                     @Override
                     public void onComplete() {}

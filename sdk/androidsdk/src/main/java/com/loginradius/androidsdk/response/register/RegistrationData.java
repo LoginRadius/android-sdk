@@ -293,7 +293,9 @@ public class RegistrationData {
     @SerializedName("PhoneId")
     @Expose
     private Object phoneId;
-
+    @SerializedName("AcceptPrivacyPolicy")
+    @Expose
+    private Boolean acceptPrivacyPolicy;
     /**
      * 
      * @return
@@ -2004,4 +2006,21 @@ public class RegistrationData {
         this.phoneId = phoneId;
     }
 
+    /**
+     *
+     * @return
+     *     The acceptPrivacyPolicy
+     */
+    public Boolean getAcceptPrivacyPolicy() {
+        return acceptPrivacyPolicy;
+    }
+
+    /**
+     *
+     * @param acceptPrivacyPolicy
+     *     The AcceptPrivacyPolicy
+     */
+    public void setAcceptPrivacyPolicy(Boolean acceptPrivacyPolicy) {
+        this.acceptPrivacyPolicy = acceptPrivacyPolicy;
+    }
 }

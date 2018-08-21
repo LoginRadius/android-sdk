@@ -29,7 +29,7 @@ public class CustomObjectAPI {
         }
     }
     public void createCustomObject(QueryParams queryParams, JsonObject update , final AsyncHandler<CreateCustomObject> handler) {
-        apiService.getCreateCustomObject(Endpoint.API_V2_CUSTOMOBJECT, QueryMapHelper.getMapCreateCustomObject(queryParams),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getCreateCustomObject(Endpoint.API_V2_CUSTOMOBJECT, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapCreateCustomObject(queryParams),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<CreateCustomObject>() {
                     @Override
                     public void onComplete() {}
@@ -49,7 +49,7 @@ public class CustomObjectAPI {
 
     public void deleteCustomObject(QueryParams queryParams, final AsyncHandler<DeleteResponse> handler) {
         String url= Endpoint.API_V2_CUSTOMOBJECT+"/"+queryParams.getObjectRecordId();
-        apiService.getDeleteCustomObject(url, QueryMapHelper.getMapDeleteCustomObject(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getDeleteCustomObject(url, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapDeleteCustomObject(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<DeleteResponse>() {
                     @Override
                     public void onComplete() {}
@@ -72,7 +72,7 @@ public class CustomObjectAPI {
 
     public void readCustomObjectById(QueryParams queryParams, final AsyncHandler<CreateCustomObject> handler) {
         String url= Endpoint.API_V2_CUSTOMOBJECT+"/"+queryParams.getObjectRecordId();
-        apiService.getReadCustomobjectById(url, QueryMapHelper.getMapReadCustomObjectbyId(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getReadCustomobjectById(url, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapReadCustomObjectbyId(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<CreateCustomObject>() {
                     @Override
                     public void onComplete() {}
@@ -91,7 +91,7 @@ public class CustomObjectAPI {
                 });}
 
     public void readCustomObjectByToken(QueryParams queryParams, final AsyncHandler<ReadCustomObject> handler) {
-        apiService.getReadCustomobjectByToken(Endpoint.API_V2_CUSTOMOBJECT, QueryMapHelper.getMapReadCustomobjectByToken(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getReadCustomobjectByToken(Endpoint.API_V2_CUSTOMOBJECT, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapReadCustomobjectByToken(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<ReadCustomObject>() {
                     @Override
                     public void onComplete() {}
@@ -114,7 +114,7 @@ public class CustomObjectAPI {
 
     public void updateCustomObject(QueryParams queryParams, JsonObject update , final AsyncHandler<CreateCustomObject> handler) {
         String url = Endpoint.API_V2_CUSTOMOBJECT+"/"+queryParams.getObjectRecordId();
-        apiService.getUpdateCustomObject(url, QueryMapHelper.getMapUpdateCustomObject(queryParams),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getUpdateCustomObject(url, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapUpdateCustomObject(queryParams),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<CreateCustomObject>() {
                     @Override
                     public void onComplete() {}

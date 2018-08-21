@@ -20,17 +20,17 @@ import io.reactivex.schedulers.Schedulers;
  * Created by loginradius on 13-Oct-17.
  */
 
-public class AutoLoginAPI {
+public class SmartLoginAPI {
 
     ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
-    public AutoLoginAPI() {
+    public SmartLoginAPI() {
         if(!LoginRadiusSDK.validate()){
             throw new LoginRadiusSDK.InitializeException();
         }
     }
 
-    public void emailPromptAutoLogin(QueryParams queryParams, final AsyncHandler<RegisterResponse> handler) {
-        apiService.getEmailPromptAutoLogin(Endpoint.API_V2_EMAIL_PROMPT_AUTO_LOGIN, QueryMapHelper.getMapEmailPromptAutoLogin(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    public void login(QueryParams queryParams, final AsyncHandler<RegisterResponse> handler) {
+        apiService.getSmartLogin(Endpoint.API_V2_SMART_LOGIN, QueryMapHelper.getMapSmartLoginByEmail(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<RegisterResponse>() {
                     @Override
                     public void onComplete() {}
@@ -48,11 +48,8 @@ public class AutoLoginAPI {
 
                 });}
 
-
-
-
-    public void emailPromptAutoLoginPing(QueryParams queryParams, final AsyncHandler<LoginData> handler) {
-        apiService.getEmailPromptAutoLoginPing(Endpoint.API_V2_EMAIL_PROMPT_AUTO_LOGIN+"/ping", QueryMapHelper.getMapEmailPromptAutoLoginPing(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    public void ping(QueryParams queryParams, final AsyncHandler<LoginData> handler) {
+        apiService.getSmartLoginPing(Endpoint.API_V2_SMART_LOGIN +"/ping", QueryMapHelper.getMapSmartLoginPing(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<LoginData>() {
                     @Override
                     public void onComplete() {}
@@ -74,8 +71,8 @@ public class AutoLoginAPI {
 
 
 
-    public void verifyAutoLoginEmail(QueryParams queryParams, final AsyncHandler<VerifyAutoLoginResponse> handler){
-        apiService.getVerifyAutoLoginEmail(Endpoint.API_V2_VERIFY_AUTO_LOGIN_EMAIL, QueryMapHelper.getMapVerifyAutoLoginEmail(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    public void verifyToken(QueryParams queryParams, final AsyncHandler<VerifyAutoLoginResponse> handler){
+        apiService.getSmartLoginVerifyToken(Endpoint.API_V2_VERIFY_SMART_LOGIN, QueryMapHelper.getMapSmartLoginVerifyToken(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<VerifyAutoLoginResponse>() {
                     @Override
                     public void onComplete() {}

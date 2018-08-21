@@ -1,5 +1,24 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://docs.loginradius.com/api/v2/mobile-libraries/android)
 
+### Version 4.1.0
+Released on **August 21,  2018**
+
+##### Enhancements
+
+  - SOTT is added as header in Registration API.
+  - Added Privacy Policy API
+  - Added Reset Password By Email OTP API
+  - Added Verify Email By OTP API
+  - Added acceptPrivacyPolicy (Boolean) property in RegistrationData.
+  - Access Token is added as header in all Authentication APIs
+  - Added preventEmailVerification (Boolean) option to prevent email verification flow in Auth Login and Registration APIs (where optional email is enabled)
+  - Updated Auth Registration API to add Access Token as response (where optional email is enabled)
+  - Added Send Welcome Email API
+
+##### Breaking Changes
+
+For developers migrating from v4.0.1, there will be some breaking changes in terms of SDK implementation. In this version, we have updated endpoints and renamed "Auto Login" to "Smart Login", "No Registration/Simplified Registration" to "One touch Login" and "Instant Link Login" to "PasswordLess Login". Also, changed the methods of the above APIs accordingly. For more details, please have a look [here](https://docs.loginradius.com/api/v2/mobile-libraries/android)
+
 ### Version 4.0.1
 Released on **January 12,  2018**
 

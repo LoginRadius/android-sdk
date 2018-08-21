@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Created by admin on 13-Oct-17.
+ * Created by loginradius on 13-Oct-17.
  */
 
 public class QueryMapHelper {
@@ -50,7 +50,6 @@ public class QueryMapHelper {
     public static Map<String,String> getMapAddEmail(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         params.put("verificationUrl",LoginRadiusSDK.getVerificationUrl());
         params.put("emailTemplate", (queryParams.getEmailTemplate()!=null?queryParams.getEmailTemplate():""));
         return params;
@@ -59,7 +58,6 @@ public class QueryMapHelper {
     public static Map<String,String> getMapChangePassword(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         return params;
     }
 
@@ -73,7 +71,6 @@ public class QueryMapHelper {
     public static Map<String,String> getMapDeleteAccountByConfirmEmail(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         params.put("deleteurl",(queryParams.getDeleteUrl()!=null ? queryParams.getDeleteUrl():""));
         params.put("emailtemplate",queryParams.getEmailTemplate()!=null ? queryParams.getEmailTemplate():"");
         return params;
@@ -108,15 +105,12 @@ public class QueryMapHelper {
     public static Map<String,String> getMapSecurityQuestions(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",(queryParams.getAccess_token()!=null?queryParams.getAccess_token():""));
         if (queryParams.getPhone()!=null) {
             params.put("phone", queryParams.getPhone());
         }else if(queryParams.getUsername()!=null){
             params.put("username", queryParams.getUsername());
         }else if (queryParams.getEmail()!=null){
             params.put("email", queryParams.getEmail());
-        }else {
-            params.put("access_token", queryParams.getAccess_token());
         }
         return params;
     }
@@ -124,7 +118,6 @@ public class QueryMapHelper {
     public static Map<String,String> getMapSocialProfile(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         if(queryParams.getFields()!=null && queryParams.getFields().length>0){
             String fields[] = queryParams.getFields();
             String strFields = "";
@@ -143,14 +136,12 @@ public class QueryMapHelper {
     public static Map<String,String> getMapInvalidateAccessToken(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         return params;
     }
 
     public static Map<String,String> getMapLink(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         return params;
     }
 
@@ -166,6 +157,9 @@ public class QueryMapHelper {
         }else {
             params.put("verificationUrl", LoginRadiusSDK.getVerificationUrl());
             params.put("emailTemplate", (queryParams.getEmailTemplate()!=null?queryParams.getEmailTemplate():""));
+        }
+        if(queryParams.isPreventEmailVerification()){
+            params.put("options","PreventVerificationEmail");
         }
         return params;
     }
@@ -216,13 +210,15 @@ public class QueryMapHelper {
             params.put("verificationUrl", LoginRadiusSDK.getVerificationUrl());
             params.put("emailTemplate", (queryParams.getEmailTemplate()!=null?queryParams.getEmailTemplate():""));
         }
+        if(queryParams.isPreventEmailVerification()){
+            params.put("options","PreventVerificationEmail");
+        }
         return params;
     }
 
     public static Map<String,String> getMapRemoveEmail(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         return params;
     }
 
@@ -250,7 +246,6 @@ public class QueryMapHelper {
     public static Map<String,String> getMapResendOtpByToken(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token", queryParams.getAccess_token());
         params.put("smstemplate",(queryParams.getSmsTemplate()!=null?queryParams.getSmsTemplate():""));
         return params;
     }
@@ -270,7 +265,6 @@ public class QueryMapHelper {
     public static Map<String,String> getMapReadAllUserProfile(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         if(queryParams.getFields()!=null && queryParams.getFields().length>0){
             String fields[] = queryParams.getFields();
             String strFields = "";
@@ -289,21 +283,18 @@ public class QueryMapHelper {
     public static Map<String,String> getMapUnlink(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         return params;
     }
 
     public static Map<String,String> getMapUpdatePhone(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         return params;
     }
 
     public static Map<String,String> getMapUpdateProfile(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         params.put("verificationUrl",LoginRadiusSDK.getVerificationUrl());
         if (queryParams.getEmailTemplate()!=null) {
             params.put("emailTemplate", queryParams.getEmailTemplate());
@@ -314,14 +305,12 @@ public class QueryMapHelper {
     public static Map<String,String> getMapUpdateSecurityQuestionToken(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         return params;
     }
 
     public static Map<String,String> getMapUpdateUsername(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         return params;
     }
 
@@ -335,7 +324,6 @@ public class QueryMapHelper {
     public static Map<String,String> getMapValidateAccessToken(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         return params;
     }
 
@@ -348,19 +336,26 @@ public class QueryMapHelper {
         return params;
     }
 
+    public static Map<String,String> getMapVerifyEmailByOtp(QueryParams queryParams){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", LoginRadiusSDK.getApiKey());
+        params.put("welcomeEmailTemplate", (queryParams.getWelcomeEmailTemplate()!=null?queryParams.getWelcomeEmailTemplate():""));
+        params.put("url", LoginRadiusSDK.getVerificationUrl());
+        return params;
+    }
+
     public static Map<String,String> getMapVerifyOtpByToken(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
-        params.put("access_token",queryParams.getAccess_token());
         params.put("smsTemplate",(queryParams.getSmsTemplate()!=null?queryParams.getSmsTemplate():""));
         params.put("apikey", LoginRadiusSDK.getApiKey());
         params.put("otp",queryParams.getOtp());
         return params;
     }
 
-    public static Map<String, String> getMapSimplifiedRegistrationByEmail(QueryParams queryParams){
+    public static Map<String, String> getMapOneTouchLoginByEmail(QueryParams queryParams){
         String name = (queryParams.getName()!=null) ? queryParams.getName() : "";
         String redirecturl = (queryParams.getRedirecturl()!=null) ? queryParams.getRedirecturl() : "";
-        String noregistrationemailtemplate=(queryParams.getNoregistrationemailtemplate()!=null) ? queryParams.getNoregistrationemailtemplate() : "";
+        String onetouchloginemailtemplate=(queryParams.getOnetouchloginemailtemplate()!=null) ? queryParams.getOnetouchloginemailtemplate() : "";
         String welcomeemailtemplate=(queryParams.getWelcomeEmailTemplate()!=null) ? queryParams.getWelcomeEmailTemplate() : "";
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
@@ -368,12 +363,12 @@ public class QueryMapHelper {
         params.put("clientguid", queryParams.getClientGuid());
         params.put("name", name);
         params.put("redirecturl", redirecturl);
-        params.put("noregistrationemailtemplate", noregistrationemailtemplate);
+        params.put("onetouchloginemailtemplate", onetouchloginemailtemplate);
         params.put("welcomeemailtemplate", welcomeemailtemplate);
         return params;
     }
 
-    public static Map<String, String> getMapSimplifiedRegistrationByPhone(QueryParams queryParams){
+    public static Map<String, String> getMapOneTouchLoginByPhone(QueryParams queryParams){
         String name = (queryParams.getName()!=null) ? queryParams.getName() : "";
         String smstemplate = (queryParams.getSmsTemplate()!=null) ? queryParams.getSmsTemplate() : "";
         Map<String, String> params = new HashMap<String, String>();
@@ -384,7 +379,7 @@ public class QueryMapHelper {
         return params;
     }
 
-    public static Map<String, String> getMapSimplifiedRegistrationOtpVerification(QueryParams queryParams){
+    public static Map<String, String> getMapOneTouchLoginVerifyOTP(QueryParams queryParams){
         String smstemplate = (queryParams.getSmsTemplate()!=null) ? queryParams.getSmsTemplate() : "";
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey",LoginRadiusSDK.getApiKey());
@@ -396,7 +391,6 @@ public class QueryMapHelper {
     public static Map<String, String> getMapCreateCustomObject(QueryParams queryParams){
         HashMap<String,String> params = new LinkedHashMap<>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         params.put("objectname",queryParams.getObjectname());
         return params;
     }
@@ -404,7 +398,6 @@ public class QueryMapHelper {
     public static Map<String, String> getMapDeleteCustomObject(QueryParams queryParams){
         HashMap<String,String> params = new LinkedHashMap<>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         params.put("objectname",queryParams.getObjectname());
         return params;
     }
@@ -412,7 +405,6 @@ public class QueryMapHelper {
     public static Map<String, String> getMapReadCustomObjectbyId(QueryParams queryParams){
         HashMap<String,String> params = new LinkedHashMap<>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         params.put("objectname",queryParams.getObjectname());
         return params;
     }
@@ -420,7 +412,6 @@ public class QueryMapHelper {
     public static Map<String, String> getMapReadCustomobjectByToken(QueryParams queryParams){
         HashMap<String,String> params = new LinkedHashMap<>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         params.put("objectname",queryParams.getObjectname());
         return params;
     }
@@ -429,7 +420,6 @@ public class QueryMapHelper {
         Boolean updatetype = (queryParams.getUpdatetype()!=null) ? queryParams.getUpdatetype() : false;
         HashMap<String,String> params = new LinkedHashMap<>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("access_token",queryParams.getAccess_token());
         params.put("objectname",queryParams.getObjectname());
         if (updatetype){
             params.put("updatetype","replace");
@@ -439,8 +429,8 @@ public class QueryMapHelper {
         return params;
     }
 
-    public static Map<String, String> getMapEmailPromptAutoLogin(QueryParams queryParams){
-        String autoLoginEmailTemplate = (queryParams.getAutoLoginEmailTemplate()!=null) ? queryParams.getAutoLoginEmailTemplate() : "";
+    public static Map<String, String> getMapSmartLoginByEmail(QueryParams queryParams){
+        String smartloginemailtemplate = (queryParams.getSmartLoginEmailTemplate()!=null) ? queryParams.getSmartLoginEmailTemplate() : "";
         String welcomeEmailTemplate = (queryParams.getWelcomeEmailTemplate()!=null) ? queryParams.getWelcomeEmailTemplate() : "";
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
@@ -449,20 +439,20 @@ public class QueryMapHelper {
         }else {params.put("email", queryParams.getEmail());}
 
         params.put("clientGuid", queryParams.getClientGuid());
-        params.put("autoLoginEmailTemplate", autoLoginEmailTemplate);
+        params.put("smartloginemailtemplate", smartloginemailtemplate);
         params.put("welcomeEmailTemplate", welcomeEmailTemplate);
 
         return  params;
     }
 
-    public static Map<String, String> getMapEmailPromptAutoLoginPing(QueryParams queryParams){
+    public static Map<String, String> getMapSmartLoginPing(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
         params.put("clientGuid", queryParams.getClientGuid());
         return  params;
     }
 
-    public static Map<String, String> getMapVerifyAutoLoginEmail(QueryParams queryParams){
+    public static Map<String, String> getMapSmartLoginVerifyToken(QueryParams queryParams){
         String welcomeEmailTemplate = (queryParams.getWelcomeEmailTemplate()!=null) ? queryParams.getWelcomeEmailTemplate() : "";
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
@@ -471,25 +461,32 @@ public class QueryMapHelper {
         return  params;
     }
 
-    public static Map<String,String> getMapInstantLoginByEmail(QueryParams queryParams){
+    public static Map<String,String> getMapPasswordlessLoginByEmail(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey",LoginRadiusSDK.getApiKey());
         params.put("email",queryParams.getEmail());
-        params.put("oneclicksignintemplate",(queryParams.getOneClickSignInTemplate()!=null?queryParams.getOneClickSignInTemplate():""));
+        params.put("passwordlesslogintemplate",(queryParams.getPasswordlessLoginTemplate()!=null?queryParams.getPasswordlessLoginTemplate():""));
         params.put("verificationurl",LoginRadiusSDK.getVerificationUrl());
         return params;
     }
 
-    public static Map<String,String> getMapInstantLoginByUsername(QueryParams queryParams){
+    public static Map<String,String> getMapPasswordlessLoginByPhone(QueryParams queryParams){
+        Map<String,String> params = new HashMap<>();
+        params.put("apikey",LoginRadiusSDK.getApiKey());
+        params.put("smstemplate",(queryParams.getSmsTemplate()!=null?queryParams.getSmsTemplate():""));
+        return params;
+    }
+
+    public static Map<String,String> getMapPasswordlessLoginByUsername(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey",LoginRadiusSDK.getApiKey());
         params.put("username",queryParams.getUsername());
-        params.put("oneclicksignintemplate",(queryParams.getOneClickSignInTemplate()!=null?queryParams.getOneClickSignInTemplate():""));
+        params.put("passwordlesslogintemplate",(queryParams.getPasswordlessLoginTemplate()!=null?queryParams.getPasswordlessLoginTemplate():""));
         params.put("verificationurl",LoginRadiusSDK.getVerificationUrl());
         return params;
     }
 
-    public static Map<String,String> getMapInstantLoginVerify(QueryParams queryParams){
+    public static Map<String,String> getMapPasswordlessLoginVerify(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey",LoginRadiusSDK.getApiKey());
         params.put("verificationtoken",queryParams.getVtoken());
@@ -512,6 +509,19 @@ public class QueryMapHelper {
             }
             params.put("fields",strFields);
         }
+        return params;
+    }
+
+    public static Map<String,String> getMapAcceptPrivacyPolicy(QueryParams queryParams){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", LoginRadiusSDK.getApiKey());
+        return params;
+    }
+
+    public static Map<String,String> getMapSendWelcomeEmail(QueryParams queryParams){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", LoginRadiusSDK.getApiKey());
+        params.put("welcomeemailtemplate",(queryParams.getWelcomeEmailTemplate()!=null?queryParams.getWelcomeEmailTemplate():""));
         return params;
     }
 }

@@ -49,6 +49,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
+import retrofit2.http.Header;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -154,36 +155,36 @@ public interface ApiInterface {
 
 
     @GET
-    Observable<LoginRadiusUltimateUserProfile> getSocialProfile(@Url String url, @QueryMap Map<String, String> options);
+    Observable<LoginRadiusUltimateUserProfile> getSocialProfile(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options);
 
 
     @GET
-    Observable<CreateCustomObject> getReadCustomobjectById(@Url String url, @QueryMap Map<String, String> options);
+    Observable<CreateCustomObject> getReadCustomobjectById(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options);
 
 
     @GET
-    Observable<ReadCustomObject> getReadCustomobjectByToken(@Url String url, @QueryMap Map<String, String> options);
+    Observable<ReadCustomObject> getReadCustomobjectByToken(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options);
 
 
     @GET
-    Observable<RegisterResponse> getEmailPromptAutoLogin(@Url String url, @QueryMap Map<String, String> options);
+    Observable<RegisterResponse> getSmartLogin(@Url String url, @QueryMap Map<String, String> options);
 
 
     @GET
-    Observable<LoginData> getEmailPromptAutoLoginPing(@Url String url, @QueryMap Map<String, String> options);
+    Observable<LoginData> getSmartLoginPing(@Url String url, @QueryMap Map<String, String> options);
 
     @GET
-    Observable<VerifyAutoLoginResponse> getVerifyAutoLoginEmail(@Url String url, @QueryMap Map<String, String> options);
+    Observable<VerifyAutoLoginResponse> getSmartLoginVerifyToken(@Url String url, @QueryMap Map<String, String> options);
 
     @GET
     Observable<VerifyEmailResponse> getVerifyEmail(@Url String url, @QueryMap Map<String, String> options);
 
     @GET
-    Observable<AccessTokenResponse> getValidateAccessToken(@Url String url, @QueryMap Map<String, String> options);
+    Observable<AccessTokenResponse> getValidateAccessToken(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options);
 
 
     @GET
-    Observable<RegisterResponse> getInvalidateAccessToken(@Url String url, @QueryMap Map<String, String> options);
+    Observable<RegisterResponse> getInvalidateAccessToken(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options);
 
     @GET
     Observable<CheckAvailability> getUsernameAvailability(@Url String url, @QueryMap Map<String, String> options);
@@ -196,43 +197,50 @@ public interface ApiInterface {
 
 
     @GET
-    Observable<PhoneSendOtpData> getphonesendOtp(@Url String url, @QueryMap Map<String, String> options);
+    Observable<PhoneSendOtpData> getPhoneSendOtp(@Url String url, @QueryMap Map<String, String> options);
 
 
     @GET
-    Observable<RegisterResponse> getSimplifiedRegistrationByEmail(@Url String url, @QueryMap Map<String, String> options);
+    Observable<RegisterResponse> getOneTouchLoginByEmail(@Url String url, @QueryMap Map<String, String> options);
 
 
     @GET
-    Observable<PhoneDataResponse> getSimplifiedRegistrationByPhone(@Url String url, @QueryMap Map<String, String> options);
+    Observable<PhoneDataResponse> getOneTouchLoginByPhone(@Url String url, @QueryMap Map<String, String> options);
 
 
     @PUT
-    Observable<LoginData> getSimplifiedRegistrationOtpVerification(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+    Observable<LoginData> getOneTouchLoginVerifyOtp(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
 
 
     @GET
     Observable<SecurityQuestionsResponse[]> getSecurityQuestions(@Url String url, @QueryMap Map<String, String> options);
 
     @GET
+    Observable<SecurityQuestionsResponse[]> getSecurityQuestionsByAccessToken(@Url String url, @Header("Authorization") String authHeader);
+
+    @GET
     Observable<UpdateResponse> getDeleteAccount(@Url String url, @QueryMap Map<String, String> options);
 
     @GET
-    Observable<LoginRadiusUltimateUserProfile> getReadAllUserProfile(@Url String url, @QueryMap Map<String, String> options);
+    Observable<LoginRadiusUltimateUserProfile> getReadAllUserProfile(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options);
 
     @GET
-    Observable<UpdateResponse> getInstantLogin(@Url String url, @QueryMap Map<String,String> options);
+    Observable<UpdateResponse> getPasswordlessLogin(@Url String url, @QueryMap Map<String,String> options);
 
     @GET
-    Observable<LoginData> getInstantLoginVerify(@Url String url, @QueryMap Map<String,String> options);
+    Observable<LoginData> getPasswordlessLoginVerify(@Url String url, @QueryMap Map<String,String> options);
+
+    @GET
+    Observable<LoginRadiusUltimateUserProfile> getAcceptPrivacyPolicy(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String,String> options);
+
+    @GET
+    Observable<UpdateResponse> getSendWelcomeEmail(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String,String> options);
 
     @POST
     Observable<PostAPIResponse> getMessage(@Url String url, @QueryMap Map<String, String> options);
 
-
     @POST
     Observable<PostAPIResponse> getStatusUpdate(@Url String url, @QueryMap Map<String, String> options);
-
 
     @POST
     Observable<RegisterResponse> getTraditionalRegister(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> options, @Body RegistrationData data);
@@ -254,29 +262,29 @@ public interface ApiInterface {
 
 
     @POST
-    Observable<PhoneResponse> getResendotpbytoken(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+    Observable<PhoneResponse> getResendotpbytoken(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
 
 
     @POST
-    Observable<RegisterResponse> getAddEmail(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+    Observable<RegisterResponse> getAddEmail(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
 
 
     @POST
-    Observable<CreateCustomObject> getCreateCustomObject(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+    Observable<CreateCustomObject> getCreateCustomObject(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
 
 
     @PUT
-    Observable<RegisterResponse> getChangePassword(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+    Observable<RegisterResponse> getChangePassword(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
 
 
     @PUT
-    Observable<PhoneResponse> getUpdatephone(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+    Observable<PhoneResponse> getUpdatephone(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
 
     @PUT
-    Observable<RegisterResponse> getUpdateprofile(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+    Observable<RegisterResponse> getUpdateprofile(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
 
     @PUT
-    Observable<RegisterResponse> getUpdateprofile(@Url String url, @QueryMap Map<String, String> options, @Body RegistrationData data);
+    Observable<RegisterResponse> getUpdateprofile(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body RegistrationData data);
 
 
     @PUT
@@ -286,21 +294,26 @@ public interface ApiInterface {
     Observable<RegisterResponse> getResetPasswordByOtp(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
 
     @PUT
-    Observable<RegisterResponse> getLinking(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+    Observable<RegisterResponse> getLinking(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
 
+    @PUT
+    Observable<LoginData> getPasswordlessLoginByPhone(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
 
     @PUT
     Observable<RegisterResponse> getResendEmailVerification(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
 
 
     @PUT
-    Observable<CreateCustomObject> getUpdateCustomObject(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+    Observable<CreateCustomObject> getUpdateCustomObject(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
 
     @PUT
-    Observable<UpdateResponse> getUpdateUsername(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+    Observable<UpdateResponse> getUpdateUsername(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
 
     @PUT
-    Observable<RegisterResponse> getVerifyOtp(@Url String url, @QueryMap Map<String, String> options);
+    Observable<VerifyEmailResponse> getVerifyEmailByOtp(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+
+    @PUT
+    Observable<RegisterResponse> getVerifyOtp(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options);
 
 
     @PUT
@@ -310,20 +323,23 @@ public interface ApiInterface {
     Observable<UpdateResponse> getResetPasswordByResetToken(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
 
     @PUT
-    Observable<UpdateSecurityQuestionsResponse> getUpdateSecurityQuestionByAccessToken(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+    Observable<UpdateResponse> getResetPasswordByEmailOtp(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+
+    @PUT
+    Observable<UpdateSecurityQuestionsResponse> getUpdateSecurityQuestionByAccessToken(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
 
 
     @HTTP(method = "DELETE",hasBody = true)
-    Observable<DeleteResponse> getRemoveEmail(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject data);
+    Observable<DeleteResponse> getRemoveEmail(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
 
 
     @HTTP(method = "DELETE",hasBody = true)
-    Observable<DeleteResponse> getUnlinking(@Url String url, @QueryMap Map<String, String> options, @Body JsonObject jsonObject);
+    Observable<DeleteResponse> getUnlinking(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject jsonObject);
 
 
     @DELETE
-    Observable<DeleteResponse> getDeleteCustomObject(@Url String url, @QueryMap Map<String, String> options);
+    Observable<DeleteResponse> getDeleteCustomObject(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options);
 
     @DELETE
-    Observable<DeleteAccountResponse> getDeleteAccountByConfirmEmail(@Url String url, @QueryMap Map<String, String> options);
+    Observable<DeleteAccountResponse> getDeleteAccountByConfirmEmail(@Url String url,@Header("Authorization") String authHeader,@QueryMap Map<String, String> options);
 }

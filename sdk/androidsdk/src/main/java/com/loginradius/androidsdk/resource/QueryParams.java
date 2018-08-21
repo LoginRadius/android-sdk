@@ -16,10 +16,10 @@ public class QueryParams {
     private String loginUrl;
     private String deleteUrl;
     private String clientGuid;
-    private String autoLoginEmailTemplate;
+    private String smartLoginEmailTemplate;
     private String welcomeEmailTemplate;
     private String redirecturl;
-    private String noregistrationemailtemplate;
+    private String onetouchloginemailtemplate;
     private String resetPasswordEmailTemplate;
     private String name;
     private String objectname;
@@ -43,8 +43,9 @@ public class QueryParams {
     private String caption;
     private String status;
     private String description;
-    private String oneClickSignInTemplate;
+    private String passwordlessLoginTemplate;
     private String[] fields;
+    private boolean preventEmailVerification;
 
     public String getEmail() {
         return email;
@@ -134,12 +135,12 @@ public class QueryParams {
         this.clientGuid = clientGuid;
     }
 
-    public String getAutoLoginEmailTemplate() {
-        return autoLoginEmailTemplate;
+    public String getSmartLoginEmailTemplate() {
+        return smartLoginEmailTemplate;
     }
 
-    public void setAutoLoginEmailTemplate(String autoLoginEmailTemplate) {
-        this.autoLoginEmailTemplate = autoLoginEmailTemplate;
+    public void setSmartLoginEmailTemplate(String smartLoginEmailTemplate) {
+        this.smartLoginEmailTemplate = smartLoginEmailTemplate;
     }
 
     public String getWelcomeEmailTemplate() {
@@ -158,12 +159,12 @@ public class QueryParams {
         this.redirecturl = redirecturl;
     }
 
-    public String getNoregistrationemailtemplate() {
-        return noregistrationemailtemplate;
+    public String getOnetouchloginemailtemplate() {
+        return onetouchloginemailtemplate;
     }
 
-    public void setNoregistrationemailtemplate(String noregistrationemailtemplate) {
-        this.noregistrationemailtemplate = noregistrationemailtemplate;
+    public void setOnetouchloginemailtemplate(String onetouchloginemailtemplate) {
+        this.onetouchloginemailtemplate = onetouchloginemailtemplate;
     }
 
     public String getResetPasswordEmailTemplate() {
@@ -350,12 +351,12 @@ public class QueryParams {
         this.description = description;
     }
 
-    public String getOneClickSignInTemplate() {
-        return oneClickSignInTemplate;
+    public String getPasswordlessLoginTemplate() {
+        return passwordlessLoginTemplate;
     }
 
-    public void setOneClickSignInTemplate(String oneClickSignInTemplate) {
-        this.oneClickSignInTemplate = oneClickSignInTemplate;
+    public void setPasswordlessLoginTemplate(String passwordlessLoginTemplate) {
+        this.passwordlessLoginTemplate = passwordlessLoginTemplate;
     }
 
     public String[] getFields() {
@@ -364,5 +365,13 @@ public class QueryParams {
 
     public void setFields(String[] fields) {
         this.fields = fields;
+    }
+
+    public boolean isPreventEmailVerification() {
+        return preventEmailVerification;
+    }
+
+    public void setPreventEmailVerification(boolean preventEmailVerification) {
+        this.preventEmailVerification = preventEmailVerification;
     }
 }

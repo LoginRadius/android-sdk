@@ -7,12 +7,17 @@ package com.loginradius.androidsdk.response.register;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.loginradius.androidsdk.response.login.LoginData;
 
 public class RegisterResponse {
 
     @SerializedName("IsPosted")
     @Expose
     private Boolean isPosted;
+    @SerializedName("Data")
+    @Expose
+    private LoginData data;
+
 
     /**
      *
@@ -32,5 +37,22 @@ public class RegisterResponse {
         this.isPosted = isPosted;
     }
 
+    /**
+     *
+     * @return
+     * The data
+     */
+    public LoginData getData() {
+        return data;
+    }
+
+    /**
+     *
+     * @param data
+     * The data
+     */
+    public void setData(LoginData data) {
+        this.data = data;
+    }
 }
 

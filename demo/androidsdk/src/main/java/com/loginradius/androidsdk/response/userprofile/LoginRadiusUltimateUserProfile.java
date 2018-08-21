@@ -1,6 +1,7 @@
 package com.loginradius.androidsdk.response.userprofile;
 
 import com.google.gson.annotations.SerializedName;
+import com.loginradius.androidsdk.response.privacy.PrivacyPolicy;
 import com.loginradius.androidsdk.response.userprofile.identity.Identity;
 
 import java.util.List;
@@ -257,6 +258,8 @@ public class LoginRadiusUltimateUserProfile
      private Boolean isCustomUid;
      @SerializedName("UnverifiedEmail")
      private List<UnverifiedEmail> unverifiedEmail = null;
+     @SerializedName("PrivacyPolicy")
+     private PrivacyPolicy privacyPolicy;
 
 
  /**
@@ -513,6 +516,13 @@ public class LoginRadiusUltimateUserProfile
   this.unverifiedEmail = unverifiedEmail;
  }
 
+ public PrivacyPolicy getPrivacyPolicy() {
+  return privacyPolicy;
+ }
+
+ public void setPrivacyPolicy(PrivacyPolicy privacyPolicy) {
+  this.privacyPolicy = privacyPolicy;
+ }
 }
 
 

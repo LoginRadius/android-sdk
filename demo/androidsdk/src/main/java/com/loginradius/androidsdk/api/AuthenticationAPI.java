@@ -54,7 +54,7 @@ public class AuthenticationAPI {
     }
 
     public void addEmail(QueryParams queryParams, JsonObject update, final AsyncHandler<RegisterResponse> handler){
-        apiService.getAddEmail(Endpoint.API_V2_ADD_EMAIL, QueryMapHelper.getMapAddEmail(queryParams),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getAddEmail(Endpoint.API_V2_ADD_EMAIL, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapAddEmail(queryParams),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<RegisterResponse>() {
                     @Override
                     public void onComplete() {}
@@ -79,7 +79,7 @@ public class AuthenticationAPI {
         if(!confirmPassword.equals(newPassword)){
             throw new IllegalArgumentException("Passwords don't match");
         }
-        apiService.getChangePassword(Endpoint.API_V2_FORGOTPASSWORD_EMAIL, QueryMapHelper.getMapChangePassword(queryParams),change).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getChangePassword(Endpoint.API_V2_CHANGE_PASSWORD, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapChangePassword(queryParams),change).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<RegisterResponse>() {
                     @Override
                     public void onComplete() {}
@@ -120,7 +120,7 @@ public class AuthenticationAPI {
     }
 
     public void deleteAccountByConfirmEmail(QueryParams queryParams, final AsyncHandler<DeleteAccountResponse> handler){
-        apiService.getDeleteAccountByConfirmEmail(Endpoint.API_V2_USERPROFILE, QueryMapHelper.getMapDeleteAccountByConfirmEmail(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getDeleteAccountByConfirmEmail(Endpoint.API_V2_USERPROFILE,"Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapDeleteAccountByConfirmEmail(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<DeleteAccountResponse>() {
                     @Override
                     public void onNext(DeleteAccountResponse value) {
@@ -207,16 +207,38 @@ public class AuthenticationAPI {
 
     public void getSecurityQuestions(QueryParams queryParams, final AsyncHandler<SecurityQuestionsResponse[]> handler){
         String urlEndpoint="";
-        if (queryParams.getPhone()!=null) {
-            urlEndpoint="phone";
-        }else if(queryParams.getUsername()!=null){
-            urlEndpoint="username";
-        }else if (queryParams.getEmail()!=null){
-            urlEndpoint="email";
-        }else {
-            urlEndpoint="accesstoken";
+        if(queryParams.getAccess_token()!=null){
+            getSecurityQuestionsByAccessToken(queryParams.getAccess_token(),handler);
+        } else {
+            if (queryParams.getPhone()!=null) {
+                urlEndpoint="phone";
+            }else if(queryParams.getUsername()!=null){
+                urlEndpoint="username";
+            }else if (queryParams.getEmail()!=null){
+                urlEndpoint="email";
+            }
+            apiService.getSecurityQuestions(Endpoint.API_V2_GET_SECURITY_QUESTIONS+"/"+urlEndpoint, QueryMapHelper.getMapSecurityQuestions(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableObserver<SecurityQuestionsResponse[]>() {
+                        @Override
+                        public void onComplete() {}
+
+                        @Override
+                        public void onError(Throwable e) {
+                            ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
+                            handler.onFailure(exceptionResponse.t, exceptionResponse.message);
+                        }
+
+                        @Override
+                        public void onNext(SecurityQuestionsResponse[] response) {
+                            handler.onSuccess(response);
+                        }
+
+                    });
         }
-        apiService.getSecurityQuestions(Endpoint.API_V2_GET_SECURITY_QUESTIONS+"/"+urlEndpoint, QueryMapHelper.getMapSecurityQuestions(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    }
+
+    private void getSecurityQuestionsByAccessToken(String access_token, final AsyncHandler<SecurityQuestionsResponse[]> handler){
+        apiService.getSecurityQuestionsByAccessToken(Endpoint.API_V2_GET_SECURITY_QUESTIONS+"/accesstoken","Bearer "+access_token).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<SecurityQuestionsResponse[]>() {
                     @Override
                     public void onComplete() {}
@@ -236,7 +258,7 @@ public class AuthenticationAPI {
     }
 
     public void getSocialProfile(QueryParams queryParams, final AsyncHandler<LoginRadiusUltimateUserProfile> handler){
-        apiService.getSocialProfile(Endpoint.API_V2_SOCIALIDENTITIES, QueryMapHelper.getMapSocialProfile(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getSocialProfile(Endpoint.API_V2_SOCIALIDENTITIES, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapSocialProfile(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<LoginRadiusUltimateUserProfile>() {
                     @Override
                     public void onComplete() {}
@@ -257,7 +279,7 @@ public class AuthenticationAPI {
     }
 
     public void invalidateAccessToken(QueryParams queryParams, final AsyncHandler<RegisterResponse> handler){
-        apiService.getInvalidateAccessToken(Endpoint.API_V2_INVALIDATE_ACCESS_TOKEN, QueryMapHelper.getMapInvalidateAccessToken(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getInvalidateAccessToken(Endpoint.API_V2_INVALIDATE_ACCESS_TOKEN, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapInvalidateAccessToken(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<RegisterResponse>() {
                     @Override
                     public void onComplete() {}
@@ -277,7 +299,7 @@ public class AuthenticationAPI {
     }
 
     public void linkAccount(QueryParams queryParams, JsonObject change, final AsyncHandler<RegisterResponse> handler){
-        apiService.getLinking(Endpoint.API_V2_SOCIALIDENTITIES, QueryMapHelper.getMapLink(queryParams),change).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getLinking(Endpoint.API_V2_SOCIALIDENTITIES, "Bearer "+queryParams.getAccess_token(),QueryMapHelper.getMapLink(queryParams),change).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<RegisterResponse>() {
                     @Override
                     public void onComplete() {}
@@ -408,6 +430,7 @@ public class AuthenticationAPI {
                 });
     }
 
+    @Deprecated
     public void loginWithPhoneUsingOtp(QueryParams queryParams, final AsyncHandler<LoginData> handler){
         apiService.getTraditionalLogin(Endpoint.API_V2_LOGIN, QueryMapHelper.getMapPhoneLoginUsingOtp(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<LoginData>() {
@@ -451,7 +474,7 @@ public class AuthenticationAPI {
     }
 
     public void sendOtpToPhone(QueryParams queryParams, final AsyncHandler<PhoneSendOtpData> handler){
-        apiService.getphonesendOtp(Endpoint.API_V2_PHONESENDOTPAPI, QueryMapHelper.getMapPhoneSendOtp(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getPhoneSendOtp(Endpoint.API_V2_PHONESENDOTPAPI, QueryMapHelper.getMapPhoneSendOtp(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<PhoneSendOtpData>() {
                     @Override
                     public void onComplete() {}
@@ -518,7 +541,7 @@ public class AuthenticationAPI {
     }
 
     public void removeEmail(QueryParams queryParams, JsonObject delete, final AsyncHandler<DeleteResponse> handler){
-        apiService.getRemoveEmail(Endpoint.API_V2_ADD_EMAIL, QueryMapHelper.getMapRemoveEmail(queryParams),delete).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getRemoveEmail(Endpoint.API_V2_ADD_EMAIL, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapRemoveEmail(queryParams),delete).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<DeleteResponse>() {
                     @Override
                     public void onComplete() {}
@@ -581,7 +604,7 @@ public class AuthenticationAPI {
     }
 
     public void resendOtpByToken(QueryParams queryParams, JsonObject data, final AsyncHandler<PhoneResponse> handler){
-        apiService.getResendotpbytoken(Endpoint.API_V2_VERIFY_OTP, QueryMapHelper.getMapResendOtpByToken(queryParams),data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getResendotpbytoken(Endpoint.API_V2_VERIFY_OTP, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapResendOtpByToken(queryParams),data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<PhoneResponse>() {
                     @Override
                     public void onComplete() {}
@@ -666,8 +689,40 @@ public class AuthenticationAPI {
                 });
     }
 
+    public void resetPasswordByOtp(QueryParams queryParams, final AsyncHandler<UpdateResponse> handler){
+        String newPassword = queryParams.getPassword();
+        String confirmPassword = queryParams.getConfirmPassword();
+        if(!confirmPassword.equals(newPassword)){
+            throw new IllegalArgumentException("Passwords don't match");
+        }
+        JsonObject update = new JsonObject();
+        update.addProperty("password",queryParams.getPassword());
+        update.addProperty("welcomeemailtemplate",(queryParams.getWelcomeEmailTemplate()!=null ? queryParams.getWelcomeEmailTemplate():""));
+        update.addProperty("resetpasswordemailtemplate",(queryParams.getResetPasswordEmailTemplate()!=null ? queryParams.getResetPasswordEmailTemplate():""));
+        update.addProperty("otp",queryParams.getOtp());
+        update.addProperty("email",queryParams.getEmail());
+        apiService.getResetPasswordByEmailOtp(Endpoint.API_V2_RESET_PASSWORD, QueryMapHelper.getMapResetPasswordToken(),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<UpdateResponse>() {
+                    @Override
+                    public void onNext(UpdateResponse value) {
+                        handler.onSuccess(value);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
+                        handler.onFailure(exceptionResponse.t, exceptionResponse.message);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     public void readAllUserProfile(QueryParams queryParams, final AsyncHandler<LoginRadiusUltimateUserProfile> handler){
-        apiService.getReadAllUserProfile(Endpoint.API_V2_USERPROFILE, QueryMapHelper.getMapReadAllUserProfile(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getReadAllUserProfile(Endpoint.API_V2_USERPROFILE, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapReadAllUserProfile(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<LoginRadiusUltimateUserProfile>() {
                     @Override
                     public void onNext(LoginRadiusUltimateUserProfile userProfile) {
@@ -688,7 +743,7 @@ public class AuthenticationAPI {
     }
 
     public void unlinkAccount(QueryParams queryParams, JsonObject json, final AsyncHandler<DeleteResponse> handler){
-        apiService.getUnlinking(Endpoint.API_V2_SOCIALIDENTITIES, QueryMapHelper.getMapUnlink(queryParams),json).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getUnlinking(Endpoint.API_V2_SOCIALIDENTITIES, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapUnlink(queryParams),json).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<DeleteResponse>() {
                     @Override
                     public void onComplete() {}
@@ -708,7 +763,7 @@ public class AuthenticationAPI {
     }
 
     public void updatePhone(QueryParams queryParams, JsonObject update, final AsyncHandler<PhoneResponse> handler){
-        apiService.getUpdatephone(Endpoint.API_V2_UPDATE_PHONE, QueryMapHelper.getMapUpdatePhone(queryParams),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getUpdatephone(Endpoint.API_V2_UPDATE_PHONE, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapUpdatePhone(queryParams),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<PhoneResponse>() {
                     @Override
                     public void onComplete() {}
@@ -728,7 +783,7 @@ public class AuthenticationAPI {
     }
 
     public void updateProfile(QueryParams queryParams, JsonObject data, final AsyncHandler<RegisterResponse> handler){
-        apiService.getUpdateprofile(Endpoint.API_V2_UPDATE_PROFILE, QueryMapHelper.getMapUpdateProfile(queryParams),data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getUpdateprofile(Endpoint.API_V2_UPDATE_PROFILE, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapUpdateProfile(queryParams),data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<RegisterResponse>() {
                     @Override
                     public void onComplete() {}
@@ -748,7 +803,7 @@ public class AuthenticationAPI {
     }
 
     public void updateProfile(QueryParams queryParams, RegistrationData data, final AsyncHandler<RegisterResponse> handler){
-        apiService.getUpdateprofile(Endpoint.API_V2_UPDATE_PROFILE, QueryMapHelper.getMapUpdateProfile(queryParams),data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getUpdateprofile(Endpoint.API_V2_UPDATE_PROFILE, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapUpdateProfile(queryParams),data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<RegisterResponse>() {
                     @Override
                     public void onComplete() {}
@@ -768,7 +823,7 @@ public class AuthenticationAPI {
     }
 
     public void updateSecurityQuestionByAccessToken(QueryParams queryParams, JsonObject update , final AsyncHandler<UpdateSecurityQuestionsResponse> handler){
-        apiService.getUpdateSecurityQuestionByAccessToken(Endpoint.API_V2_USERPROFILE, QueryMapHelper.getMapUpdateSecurityQuestionToken(queryParams),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getUpdateSecurityQuestionByAccessToken(Endpoint.API_V2_USERPROFILE,"Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapUpdateSecurityQuestionToken(queryParams),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<UpdateSecurityQuestionsResponse>() {
                     @Override
                     public void onComplete() {}
@@ -790,7 +845,7 @@ public class AuthenticationAPI {
     public void updateUsername(QueryParams queryParams, final AsyncHandler<UpdateResponse> handler){
         JsonObject update = new JsonObject();
         update.addProperty("username",queryParams.getUsername());
-        apiService.getUpdateUsername(Endpoint.API_V2_VERIFY_USERNAME, QueryMapHelper.getMapUpdateUsername(queryParams),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getUpdateUsername(Endpoint.API_V2_VERIFY_USERNAME, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapUpdateUsername(queryParams),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<UpdateResponse>() {
                     @Override
                     public void onNext(UpdateResponse value) {
@@ -832,7 +887,7 @@ public class AuthenticationAPI {
     }
 
     public void validateAccessToken(QueryParams queryParams, final AsyncHandler<AccessTokenResponse> handler){
-        apiService.getValidateAccessToken(Endpoint.API_V2_VALIDATE_ACCESS_TOKEN, QueryMapHelper.getMapValidateAccessToken(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getValidateAccessToken(Endpoint.API_V2_VALIDATE_ACCESS_TOKEN, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapValidateAccessToken(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<AccessTokenResponse>() {
                     @Override
                     public void onComplete() {}
@@ -870,8 +925,33 @@ public class AuthenticationAPI {
                 });
     }
 
+    public void verifyEmailByOtp(QueryParams queryParams, JsonObject securityAnswer, final AsyncHandler<VerifyEmailResponse> handler){
+        JsonObject data = new JsonObject();
+        data.addProperty("otp",queryParams.getOtp());
+        data.addProperty("email",queryParams.getEmail());
+        if(securityAnswer!=null){
+            data.add("securityanswer",securityAnswer);
+        }
+        apiService.getVerifyEmailByOtp(Endpoint.API_V2_VERIFY_EMAIL, QueryMapHelper.getMapVerifyEmailByOtp(queryParams),data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<VerifyEmailResponse>(){
+                    @Override
+                    public void onComplete() {}
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
+                        handler.onFailure(exceptionResponse.t, exceptionResponse.message);
+                    }
+
+                    @Override
+                    public void onNext(VerifyEmailResponse value) {
+                        handler.onSuccess(value);
+                    }
+                });
+    }
+
     public void verifyOtpByToken(QueryParams queryParams, final AsyncHandler<RegisterResponse> handler){
-        apiService.getVerifyOtp(Endpoint.API_V2_VERIFY_OTP, QueryMapHelper.getMapVerifyOtpByToken(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        apiService.getVerifyOtp(Endpoint.API_V2_VERIFY_OTP, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapVerifyOtpByToken(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<RegisterResponse>() {
                     @Override
                     public void onComplete() {}
@@ -887,6 +967,46 @@ public class AuthenticationAPI {
                         handler.onSuccess(response);
                     }
 
+                });
+    }
+
+    public void acceptPrivacyPolicy(QueryParams queryParams, final AsyncHandler<LoginRadiusUltimateUserProfile> handler){
+        apiService.getAcceptPrivacyPolicy(Endpoint.API_V2_ACCEPT_PRIVACY_POLICY,"Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapAcceptPrivacyPolicy(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<LoginRadiusUltimateUserProfile>() {
+                    @Override
+                    public void onNext(LoginRadiusUltimateUserProfile data) {
+                        handler.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
+                        handler.onFailure(exceptionResponse.t, exceptionResponse.message);
+                    }
+
+                    @Override
+                    public void onComplete() {}
+                });
+    }
+
+    public void sendWelcomeEmail(QueryParams queryParams, final AsyncHandler<UpdateResponse> handler){
+        apiService.getSendWelcomeEmail(Endpoint.API_V2_SEND_WELCOME_EMAIL,"Bearer "+queryParams.getAccess_token(),QueryMapHelper.getMapSendWelcomeEmail(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<UpdateResponse>() {
+                    @Override
+                    public void onNext(UpdateResponse data) {
+                        handler.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
+                        handler.onFailure(exceptionResponse.t, exceptionResponse.message);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
                 });
     }
 
