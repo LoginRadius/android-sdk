@@ -14,7 +14,6 @@ public class Endpoint {
 	 * Creates url after appending LoginRadiusSDK api endpoint
 	 */
 
-	public static final String API_V2_SOCIALINTERFACE_URL = "interface/json/";
 	public static final String API_V2_CONFIG = "ciam/appInfo";
 	public static final String API_V2_LOGIN = "identity/v2/auth/login";
 	public static final String API_V2_REGISTER = "identity/v2/auth/register";

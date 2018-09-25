@@ -3,11 +3,13 @@ package com.loginradius.demo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
 import android.view.View;
 import android.widget.Button;
 
 import com.loginradius.androidsdk.helper.LoginRadiusSDK;
 import com.loginradius.androidsdk.helper.LoginRadiusSDK.Initialize;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -19,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String sott = "put your sott here";
+        String sott = "put_your_sott_here";
         LoginRadiusSDK.Initialize init = new Initialize();
         init.setApiKey(getString(R.string.api_key));
         init.setSiteName(getString(R.string.site_name));
@@ -61,5 +63,6 @@ public class MainActivity extends AppCompatActivity {
         btnlogin.setOnClickListener(listener);
         btnregister.setOnClickListener(listener);
         btnforgotpassword.setOnClickListener(listener);
+
 }
 }

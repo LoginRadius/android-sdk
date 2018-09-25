@@ -353,15 +353,11 @@ public class QueryMapHelper {
     }
 
     public static Map<String, String> getMapOneTouchLoginByEmail(QueryParams queryParams){
-        String name = (queryParams.getName()!=null) ? queryParams.getName() : "";
         String redirecturl = (queryParams.getRedirecturl()!=null) ? queryParams.getRedirecturl() : "";
         String onetouchloginemailtemplate=(queryParams.getOnetouchloginemailtemplate()!=null) ? queryParams.getOnetouchloginemailtemplate() : "";
         String welcomeemailtemplate=(queryParams.getWelcomeEmailTemplate()!=null) ? queryParams.getWelcomeEmailTemplate() : "";
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("email", queryParams.getEmail());
-        params.put("clientguid", queryParams.getClientGuid());
-        params.put("name", name);
         params.put("redirecturl", redirecturl);
         params.put("onetouchloginemailtemplate", onetouchloginemailtemplate);
         params.put("welcomeemailtemplate", welcomeemailtemplate);
@@ -369,12 +365,9 @@ public class QueryMapHelper {
     }
 
     public static Map<String, String> getMapOneTouchLoginByPhone(QueryParams queryParams){
-        String name = (queryParams.getName()!=null) ? queryParams.getName() : "";
         String smstemplate = (queryParams.getSmsTemplate()!=null) ? queryParams.getSmsTemplate() : "";
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
-        params.put("phone", queryParams.getPhone());
-        params.put("name", name);
         params.put("smstemplate", smstemplate);
         return params;
     }
@@ -522,6 +515,12 @@ public class QueryMapHelper {
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
         params.put("welcomeemailtemplate",(queryParams.getWelcomeEmailTemplate()!=null?queryParams.getWelcomeEmailTemplate():""));
+        return params;
+    }
+
+    public static Map<String,String> getMapRemovePhoneIDByAccessToken(QueryParams queryParams){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", LoginRadiusSDK.getApiKey());
         return params;
     }
 }

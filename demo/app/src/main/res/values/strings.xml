@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Demo</string>
-    <string name="api_key">your loginradius api key</string>
-    <string name="site_name">your loginradius sitename</string>
+    <string name="api_key">your_loginradius_apiKey</string>
+    <string name="site_name">your_loginradius_siteName</string>
     <string name="verification_url">https://auth.lrcontent.com/mobile/verification/index.html</string>
     <string name="reset_password_url">https://auth.lrcontent.com/mobile/verification/index.html</string>
     <string name="email_template">your-email-Template</string>

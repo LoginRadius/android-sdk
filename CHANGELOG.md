@@ -1,5 +1,21 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://docs.loginradius.com/api/v2/mobile-libraries/android)
 
+
+### Version 4.2.0
+Released on **September 25,  2018**
+
+##### Enhancements
+
+  - LoginRadius SDK compiled with newly version of Facebook SDK(Version 4.36.1).
+  - LoginRadius SDK compiled with newly version of Google Account Login(Version 16.0.0).
+  - Added New Remove Phone ID by Access Token API.
+  
+##### Bug Fixes
+
+  - Fixed bug in Twitter first time login on newly installed application on mobile device.
+  - Fixed bug in Demo at the time of unlinking social provider.
+
+
 ### Version 4.1.0
 Released on **August 21,  2018**
 

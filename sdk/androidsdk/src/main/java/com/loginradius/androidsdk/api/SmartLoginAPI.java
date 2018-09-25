@@ -8,7 +8,7 @@ import com.loginradius.androidsdk.handler.ExceptionResponse;
 import com.loginradius.androidsdk.handler.RestRequest;
 import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.resource.QueryParams;
-import com.loginradius.androidsdk.response.VerifyAutoLoginResponse;
+import com.loginradius.androidsdk.response.VerifyResponse;
 import com.loginradius.androidsdk.response.login.LoginData;
 import com.loginradius.androidsdk.response.register.RegisterResponse;
 
@@ -71,9 +71,9 @@ public class SmartLoginAPI {
 
 
 
-    public void verifyToken(QueryParams queryParams, final AsyncHandler<VerifyAutoLoginResponse> handler){
+    public void verifyToken(QueryParams queryParams, final AsyncHandler<VerifyResponse> handler){
         apiService.getSmartLoginVerifyToken(Endpoint.API_V2_VERIFY_SMART_LOGIN, QueryMapHelper.getMapSmartLoginVerifyToken(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<VerifyAutoLoginResponse>() {
+                .subscribe(new DisposableObserver<VerifyResponse>() {
                     @Override
                     public void onComplete() {}
 
@@ -84,7 +84,7 @@ public class SmartLoginAPI {
                     }
 
                     @Override
-                    public void onNext(VerifyAutoLoginResponse value) {
+                    public void onNext(VerifyResponse value) {
                         handler.onSuccess(value);
                     }
                 });

@@ -762,6 +762,27 @@ public class AuthenticationAPI {
                 });
     }
 
+
+    public void removePhoneIDByAccessToken(QueryParams queryParams, final AsyncHandler<DeleteResponse> handler){
+        apiService.getRemovePhoneIDByAccessToken(Endpoint.API_V2_UPDATE_PHONE, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapRemovePhoneIDByAccessToken(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<DeleteResponse>() {
+                    @Override
+                    public void onComplete() {}
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
+                        handler.onFailure(exceptionResponse.t, exceptionResponse.message);
+                    }
+
+                    @Override
+                    public void onNext(DeleteResponse response) {
+                        handler.onSuccess(response);
+                    }
+
+                });
+    }
+
     public void updatePhone(QueryParams queryParams, JsonObject update, final AsyncHandler<PhoneResponse> handler){
         apiService.getUpdatephone(Endpoint.API_V2_UPDATE_PHONE, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapUpdatePhone(queryParams),update).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<PhoneResponse>() {

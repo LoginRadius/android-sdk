@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by loginradius on 8/28/2017.
  */
 
-public class VerifyAutoLoginResponse {
+public class VerifyResponse {
 
     @SerializedName("IsVerified")
     @Expose

@@ -596,6 +596,10 @@ public class ProfileActivity extends AppCompatActivity {
         AuthenticationAPI api = new AuthenticationAPI();
         QueryParams queryParams = new QueryParams();
         queryParams.setAccess_token(token.access_token);
+        final SharedPreferences.Editor editor = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).edit();
+        editor.putString("login_token", token.access_token);
+        editor.putString("login_provider",token.provider);
+        editor.commit();
         api.readAllUserProfile(queryParams, new AsyncHandler<LoginRadiusUltimateUserProfile>() {
             @Override
             public void onSuccess(LoginRadiusUltimateUserProfile userProfile) {
@@ -606,24 +610,31 @@ public class ProfileActivity extends AppCompatActivity {
 
                             case "facebook":
                                 vFacebook="VISIBLE";
+                                editor.putString("linkFacebookid",i.getID());
                                 break;
                             case "google":
                                 vGoogle="VISIBLE";
+                                editor.putString("linkGoogleid",i.getID());
                                 break;
                             case "twitter":
                                 vTwitter ="VISIBLE";
+                                editor.putString("linkTwitterid",i.getID());
                                 break;
                             case "linkedin":
                                 vLinkedIn="VISIBLE";
+                                editor.putString("linkLinkedInid",i.getID());
                                 break;
                             case "yahoo":
                                 vYahoo="VISIBLE";
+                                editor.putString("linkYahooid",i.getID());
                                 break;
                             case "instagram":
                                 vInstagram="VISIBLE";
+                                editor.putString("linkInstagramid",i.getID());
                                 break;
                             case "amazon":
                                 vAmazon="VISIBLE";
+                                editor.putString("linkAmazonid",i.getID());
                                 break;
                             case "live":
                                 vLive="VISIBLE";
@@ -705,10 +716,11 @@ public class ProfileActivity extends AppCompatActivity {
                                 break;
                         }
 
-                        SocialIdentities(token);
+                        editor.commit();
+                        SocialIdentities();
                     }
                 }else {
-                    SocialIdentities(token);
+                    SocialIdentities();
                 }
             }
             @Override
@@ -717,11 +729,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void SocialIdentities(final AccessTokenResponse token) {
-        final SharedPreferences.Editor editor = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).edit();
-        editor.putString("login_token", token.access_token);
-        editor.putString("login_provider",token.provider);
-        editor.commit();
+    private void SocialIdentities() {
+
         ConfigurationAPI api = new ConfigurationAPI();
         api.getResponse(new AsyncHandler<ConfigResponse>() {
             @Override

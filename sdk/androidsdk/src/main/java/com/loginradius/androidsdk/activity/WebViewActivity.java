@@ -6,11 +6,13 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
+
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -59,6 +61,7 @@ public class WebViewActivity extends AppCompatActivity {
     private WebView webView;
     String provider, spinview, encodedURL;
     int fieldsColor;
+    boolean isTwitterCancel =false;
     boolean isRequired,promptPassword,reloadOnError,askOptionalOnSocialLogin,customScopeEnabled;
     List<UserRegistration> raasSchemaList;
     AccessTokenResponse accessToken;
@@ -66,7 +69,7 @@ public class WebViewActivity extends AppCompatActivity {
     FieldViewUtil fieldUtil;
     Context context;
     LoginRadiusUltimateUserProfile userProfile;
-
+    String TAG = this.getClass().getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,8 +147,10 @@ public class WebViewActivity extends AppCompatActivity {
 
             @Override
             public void onPageFinished(WebView view, String url) {
+                   isTwitterCancel =false;
                 if(url.startsWith("https://api.twitter.com/oauth") && !url.contains("oauth_token")){
-                    finish();
+                    isTwitterCancel=true;
+                    onTwitterFinesh();
                 }else{
                     super.onPageFinished(view, url);
                 }
@@ -453,6 +458,20 @@ public class WebViewActivity extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.show();
     }
+
+
+    public void onTwitterFinesh() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if(isTwitterCancel){
+                    finish();//finishing activity
+                }
+            }
+        }, 3000);
+    }
+
+
 
     @Override
     // Detect when the back button is pressed

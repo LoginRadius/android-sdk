@@ -1,6 +1,8 @@
 package com.loginradius.androidsdk.handler;
 
 import com.google.gson.JsonObject;
+import com.loginradius.androidsdk.model.OneTouchLoginEmailModel;
+import com.loginradius.androidsdk.model.OneTouchLoginPhoneModel;
 import com.loginradius.androidsdk.response.AccessTokenResponse;
 import com.loginradius.androidsdk.response.CheckAvailability;
 import com.loginradius.androidsdk.response.DeleteAccountResponse;
@@ -8,7 +10,7 @@ import com.loginradius.androidsdk.response.securityquestions.SecurityQuestionsRe
 import com.loginradius.androidsdk.response.LoginRadiusContactCursorResponse;
 import com.loginradius.androidsdk.response.PostAPIResponse;
 import com.loginradius.androidsdk.response.UpdateResponse;
-import com.loginradius.androidsdk.response.VerifyAutoLoginResponse;
+import com.loginradius.androidsdk.response.VerifyResponse;
 import com.loginradius.androidsdk.response.VerifyEmailResponse;
 import com.loginradius.androidsdk.response.album.LoginRadiusAlbum;
 import com.loginradius.androidsdk.response.audio.LoginRadiusAudio;
@@ -174,7 +176,7 @@ public interface ApiInterface {
     Observable<LoginData> getSmartLoginPing(@Url String url, @QueryMap Map<String, String> options);
 
     @GET
-    Observable<VerifyAutoLoginResponse> getSmartLoginVerifyToken(@Url String url, @QueryMap Map<String, String> options);
+    Observable<VerifyResponse> getSmartLoginVerifyToken(@Url String url, @QueryMap Map<String, String> options);
 
     @GET
     Observable<VerifyEmailResponse> getVerifyEmail(@Url String url, @QueryMap Map<String, String> options);
@@ -200,12 +202,12 @@ public interface ApiInterface {
     Observable<PhoneSendOtpData> getPhoneSendOtp(@Url String url, @QueryMap Map<String, String> options);
 
 
-    @GET
-    Observable<RegisterResponse> getOneTouchLoginByEmail(@Url String url, @QueryMap Map<String, String> options);
+    @POST
+    Observable<RegisterResponse> getOneTouchLoginByEmail(@Url String url, @QueryMap Map<String, String> options, @Body OneTouchLoginEmailModel value);
 
 
-    @GET
-    Observable<PhoneDataResponse> getOneTouchLoginByPhone(@Url String url, @QueryMap Map<String, String> options);
+    @POST
+    Observable<PhoneDataResponse> getOneTouchLoginByPhone(@Url String url, @QueryMap Map<String, String> options, @Body OneTouchLoginPhoneModel value);
 
 
     @PUT
@@ -342,4 +344,7 @@ public interface ApiInterface {
 
     @DELETE
     Observable<DeleteAccountResponse> getDeleteAccountByConfirmEmail(@Url String url,@Header("Authorization") String authHeader,@QueryMap Map<String, String> options);
+
+    @DELETE
+    Observable<DeleteResponse> getRemovePhoneIDByAccessToken(@Url String url,@Header("Authorization") String authHeader,@QueryMap Map<String, String> options);
 }
