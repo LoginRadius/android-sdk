@@ -6,13 +6,13 @@ Released on **September 25,  2018**
 
 ##### Enhancements
 
-  - LoginRadius SDK compiled with newly version of Facebook SDK(Version 4.36.1).
-  - LoginRadius SDK compiled with newly version of Google Account Login(Version 16.0.0).
+  - LoginRadius SDK compiled with the new version of Facebook SDK(Version 4.36.1).
+  - LoginRadius SDK compiled with the new version of Google Account Login(Version 16.0.0).
   - Added New Remove Phone ID by Access Token API.
   
 ##### Bug Fixes
 
-  - Fixed bug in Twitter first time login on newly installed application on mobile device.
+  - Fixed bug in Twitter first time login on a newly installed application on mobile device.
   - Fixed bug in Demo at the time of unlinking social provider.
 
 
