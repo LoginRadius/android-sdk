@@ -2,7 +2,7 @@
 
 
 ### Version 4.2.0
-Released on **September 25,  2018**
+Released on **September 25,  2018** 
 
 ##### Enhancements
 
