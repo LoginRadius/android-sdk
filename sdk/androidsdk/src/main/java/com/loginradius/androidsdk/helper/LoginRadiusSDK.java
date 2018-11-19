@@ -102,6 +102,7 @@ public class LoginRadiusSDK {
         private boolean isRequired = true;
         private int fieldsColor;
         private Intent intent;
+        private static  String googleServerClientID;
 
         public NativeLogin() {
             if(!LoginRadiusSDK.validate()){
@@ -117,6 +118,12 @@ public class LoginRadiusSDK {
         public NativeLogin setFieldsColor(int fieldsColor) {
             this.fieldsColor = fieldsColor;
             return this;
+        }
+
+
+        public void setGoogleServerClientID(String googleServerClientID) {
+            NativeLogin.googleServerClientID = googleServerClientID;
+
         }
 
         private void startNativeLogin(Activity activity, int requestCode){
@@ -179,6 +186,11 @@ public class LoginRadiusSDK {
         }else{
             return Endpoint.API_V2_VERIFY_URL;
         }
+    }
+
+
+    public static String getGoogleServerClientID() {
+        return NativeLogin.googleServerClientID;
     }
 
     public static class InitializeException extends RuntimeException{

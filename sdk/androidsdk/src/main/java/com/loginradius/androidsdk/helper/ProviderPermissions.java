@@ -101,6 +101,19 @@ public class ProviderPermissions
 
 
 
+	public enum GoogleScopes {
+
+		USER_BASIC_INFO			("https://www.googleapis.com/auth/userinfo.profile"),
+		USER_EMAIL				("https://www.googleapis.com/auth/userinfo.email"),
+		USER_PHOTOS             ("https://picasaweb.google.com/data/"),
+		USER_FEEDS				("https://www.google.com/m8/feeds"),
+		USER_VIDEO			    ("https://www.googleapis.com/auth/youtube");
+		public final String id;
+		GoogleScopes(String id) {
+			this.id=id;
+		}
+	}
+
 	/**
 	 * Facebook permissions used to retrieve data
 	 * Permissions used in case of native login

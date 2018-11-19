@@ -1,50 +1,81 @@
 package com.loginradius.androidsdk.helper;
 
-import android.accounts.AccountManager;
+import android.accounts.Account;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+
 
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.android.gms.common.AccountPicker;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.Scope;
 import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.response.AccessTokenResponse;
 
 
 /**
  *	Manage Google token requests - used for Google Native Login
-*/
+ */
 @SuppressLint("InlinedApi")
 public class GoogleSSO extends Activity
 {
 	private static final int ACCOUNT_CODE = 1601;
 	static final int REQUEST_AUTHORIZATION = 2;
-
+	private GoogleSignInClient mGoogleSignInClient;
+	private String googleServerClientID = LoginRadiusSDK.getGoogleServerClientID();
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		Log.d("hello","qwe");
+   if(savedInstanceState == null) {
+   String feeds = ProviderPermissions.GoogleScopes.USER_FEEDS.id;
+   String photo = ProviderPermissions.GoogleScopes.USER_PHOTOS.id;
 
-		if (savedInstanceState == null) {		
-			Intent googlePicker = AccountPicker.newChooseAccountIntent(null,null,
-					new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE},true,"Choose Your Google Account",null,null,null) ;
-			GoogleSSO.this.startActivityForResult(googlePicker,ACCOUNT_CODE);
-		} 
+	   if (googleServerClientID == null){
+		   GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+				   .requestEmail().requestProfile()
+				   .requestScopes(new Scope(photo),new Scope(feeds),
+						   new Scope(Scopes.PLUS_LOGIN),
+						   new Scope(Scopes.PROFILE),
+						   new Scope(Scopes.EMAIL),
+						   new Scope(Scopes.PLUS_ME)).build();
+		   mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+	   } else if (googleServerClientID != null) {
+		   GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+				   .requestEmail().requestProfile().requestServerAuthCode(googleServerClientID,true)
+				   .requestScopes(new Scope(photo),new Scope(feeds),
+						   new Scope(Scopes.PLUS_LOGIN),
+					       new Scope(Scopes.PROFILE),
+						   new Scope(Scopes.EMAIL),
+		                   new Scope(Scopes.PLUS_ME)).build();
+
+		   mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+	   }
+
+		   mGoogleSignInClient.signOut();
+		   SignIn();
+
+   }
 	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void requestToken(final String accountName)
+	private void requestToken(final Account accountName)
 	{
 		final Context context=this.getApplicationContext();
 		AsyncTask task = new AsyncTask()
 		{
-			
+
 			@Override
 			protected Object doInBackground(Object... params)
 			{
@@ -53,10 +84,10 @@ public class GoogleSSO extends Activity
 					token = GoogleAuthUtil.getToken(context,accountName, ProviderPermissions.SCOPES);
 				} catch (UserRecoverableAuthException e) {
 					this.cancel(true);
-					handleRecoverableerror(e);					
+					handleRecoverableerror(e);
 				} catch (Exception e) {
 					e.printStackTrace();
-				} 
+				}
 				return token;
 
 			}
@@ -64,8 +95,8 @@ public class GoogleSSO extends Activity
 			@Override
 			protected void onPostExecute(Object token)
 			{
-				executeForResult((String)token);
-				finish();				
+				executeForResult((String)token ,false);
+				finish();
 			}
 		};
 		task.execute((Void) null);
@@ -74,9 +105,9 @@ public class GoogleSSO extends Activity
 	private void handleRecoverableerror(UserRecoverableAuthException u){
 		GoogleSSO.this.startActivityForResult(u.getIntent(),REQUEST_AUTHORIZATION);
 	}
-	
-	private void executeForResult(String token){
-		LoginRadiusAuthManager.getResponseGoogle((String)token, new AsyncHandler<AccessTokenResponse>() {
+
+	private void executeForResult(String token ,boolean offline){
+		LoginRadiusAuthManager.getResponseGoogle((String)token,offline ,new AsyncHandler<AccessTokenResponse>() {
 			@Override
 			public void onSuccess(AccessTokenResponse data) {
 				data.provider = "google";
@@ -88,28 +119,36 @@ public class GoogleSSO extends Activity
 			}
 		});
 	}
-	
-	
+
+	private void SignIn() {
+		Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+		startActivityForResult(signInIntent, ACCOUNT_CODE);
+	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == ACCOUNT_CODE && resultCode == RESULT_OK)
-		{
-			String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-			requestToken(accountName);
-		} else if (resultCode == Activity.RESULT_CANCELED) {
-			LoginRadiusAuthManager.asyncHandler.onFailure(new Throwable("GoogleSSO cancelled"), "lr_LOGIN_CANCELLED");
-			finish();
-		} else if (requestCode == REQUEST_AUTHORIZATION){//Handling the UserRecoverableAuthException
-			 Bundle b = data.getExtras();
-			 String token = b.getString("authtoken");
 
-			 executeForResult(token);
-			 finish();
-		}
+			if (requestCode == ACCOUNT_CODE && resultCode == RESULT_OK) {
+				GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+				GoogleSignInAccount acct = result.getSignInAccount();
+				if(googleServerClientID ==null && result.isSuccess()) {
+					requestToken(  acct.getAccount());
+				}else if (googleServerClientID!=null && result.isSuccess()){
+					executeForResult(acct.getServerAuthCode(),true);
+					finish();
+				}
+
+	    	} else if (resultCode == Activity.RESULT_CANCELED) {
+				LoginRadiusAuthManager.asyncHandler.onFailure(new Throwable("GoogleSSO cancelled"), "lr_LOGIN_CANCELLED");
+				finish();
+			} else if (requestCode == REQUEST_AUTHORIZATION) {//Handling the UserRecoverableAuthException
+				Bundle b = data.getExtras();
+				String token = b.getString("authtoken");
+				executeForResult(token,false);
+				finish();
+			}
+
 	}
-
-
-
 }

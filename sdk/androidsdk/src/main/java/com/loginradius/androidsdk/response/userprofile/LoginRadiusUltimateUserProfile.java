@@ -7,8 +7,7 @@ import com.loginradius.androidsdk.response.userprofile.identity.Identity;
 import java.util.List;
 
 
-public class LoginRadiusUltimateUserProfile
-{
+public class LoginRadiusUltimateUserProfile {
  @SerializedName("Identities")
 
  private List<Identity> identities;
@@ -523,6 +522,25 @@ public class LoginRadiusUltimateUserProfile
  public void setPrivacyPolicy(PrivacyPolicy privacyPolicy) {
   this.privacyPolicy = privacyPolicy;
  }
+
+ /**
+  *
+  * @return
+  * The provider
+  */
+ public String getProvider() {
+  return Provider;
+ }
+
+ /**
+  *
+  * @param Provider
+  * The Provider
+  */
+ public void setProvider(String Provider) {
+  this.Provider = Provider;
+ }
+
 }
 
 

@@ -6,6 +6,7 @@ package com.loginradius.androidsdk.response.login;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.loginradius.androidsdk.response.privacy.PrivacyPolicy;
 import com.loginradius.androidsdk.response.userprofile.UnverifiedEmail;
 import com.loginradius.androidsdk.response.userprofile.identity.Identity;
 
@@ -384,7 +385,18 @@ public class Profile implements Serializable{
     @SerializedName("IsSecurePassword")
     @Expose
     private Boolean isSecurePassword;
-
+    @SerializedName("RegistrationProvider")
+    private Object registrationProvider;
+    @SerializedName("IsLoginLocked")
+    private Boolean isLoginLocked;
+    @SerializedName("LastLoginLocation")
+    private Object lastLoginLocation;
+    @SerializedName("RegistrationSource")
+    private Object registrationSource;
+    @SerializedName("IsCustomUid")
+    private Boolean isCustomUid;
+    @SerializedName("PrivacyPolicy")
+    private PrivacyPolicy privacyPolicy;
     /**
      *
      * @return
@@ -2601,5 +2613,60 @@ public class Profile implements Serializable{
 
     public void setSecurePassword(Boolean securePassword) {
         isSecurePassword = securePassword;
+    }
+
+    public Object getRegistrationProvider() {
+        return registrationProvider;
+    }
+
+    /**
+     *
+     * @param registrationProvider
+     * Value of RegistrationProvider
+     */
+
+    public void setRegistrationProvider(Object registrationProvider) {
+        this.registrationProvider = registrationProvider;
+    }
+
+    public Boolean getIsLoginLocked() {
+        return isLoginLocked;
+    }
+
+    public void setIsLoginLocked(Boolean isLoginLocked) {
+        this.isLoginLocked = isLoginLocked;
+    }
+
+    public Object getLastLoginLocation() {
+        return lastLoginLocation;
+    }
+
+    public void setLastLoginLocation(Object lastLoginLocation) {
+        this.lastLoginLocation = lastLoginLocation;
+    }
+
+    public Object getRegistrationSource() {
+        return registrationSource;
+    }
+
+    public void setRegistrationSource(Object registrationSource) {
+        this.registrationSource = registrationSource;
+    }
+
+    public Boolean getIsCustomUid() {
+        return isCustomUid;
+    }
+
+    public void setIsCustomUid(Boolean isCustomUid) {
+        this.isCustomUid = isCustomUid;
+    }
+
+
+    public PrivacyPolicy getPrivacyPolicy() {
+        return privacyPolicy;
+    }
+
+    public void setPrivacyPolicy(PrivacyPolicy privacyPolicy) {
+        this.privacyPolicy = privacyPolicy;
     }
 }

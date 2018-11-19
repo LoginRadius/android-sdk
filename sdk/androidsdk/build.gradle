@@ -9,7 +9,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
-        versionName "4.2.0"
+        versionName "4.3.0"
         multiDexEnabled true
 
     }
@@ -17,11 +17,11 @@ android {
         debug {
             minifyEnabled false
             useProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'),
-                    'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
             minifyEnabled false
+            useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -30,9 +30,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 
-    buildscript {
+  buildscript {
         repositories {
-            mavenCentral()
+            google()
+            maven { url 'https://maven.google.com' }
+            jcenter()
         }
     }
 

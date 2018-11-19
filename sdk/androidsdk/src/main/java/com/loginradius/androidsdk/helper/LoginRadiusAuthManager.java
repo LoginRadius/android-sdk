@@ -242,11 +242,17 @@ public class LoginRadiusAuthManager {
 	 * @param googleToken Token from google
 	 * @param handler callback handler
 	 */
-	public static void getResponseGoogle(String googleToken, final AsyncHandler<AccessTokenResponse> handler)
+	public static void getResponseGoogle(String googleToken,boolean offline, final AsyncHandler<AccessTokenResponse> handler)
 	{
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("key",AKey);
-		params.put("google_access_token",googleToken);
+		if (offline){
+			params.put("apikey",AKey);
+			params.put("google_authcode",googleToken);
+		}else {
+			params.put("key",AKey);
+			params.put("google_access_token",googleToken);
+		}
+
 		providerHandler(Endpoint.API_V2_ACCESS_TOKEN_GOOGLE, params, handler);
 	}
 

@@ -15,6 +15,9 @@ public class LoginData{
     @SerializedName("access_token")
     @Expose
     private String accessToken;
+    @SerializedName("refresh_token")
+    @Expose
+    private String refreshToken;
     @SerializedName("expires_in")
     @Expose
     private String expiresIn;
@@ -58,6 +61,18 @@ public class LoginData{
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
+
+    /**
+     *
+     * @return
+     * The refreshToken
+     */
+    public String getRefreshToken(){return refreshToken; }
+    /**
+     *
+     *
+     */
+    public void setRefreshToken(String refreshToken){this.refreshToken=refreshToken;}
 
     /**
      *

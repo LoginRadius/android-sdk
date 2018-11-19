@@ -101,11 +101,10 @@ public class VkontakteNativeActivity extends AppCompatActivity {
             public void onSuccess(AccessTokenResponse data) {
                 accessToken = data;
                 accessToken.provider = "vkontakte";
-                accessToken.apikey = LoginRadiusSDK.getApiKey();
                 if(isRequired){
                     getRaasSchema();
                 }else{
-                    sendAccessToken(data.access_token);
+                    sendAccessToken(data.access_token,data.refresh_token);
                 }
             }
 
@@ -134,7 +133,7 @@ public class VkontakteNativeActivity extends AppCompatActivity {
             @Override
             public void onFailure(Throwable error, String errorcode) {
                 Log.i("lr_api_error",error.getMessage());
-                sendAccessToken(null);
+                sendAccessToken(null,null);
             }
         });
     }
@@ -149,7 +148,7 @@ public class VkontakteNativeActivity extends AppCompatActivity {
         if(containsRequired){
             getUserProfile();
         }else{
-            sendAccessToken(accessToken.access_token);
+            sendAccessToken(accessToken.access_token,accessToken.refresh_token);
         }
     }
 
@@ -167,7 +166,7 @@ public class VkontakteNativeActivity extends AppCompatActivity {
             @Override
             public void onFailure(Throwable error, String errorcode) {
                 Log.i("lr_api_error",error.getMessage());
-                sendAccessToken(null);
+                sendAccessToken(null,null);
             }
         });
     }
@@ -192,7 +191,7 @@ public class VkontakteNativeActivity extends AppCompatActivity {
                 if(value.getChildCount()>0){
                     setContentView(value);
                 }else{
-                    sendAccessToken(accessToken.access_token);
+                    sendAccessToken(accessToken.access_token,accessToken.refresh_token);
                 }
             }
 
@@ -273,7 +272,7 @@ public class VkontakteNativeActivity extends AppCompatActivity {
                         showEmailInfoDialog();
                         return;
                     }
-                    sendAccessToken(accessToken.access_token);
+                    sendAccessToken(accessToken.access_token,accessToken.refresh_token);
                 }
 
                 @Override
@@ -313,7 +312,7 @@ public class VkontakteNativeActivity extends AppCompatActivity {
         alert.setPositiveButton("OK", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                sendAccessToken(null);
+                sendAccessToken(null,null);
             }
         });
         AlertDialog dialog = alert.create();
@@ -395,7 +394,7 @@ public class VkontakteNativeActivity extends AppCompatActivity {
         api.verifyOtp(queryParams, jsonObject, new AsyncHandler<LoginData>() {
             @Override
             public void onSuccess(LoginData data) {
-                sendAccessToken(data.getAccessToken());
+                sendAccessToken(data.getAccessToken(),data.getRefreshToken());
             }
 
             @Override
@@ -424,13 +423,15 @@ public class VkontakteNativeActivity extends AppCompatActivity {
         }
     }
 
-    public void sendAccessToken(String accessToken) {
+    public void sendAccessToken(String accessToken,String refreshToken ) {
         AccessTokenResponse accesstoken = new AccessTokenResponse();
         accesstoken.access_token = accessToken;
+        accesstoken.refresh_token=refreshToken;
         accesstoken.provider = "vkontakte";
         Intent intent = new Intent();
         intent.putExtra("accesstoken", accessToken);
         intent.putExtra("provider", "vkontakte");
+        intent.putExtra("refreshtoken",refreshToken);
         setResult(2, intent);
         finish();//finishing activity
     }

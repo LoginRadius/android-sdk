@@ -1,5 +1,17 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://docs.loginradius.com/api/v2/mobile-libraries/android)
 
+### Version 4.3.0
+Released on **November 19,  2018** 
+
+##### Enhancements
+ 
+  - Improved google native login Performance and UI for Better Native User Experience.
+  
+##### Bug Fixes
+
+  - Fixed bug to retrieve LoginRadius refresh_token in Native Login and Traditional Login.
+  - Fixed Some Missing Parameters in Traditional Login Response JSON.
+  - Fixed google refresh token issue in native login.
 
 ### Version 4.2.0
 Released on **September 25,  2018** 

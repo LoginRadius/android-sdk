@@ -163,12 +163,11 @@ public class GoogleNativeActivity extends AppCompatActivity {
             @Override
             public void onSuccess(AccessTokenResponse data) {
                 accessToken = data;
-                accessToken.apikey = LoginRadiusSDK.getApiKey();
                 accessToken.provider = "google";
                 if(isRequired){
                     getRaasSchema();
                 }else {
-                    sendAccessToken(data.access_token);
+                    sendAccessToken(data.access_token,data.refresh_token);
                 }
             }
 
@@ -198,7 +197,7 @@ public class GoogleNativeActivity extends AppCompatActivity {
             @Override
             public void onFailure(Throwable error, String errorcode) {
                 Log.i("lr_api_error",error.getMessage());
-                sendAccessToken(null);
+                sendAccessToken(null,null);
             }
         });
     }
@@ -213,7 +212,7 @@ public class GoogleNativeActivity extends AppCompatActivity {
         if(containsRequired){
             getUserProfile();
         }else{
-            sendAccessToken(accessToken.access_token);
+            sendAccessToken(accessToken.access_token,accessToken.refresh_token);
         }
     }
 
@@ -231,7 +230,7 @@ public class GoogleNativeActivity extends AppCompatActivity {
             @Override
             public void onFailure(Throwable error, String errorcode) {
                 Log.i("lr_api_error",error.getMessage());
-                sendAccessToken(null);
+                sendAccessToken(null,null);
             }
         });
     }
@@ -256,7 +255,7 @@ public class GoogleNativeActivity extends AppCompatActivity {
                 if(value.getChildCount()>0){
                     setContentView(value);
                 }else{
-                    sendAccessToken(accessToken.access_token);
+                    sendAccessToken(accessToken.access_token,accessToken.refresh_token);
                 }
             }
 
@@ -337,7 +336,7 @@ public class GoogleNativeActivity extends AppCompatActivity {
                         showEmailInfoDialog();
                         return;
                     }
-                    sendAccessToken(accessToken.access_token);
+                    sendAccessToken(accessToken.access_token,accessToken.refresh_token);
                 }
 
                 @Override
@@ -377,7 +376,7 @@ public class GoogleNativeActivity extends AppCompatActivity {
         alert.setPositiveButton("OK", new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                sendAccessToken(null);
+                sendAccessToken(null,null);
             }
         });
         AlertDialog dialog = alert.create();
@@ -459,7 +458,7 @@ public class GoogleNativeActivity extends AppCompatActivity {
         api.verifyOtp(queryParams, jsonObject, new AsyncHandler<LoginData>() {
             @Override
             public void onSuccess(LoginData data) {
-                sendAccessToken(data.getAccessToken());
+                sendAccessToken(data.getAccessToken(),data.getRefreshToken());
             }
 
             @Override
@@ -477,13 +476,15 @@ public class GoogleNativeActivity extends AppCompatActivity {
         });
     }
 
-    public void sendAccessToken(String accessToken) {
+    public void sendAccessToken(String accessToken,String refreshToken) {
 
         AccessTokenResponse accesstoken = new AccessTokenResponse();
         accesstoken.access_token = accessToken;
+        accesstoken.refresh_token=refreshToken;
         accesstoken.provider = "google";
         Intent intent = new Intent();
         intent.putExtra("accesstoken", accessToken);
+        intent.putExtra("refreshtoken",refreshToken);
         intent.putExtra("provider", "google");
         setResult(2, intent);
         finish();//finishing activity
@@ -498,8 +499,10 @@ public class GoogleNativeActivity extends AppCompatActivity {
             if (data != null) {
                 String token = data.getStringExtra("accesstoken");
                 String provider = data.getStringExtra("provider");
+                String refreshtoken=data.getStringExtra("refreshtoken");
                 Intent intent = new Intent();
                 intent.putExtra("accesstoken", token);
+                intent.putExtra("refreshtoken",refreshtoken);
                 intent.putExtra("provider", provider);
                 setResult(2, intent);
                 finish();//finishing activity

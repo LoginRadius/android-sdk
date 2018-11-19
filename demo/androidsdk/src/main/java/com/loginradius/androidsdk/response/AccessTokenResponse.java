@@ -5,10 +5,10 @@ public class AccessTokenResponse
 	public String access_token;
 	//public Provider provider;
 	public String provider;
-	public String apikey;
+
 	public String expires_in;
 	public String id;
-
+	public String refresh_token;
 
 
 
@@ -19,13 +19,7 @@ public class AccessTokenResponse
 	public void setAccess_token(String access_token) {
 		this.access_token = access_token;
 	}
-	public String getApikey() {
-		return apikey;
-	}
 
-	public void setApikey(String apikey) {
-		this.apikey = apikey;
-	}
 	public String getProvider() {
 		return provider;
 	}
@@ -48,6 +42,12 @@ public class AccessTokenResponse
 
 	public void setExpires_in(String expires_in) {
 		this.expires_in = expires_in;
+	}
+
+	public String getRefresh_token() { return refresh_token; }
+
+	public void setRefresh_token(String refresh_token) {
+		this.refresh_token = refresh_token;
 	}
 
 }

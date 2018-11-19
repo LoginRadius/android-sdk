@@ -175,7 +175,7 @@ public class ProfileActivity extends AppCompatActivity {
             accessToken = new AccessTokenResponse();
             accessToken.access_token = token;
             accessToken.provider = provider;
-            accessToken.apikey = LoginRadiusSDK.getApiKey();
+
             getConfiguration();
 
 

@@ -63,6 +63,7 @@ public class LoginUtil {
             @Override
             public void onSuccess(AccessTokenResponse data) {
                 setLogin(data.access_token);
+                Log.i("refreshtoken",data.refresh_token);
             }
 
             @Override

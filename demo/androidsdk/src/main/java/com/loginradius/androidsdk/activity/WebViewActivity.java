@@ -115,7 +115,6 @@ public class WebViewActivity extends AppCompatActivity {
                         accessToken = new AccessTokenResponse();
                         accessToken.access_token = Token;
                         accessToken.provider = provider;
-                        accessToken.apikey = LoginRadiusSDK.getApiKey();
                         if(isRequired){
                             getRaasSchema();
                         }else{
