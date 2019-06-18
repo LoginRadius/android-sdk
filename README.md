@@ -24,7 +24,7 @@ LoginRadius is now using Gradle.
 Use the following dependency in your project:
 
 ```
-implementation 'com.loginradius.android:androidsdk:4.3.0'
+implementation 'com.loginradius.android:androidsdk:4.4.0-beta'
 
 ```
 
@@ -38,7 +38,7 @@ compile project(':androidsdk-release')
 If you prefer to use AAR dependency, then you've to add the following dependencies manually in build.gradle. The AAR file doesn't hold any information about external dependencies.
 
 ```
-implementation 'com.facebook.android:facebook-android-sdk:4.36.1'
+implementation 'com.facebook.android:facebook-login:[5,6)'
 implementation 'com.squareup.retrofit2:retrofit:2.4.0'
 implementation 'com.google.code.gson:gson:2.8.5'
 implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'

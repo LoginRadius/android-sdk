@@ -1,5 +1,19 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://docs.loginradius.com/api/v2/mobile-libraries/android)
 
+### Version 4.4.0-beta
+Released on **June 18,  2019** 
+
+##### Enhancements
+
+  - LoginRadius SDK compiled with the new version of Facebook Login SDK(Version [5,6)).
+  
+##### Bug Fixes
+
+  - Fixed bug to retrieve LoginRadius Security Questions By AccessToken.
+  - Fixed Some Missing Model Parameters in RegisterationData JSON.
+  
+
+
 ### Version 4.3.0
 Released on **November 19,  2018** 
 

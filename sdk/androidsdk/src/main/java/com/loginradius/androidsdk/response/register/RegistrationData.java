@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.Map;
 
 public class RegistrationData {
 
@@ -293,6 +294,9 @@ public class RegistrationData {
     @SerializedName("PhoneId")
     @Expose
     private Object phoneId;
+    @SerializedName("SecurityQuestionAnswer")
+    @Expose
+    private Map<String, String> securityQuestionAnswer;
     @SerializedName("AcceptPrivacyPolicy")
     @Expose
     private Boolean acceptPrivacyPolicy;
@@ -2005,7 +2009,22 @@ public class RegistrationData {
     public void setPhoneId(Object phoneId) {
         this.phoneId = phoneId;
     }
-
+    /**
+     *
+     * @return
+     *     The securityQuestionAnswer
+     */
+    public Map<String, String> getSecurityQuestionAnswer() {
+        return securityQuestionAnswer;
+    }
+    /**
+     *
+     * @param securityQuestionAnswer
+     *     The SecurityQuestionAnswer
+     */
+    public void setSecurityQuestionAnswer(Map<String, String> securityQuestionAnswer) {
+        this.securityQuestionAnswer = securityQuestionAnswer;
+    }
     /**
      *
      * @return

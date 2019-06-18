@@ -208,7 +208,7 @@ public class AuthenticationAPI {
     public void getSecurityQuestions(QueryParams queryParams, final AsyncHandler<SecurityQuestionsResponse[]> handler){
         String urlEndpoint="";
         if(queryParams.getAccess_token()!=null){
-            getSecurityQuestionsByAccessToken(queryParams.getAccess_token(),handler);
+            getSecurityQuestionsByAccessToken(queryParams,handler);
         } else {
             if (queryParams.getPhone()!=null) {
                 urlEndpoint="phone";
@@ -237,8 +237,8 @@ public class AuthenticationAPI {
         }
     }
 
-    private void getSecurityQuestionsByAccessToken(String access_token, final AsyncHandler<SecurityQuestionsResponse[]> handler){
-        apiService.getSecurityQuestionsByAccessToken(Endpoint.API_V2_GET_SECURITY_QUESTIONS+"/accesstoken","Bearer "+access_token).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    private void getSecurityQuestionsByAccessToken(QueryParams queryParams, final AsyncHandler<SecurityQuestionsResponse[]> handler){
+        apiService.getSecurityQuestionsByAccessToken(Endpoint.API_V2_GET_SECURITY_QUESTIONS+"/accesstoken","Bearer "+queryParams.getAccess_token(),QueryMapHelper.getMapSecurityQuestionsByAccessToken(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<SecurityQuestionsResponse[]>() {
                     @Override
                     public void onComplete() {}

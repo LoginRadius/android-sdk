@@ -115,6 +115,12 @@ public class QueryMapHelper {
         return params;
     }
 
+    public static Map<String,String> getMapSecurityQuestionsByAccessToken(QueryParams queryParams){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", LoginRadiusSDK.getApiKey());
+        return params;
+    }
+
     public static Map<String,String> getMapSocialProfile(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());

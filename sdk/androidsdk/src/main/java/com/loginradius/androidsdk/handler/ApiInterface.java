@@ -218,7 +218,7 @@ public interface ApiInterface {
     Observable<SecurityQuestionsResponse[]> getSecurityQuestions(@Url String url, @QueryMap Map<String, String> options);
 
     @GET
-    Observable<SecurityQuestionsResponse[]> getSecurityQuestionsByAccessToken(@Url String url, @Header("Authorization") String authHeader);
+    Observable<SecurityQuestionsResponse[]> getSecurityQuestionsByAccessToken(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options);
 
     @GET
     Observable<UpdateResponse> getDeleteAccount(@Url String url, @QueryMap Map<String, String> options);
