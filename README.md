@@ -24,7 +24,7 @@ LoginRadius is now using Gradle.
 Use the following dependency in your project:
 
 ```
-implementation 'com.loginradius.android:androidsdk:4.4.0-beta'
+implementation 'com.loginradius.android:androidsdk:4.4.0'
 
 ```
 

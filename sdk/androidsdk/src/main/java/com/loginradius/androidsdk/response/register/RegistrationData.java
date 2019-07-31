@@ -2020,7 +2020,7 @@ public class RegistrationData {
     /**
      *
      * @param securityQuestionAnswer
-     *     The SecurityQuestionAnswer
+     *    The SecurityQuestionAnswer 
      */
     public void setSecurityQuestionAnswer(Map<String, String> securityQuestionAnswer) {
         this.securityQuestionAnswer = securityQuestionAnswer;

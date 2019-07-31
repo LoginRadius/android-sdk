@@ -47,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
     private FieldViewUtil fieldUtil;
     private Context context;
     private List<UserRegistration> raasSchemaList;
+    String sott = "put_your_sott_here";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +155,7 @@ public class RegisterActivity extends AppCompatActivity {
             AuthenticationAPI api = new AuthenticationAPI();
             QueryParams queryParams = new QueryParams();
             JsonObject jsonData = fieldUtil.getData(gtr,linearContainer);
-            api.register(queryParams, jsonData, new AsyncHandler<RegisterResponse>() {
+            api.register(queryParams,sott, jsonData, new AsyncHandler<RegisterResponse>() {
                 @Override
                 public void onSuccess(RegisterResponse data) {
                     if(fieldUtil.getPhone()!=null){

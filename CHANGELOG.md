@@ -1,4 +1,25 @@
-> **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://docs.loginradius.com/api/v2/mobile-libraries/android)
+> **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/mobile-sdk-libraries/android-library/)
+
+
+### Version 4.4.0
+Released on **July 31,  2019** 
+
+##### Enhancements
+
+  - LoginRadius SDK compiled with the new version of Facebook Login SDK(Version [5,6)).
+  - Added new callback method for SDK Logout function.
+  - Added new a overload method for SetLogin function now user can store access_token and UserProfile after successful login in local Session for long time.
+
+##### Breaking Changes
+
+For developers migrating from v4.4.0-beta, there will be one breaking changes in terms of SDK implementation. In this version, we have updated the methods of the Registration API. For more details, please have a look [here](https://www.loginradius.com/docs/api/v2/deployment/mobile-sdk-libraries/android-library/)
+  
+##### Bug Fixes
+
+  - Fixed bug to retrieve LoginRadius Security Questions By AccessToken.
+  - Fixed Some Missing Model Parameters in RegisterationData JSON.
+
+
 
 ### Version 4.4.0-beta
 Released on **June 18,  2019** 

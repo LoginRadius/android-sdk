@@ -494,10 +494,10 @@ public class AuthenticationAPI {
                 });
     }
 
-    public void register(QueryParams queryParams, RegistrationData registrationData, final AsyncHandler<RegisterResponse> handler){
+    public void register(QueryParams queryParams, String sott, RegistrationData registrationData, final AsyncHandler<RegisterResponse> handler){
         Map<String,String> headers = new HashMap<>();
         headers.put("Content-Type","application/json");
-        headers.put("X-LoginRadius-Sott",LoginRadiusSDK.getSott());
+        headers.put("X-LoginRadius-Sott",sott);
         apiService.getTraditionalRegister(Endpoint.API_V2_REGISTER,headers, QueryMapHelper.getMapRegistration(queryParams),registrationData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<RegisterResponse>() {
                     @Override
@@ -517,10 +517,11 @@ public class AuthenticationAPI {
                 });
     }
 
-    public void register(QueryParams queryParams, JsonObject data, final AsyncHandler<RegisterResponse> handler){
+
+    public void register(QueryParams queryParams, String sott, JsonObject data, final AsyncHandler<RegisterResponse> handler){
         Map<String,String> headers = new HashMap<>();
         headers.put("Content-Type","application/json");
-        headers.put("X-LoginRadius-Sott",LoginRadiusSDK.getSott());
+        headers.put("X-LoginRadius-Sott",sott);
         apiService.getTraditionalRegister(Endpoint.API_V2_REGISTER,headers, QueryMapHelper.getMapRegistration(queryParams),data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<RegisterResponse>() {
                     @Override
@@ -539,6 +540,7 @@ public class AuthenticationAPI {
 
                 });
     }
+
 
     public void removeEmail(QueryParams queryParams, JsonObject delete, final AsyncHandler<DeleteResponse> handler){
         apiService.getRemoveEmail(Endpoint.API_V2_ADD_EMAIL, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapRemoveEmail(queryParams),delete).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())

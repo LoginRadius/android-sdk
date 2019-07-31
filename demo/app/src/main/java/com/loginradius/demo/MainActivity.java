@@ -22,11 +22,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        String sott = "put_your_sott_here";
         LoginRadiusSDK.Initialize init = new Initialize();
         init.setApiKey(getString(R.string.api_key));
         init.setSiteName(getString(R.string.site_name));
-        init.setSott(sott);
         init.setVerificationUrl(getString(R.string.verification_url));
         init.setResetPasswordUrl(getString(R.string.reset_password_url));
 

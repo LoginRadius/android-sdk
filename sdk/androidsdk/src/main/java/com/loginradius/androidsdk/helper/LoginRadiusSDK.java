@@ -11,7 +11,7 @@ import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.resource.SocialProviderConstant;
 
 /**
- * Created by loginradius on 10/12/2017.
+ * Updated by loginradius on 31/07/2019.
  */
 
 public class LoginRadiusSDK {
@@ -19,7 +19,7 @@ public class LoginRadiusSDK {
     private LoginRadiusSDK() {}
 
     public static class Initialize{
-        private static String apiKey,siteName,sott,verificationUrl,resetPasswordUrl;
+        private static String apiKey,siteName,verificationUrl,resetPasswordUrl;
 
         public void setApiKey(String apiKey) {
             Initialize.apiKey = apiKey;
@@ -27,10 +27,6 @@ public class LoginRadiusSDK {
 
         public void setSiteName(String siteName) {
             Initialize.siteName = siteName;
-        }
-
-        public void setSott(String sott) {
-            Initialize.sott = sott;
         }
 
         public void setVerificationUrl(String verificationUrl) {
@@ -154,8 +150,6 @@ public class LoginRadiusSDK {
             return false;
         }else if(Initialize.siteName == null || Initialize.siteName.length() == 0){
             return false;
-        }else if(Initialize.sott == null || Initialize.sott.length() == 0){
-            return false;
         }
         return true;
     }
@@ -168,9 +162,6 @@ public class LoginRadiusSDK {
         return Initialize.siteName;
     }
 
-    public static String getSott() {
-        return Initialize.sott;
-    }
 
     public static String getVerificationUrl() {
         if(Initialize.verificationUrl!=null && Initialize.verificationUrl.length() > 0){

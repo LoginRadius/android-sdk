@@ -29,6 +29,7 @@ import com.loginradius.androidsdk.api.AuthenticationAPI;
 import com.loginradius.androidsdk.api.ConfigurationAPI;
 import com.loginradius.androidsdk.api.SocialAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
+import com.loginradius.androidsdk.helper.ErrorResponse;
 import com.loginradius.androidsdk.helper.LoginRadiusSDK;
 import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.resource.LoginUtil;
@@ -234,6 +235,7 @@ public class ProfileActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
+                    // For Android SSO Logout
                     try {
                         Context   con = createPackageContext("com.loginradius.link", 0);
                         SharedPreferences pref = con.getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE);
@@ -245,9 +247,21 @@ public class ProfileActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    Intent intent  = new Intent(getBaseContext(), MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                    // For Android Local Session Logout
+                    LoginUtil session =new LoginUtil(getApplicationContext());
+                    session.logout(accessToken.access_token, new LoginUtil.LogoutCallBack() {
+                        @Override
+                        public void Response(Boolean isLogout, Boolean isError, ErrorResponse error) {
+                            // do your code heare
+                            if(isLogout){
+                                Log.d("logout",String.valueOf(isLogout));
+                                Intent intent  = new Intent(getBaseContext(), MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            }
+                        }
+                    });
+
                 }
             });
 
