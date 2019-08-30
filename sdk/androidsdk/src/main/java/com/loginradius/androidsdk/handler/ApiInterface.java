@@ -1,11 +1,18 @@
 package com.loginradius.androidsdk.handler;
 
 import com.google.gson.JsonObject;
+import com.loginradius.androidsdk.model.ChangePINModel;
 import com.loginradius.androidsdk.model.OneTouchLoginEmailModel;
 import com.loginradius.androidsdk.model.OneTouchLoginPhoneModel;
+import com.loginradius.androidsdk.model.PINRequiredModel;
+import com.loginradius.androidsdk.model.ResetPINByResetToken;
+import com.loginradius.androidsdk.model.ResetPINByEmailModel;
+import com.loginradius.androidsdk.model.ResetPINByPhoneModel;
+import com.loginradius.androidsdk.model.ResetPINByUserNameModel;
 import com.loginradius.androidsdk.response.AccessTokenResponse;
 import com.loginradius.androidsdk.response.CheckAvailability;
 import com.loginradius.androidsdk.response.DeleteAccountResponse;
+import com.loginradius.androidsdk.response.PostResponse;
 import com.loginradius.androidsdk.response.securityquestions.SecurityQuestionsResponse;
 import com.loginradius.androidsdk.response.LoginRadiusContactCursorResponse;
 import com.loginradius.androidsdk.response.PostAPIResponse;
@@ -69,6 +76,8 @@ public interface ApiInterface {
     /**
      * Retrofit2 with RxJava GET
      */
+
+
 
 
     @GET
@@ -238,6 +247,26 @@ public interface ApiInterface {
     @GET
     Observable<UpdateResponse> getSendWelcomeEmail(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String,String> options);
 
+    @GET
+    Observable<PostResponse> getInvalidatePINSessionToken(@Url String url, @QueryMap Map<String, String> options);
+
+
+    @POST
+    Observable<LoginData> getLoginByPin(@Url String url, @QueryMap Map<String,String> options,@Body PINRequiredModel data);
+
+    @POST
+    Observable<LoginData> getPINByPinAuthToken(@Url String url, @QueryMap Map<String,String> options,@Body PINRequiredModel data);
+
+    @POST
+    Observable<PostResponse> getForgotPINByEmail(@Url String url, @QueryMap Map<String,String> options,@Body JsonObject data);
+
+    @POST
+    Observable<PhoneResponse> getForgotPINByPhone(@Url String url, @QueryMap Map<String,String> options, @Body JsonObject data);
+
+    @POST
+    Observable<PostResponse> getForgotPINByUserName(@Url String url, @QueryMap Map<String,String> options,@Body JsonObject data);
+
+
     @POST
     Observable<PostAPIResponse> getMessage(@Url String url, @QueryMap Map<String, String> options);
 
@@ -273,6 +302,21 @@ public interface ApiInterface {
 
     @POST
     Observable<CreateCustomObject> getCreateCustomObject(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
+
+    @PUT
+    Observable<PostResponse> getResetPINByEmail(@Url String url, @QueryMap Map<String, String> options, @Body ResetPINByEmailModel data);
+
+    @PUT
+    Observable<PostResponse> getResetPINByPhone(@Url String url, @QueryMap Map<String, String> options, @Body ResetPINByPhoneModel data);
+
+    @PUT
+    Observable<PostResponse> getResetPINByUserName(@Url String url, @QueryMap Map<String, String> options, @Body ResetPINByUserNameModel data);
+
+    @PUT
+    Observable<PostResponse> getResetPINByResetToken(@Url String url, @QueryMap Map<String, String> options, @Body ResetPINByResetToken data);
+
+    @PUT
+    Observable<PostResponse> getChangePINByAccessToken(@Url String url, @QueryMap Map<String, String> options, @Body ChangePINModel data);
 
 
     @PUT

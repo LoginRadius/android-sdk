@@ -7,6 +7,7 @@ package com.loginradius.androidsdk.response.login;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.loginradius.androidsdk.response.privacy.PrivacyPolicy;
+import com.loginradius.androidsdk.response.userprofile.LoginRadiusPIN;
 import com.loginradius.androidsdk.response.userprofile.UnverifiedEmail;
 import com.loginradius.androidsdk.response.userprofile.identity.Identity;
 
@@ -397,6 +398,9 @@ public class Profile implements Serializable{
     private Boolean isCustomUid;
     @SerializedName("PrivacyPolicy")
     private PrivacyPolicy privacyPolicy;
+    @SerializedName("PIN")
+    private LoginRadiusPIN pin ;
+
     /**
      *
      * @return
@@ -2669,4 +2673,14 @@ public class Profile implements Serializable{
     public void setPrivacyPolicy(PrivacyPolicy privacyPolicy) {
         this.privacyPolicy = privacyPolicy;
     }
+
+    public LoginRadiusPIN getPin() {
+        return pin;
+    }
+
+    public void setPin(LoginRadiusPIN pin) {
+        this.pin = pin;
+    }
+
+
 }

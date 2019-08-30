@@ -529,4 +529,47 @@ public class QueryMapHelper {
         params.put("apikey", LoginRadiusSDK.getApiKey());
         return params;
     }
+    public static Map<String,String> getMapLoginByPin(QueryParams queryParams){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", LoginRadiusSDK.getApiKey());
+        params.put("session_token",queryParams.getSessionToken());
+        return params;
+    }
+    public static Map<String,String> getMapSetPINByPinAuthToken(String queryParams){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", LoginRadiusSDK.getApiKey());
+        params.put("pinAuthToken",queryParams);
+        return params;
+    }
+    public static Map<String,String> getMapForgotPINByEmail(QueryParams queryParams){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", LoginRadiusSDK.getApiKey());
+        params.put("emailTemplate",queryParams.getEmailTemplate());
+        params.put("resetPINUrl",queryParams.getResetPinUrl());
+        return params;
+    }
+    public static Map<String,String> getMapForgotPINByPhone(String queryParams){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", LoginRadiusSDK.getApiKey());
+        params.put("smsTemplate",queryParams);
+        return params;
+    }
+    public static Map<String,String> getMapPINReset(){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", LoginRadiusSDK.getApiKey());
+        return params;
+    }
+
+    public static Map<String,String> getMapChangePINByAccessToken(String queryParams){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", LoginRadiusSDK.getApiKey());
+        params.put("access_token",queryParams);
+        return params;
+    }
+    public static Map<String,String> getinvalidatePINSessionTokenMap(String queryParams){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", LoginRadiusSDK.getApiKey());
+        params.put("session_token",queryParams);
+        return params;
+    }
 }

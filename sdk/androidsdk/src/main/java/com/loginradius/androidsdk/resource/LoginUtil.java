@@ -86,7 +86,7 @@ public class LoginUtil {
             }
             @Override
             public void onFailure(Throwable error, String errorcode) {
-                ErrorResponse errorResponse =JsonDeserializer.deserializeJson(error.getMessage(),ErrorResponse.class);
+                ErrorResponse errorResponse =JsonDeserializer.deserializeJson(error.getMessage(),errorcode,ErrorResponse.class);
                 handler.Response(true,true,errorResponse);
             }
         });

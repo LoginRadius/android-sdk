@@ -165,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onFailure(Throwable error, String errorcode) {
                 hideProgressDialog();
                 NotifyToastUtil.showNotify(LoginActivity.this,error.getMessage());
-                ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(), ErrorResponse.class);
+                ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(),errorcode,ErrorResponse.class);
                 if (errorResponse.getErrorCode() == 1066){
                     new Handler().postDelayed(new Runnable() {
                         @Override

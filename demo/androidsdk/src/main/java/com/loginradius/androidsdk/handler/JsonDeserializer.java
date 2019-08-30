@@ -4,6 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
+import com.loginradius.androidsdk.helper.ErrorResponse;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -109,12 +114,76 @@ public class JsonDeserializer extends Converter.Factory {
 			}
 		}
 	}
+	public static boolean isJSONValid(String jsonString) {
+		try {
+			new JSONObject(jsonString);
+		} catch (JSONException ex) {
+			try {
+				new JSONArray(jsonString);
+			} catch (JSONException ex1) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	private static Gson errorgson = new Gson();
 	public static <T> T deserializeJson(String jsonString, Class<T> type) {
 		T result = null;
-		result = errorgson.fromJson(jsonString, type);
+
+		if(isJSONValid(jsonString)){
+			result = errorgson.fromJson(jsonString, type);}
+		else{
+			ErrorResponse errorResponse =new ErrorResponse();
+			errorResponse.setErrorCode(100);
+			errorResponse.setDescription(jsonString);
+			errorResponse.setMessage("Unable to complete the request at the moment");
+			return (T) errorResponse;
+		}
 		return result;
 	}
+
+    public static <T> T deserializeJson(String error,String errorcode, Class<T> type) {
+        T result = null;
+        ErrorResponse errorResponse =new ErrorResponse();
+        if(isJSONValid(error)){
+            result = errorgson.fromJson(error, type);}
+        else{
+            if(errorcode.equals("TimeoutError")){
+                errorResponse.setErrorCode(101);
+                errorResponse.setDescription("Unable to reach host please check your internet connection");
+                errorResponse.setMessage("TimeoutError");
+                return (T) errorResponse;
+
+            }
+            else if(errorcode.equals("IllegalArgumentError")) {
+                errorResponse.setErrorCode(102);
+                errorResponse.setDescription(error);
+                errorResponse.setMessage("IllegalArgumentError");
+                return (T) errorResponse;
+            }
+            else if(errorcode.equals("ConversionError")){
+                errorResponse.setErrorCode(103);
+                errorResponse.setDescription(error);
+                errorResponse.setMessage("ConversionError");
+                return (T) errorResponse;
+            }
+            else if(errorcode.equals("ServerError")){
+                errorResponse.setErrorCode(104);
+                errorResponse.setDescription(error);
+                errorResponse.setMessage("ServerError");
+                return (T) errorResponse;
+            }
+            else{
+                errorResponse.setErrorCode(100);
+                errorResponse.setDescription(error);
+                errorResponse.setMessage("Unable to complete the request at the moment");
+                return (T) errorResponse;
+            }
+        }
+        return result;
+    }
+
 }
 
 

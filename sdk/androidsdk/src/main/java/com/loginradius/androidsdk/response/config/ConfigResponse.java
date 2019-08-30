@@ -104,6 +104,11 @@ public class ConfigResponse {
     @SerializedName("NoRegistration")
     @Expose
     private Boolean noRegistration;
+    @SerializedName("PINAuthentication")
+    @Expose
+    private PINAuthentication pinAuthentication;
+
+
 
     public SocialSchema getSocialSchema() {
         return socialSchema;
@@ -352,5 +357,16 @@ public class ConfigResponse {
     public void setNoRegistration(Boolean noRegistration) {
         this.noRegistration = noRegistration;
     }
+
+
+    public PINAuthentication getPinAuthentication() {
+        return pinAuthentication;
+    }
+
+    public void setPinAuthentication(PINAuthentication pinAuthentication) {
+        this.pinAuthentication = pinAuthentication;
+    }
+
+
 
 }

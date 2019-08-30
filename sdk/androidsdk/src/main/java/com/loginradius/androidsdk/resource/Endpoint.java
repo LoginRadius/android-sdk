@@ -66,6 +66,20 @@ public class Endpoint {
 	public static final String API_V2_ACCEPT_PRIVACY_POLICY="identity/v2/auth/privacypolicy/accept";
 	public static final String API_V2_SEND_WELCOME_EMAIL="identity/v2/auth/account/sendwelcomeemail";
 	public static final String API_V2_VERIFY_URL = "https://auth.lrcontent.com/mobile/verification/index.html";
+	public static final String API_V2_PIN_LOGIN="identity/v2/auth/login/pin";
+	public static final String API_V2_PIN_BY_PINAuth="identity/v2/auth/pin/set/pinauthtoken";
+	public static final String API_V2_PIN_FORGOT_BY_EMAIL="identity/v2/auth/pin/forgot/email";
+	public static final String API_V2_PIN_FORGOT_BY_PHONE="identity/v2/auth/pin/forgot/otp";
+	public static final String API_V2_PIN_FORGOT_BY_USERNAME="identity/v2/auth/pin/forgot/username";
+	public static final String API_V2_PIN_INVALIDATE_SESSION_TOKEN="identity/v2/auth/session_token/InValidate";
+	public static final String API_V2_PIN_RESET_EMAIL_OTP="identity/v2/auth/pin/reset/otp/email";
+	public static final String API_V2_PIN_RESET_PHONE_OTP="identity/v2/auth/pin/reset/otp/phone";
+	public static final String API_V2_PIN_RESET_USERNAME_OTP="identity/v2/auth/pin/reset/otp/username";
+	public static final String API_V2_PIN_RESET_BY_RESET_TOKEN="identity/v2/auth/pin/reset/token";
+	public static final String API_V2_PIN_RESET_EMAIL_SECURITY_QUESTION="identity/v2/auth/pin/reset/securityAnswer/email";
+	public static final String API_V2_PIN_RESET_USERNAME_SECURITY_QUESTION="identity/v2/auth/pin/reset/securityAnswer/username";
+	public static final String API_V2_PIN_RESET_PHONE_SECURITY_QUESTION="identity/v2/auth/pin/reset/securityAnswer/phone";
+	public static final String API_V2_PIN_CHANGE_BY_ACCESS_TOKEN="identity/v2/auth/pin/change";
 
 	public static final String SHAREDPREFERENCEFILEKEY = "com.loginradius.loginradiusraas.PREFERENCE_FILE_KEY";
 	public static final String webviewlogin=".hub.loginradius.com/RequestHandlor.aspx";

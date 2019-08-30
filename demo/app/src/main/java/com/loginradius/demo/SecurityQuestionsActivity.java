@@ -100,7 +100,7 @@ public class SecurityQuestionsActivity extends AppCompatActivity implements OnCl
             @Override
             public void onFailure(Throwable error, String errorcode) {
                 pbLoad.setVisibility(View.GONE);
-                ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(), ErrorResponse.class);
+                ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(),errorcode,ErrorResponse.class);
                 if(errorResponse.getErrorCode() == 1092){
                     AlertDialog.Builder alert = new Builder(SecurityQuestionsActivity.this);
                     alert.setTitle("Message");

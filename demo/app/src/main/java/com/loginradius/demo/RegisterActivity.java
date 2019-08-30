@@ -172,7 +172,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Throwable error, String errorcode) {
-                    ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(), ErrorResponse.class);
+                    ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(),errorcode,ErrorResponse.class);
                     int errorCode = errorResponse.getErrorCode();
                     Log.i("ErrorCode",String.valueOf(errorCode));
                     switch (errorCode){
@@ -270,7 +270,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable error, String errorcode) {
-                ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(), ErrorResponse.class);
+                ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(),errorcode,ErrorResponse.class);
                 int errorCode = errorResponse.getErrorCode();
                 Log.i("ErrorCode",String.valueOf(errorCode));
                 Toast.makeText(context,"Unable to complete the request at the moment",Toast.LENGTH_SHORT).show();
@@ -295,7 +295,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable error, String errorcode) {
-                ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(), ErrorResponse.class);
+                ErrorResponse errorResponse = JsonDeserializer.deserializeJson(error.getMessage(),errorcode,ErrorResponse.class);
                 int errorCode = errorResponse.getErrorCode();
                 Log.i("ErrorCode",String.valueOf(errorCode));
                 if(errorCode == 1067){

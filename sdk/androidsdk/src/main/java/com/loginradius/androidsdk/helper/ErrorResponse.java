@@ -21,6 +21,11 @@ public class ErrorResponse {
 
     private Integer errorCode;
 
+    @SerializedName("Data")
+    @Expose
+    private Object data;
+
+
     @SerializedName("ExtraInfo")
     @Expose
     private List<ExtraInfo> extraInfo = new ArrayList<>();
@@ -113,6 +118,16 @@ public class ErrorResponse {
     public void setExtraInfo(List<ExtraInfo> extraInfo) {
         this.extraInfo = extraInfo;
     }
+
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
 
 
     public class ExtraInfo {

@@ -259,6 +259,9 @@ public class LoginRadiusUltimateUserProfile {
      private List<UnverifiedEmail> unverifiedEmail = null;
      @SerializedName("PrivacyPolicy")
      private PrivacyPolicy privacyPolicy;
+     @SerializedName("PIN")
+     private LoginRadiusPIN pin ;
+
 
 
  /**
@@ -540,6 +543,15 @@ public class LoginRadiusUltimateUserProfile {
  public void setProvider(String Provider) {
   this.Provider = Provider;
  }
+
+ public LoginRadiusPIN getPin() {
+  return pin;
+ }
+
+ public void setPin(LoginRadiusPIN pin) {
+  this.pin = pin;
+ }
+
 
 }
 

@@ -26,6 +26,14 @@ public class LoginData{
     @Expose
     private Boolean isPosted;
 
+    @SerializedName("session_token")
+    @Expose
+    private String sessionToken;
+
+    @SerializedName("session_expires_in")
+    @Expose
+    private String sessionExpiresIn;
+
     /**
      *
      * @return
@@ -105,6 +113,23 @@ public class LoginData{
      */
     public void setIsPosted(Boolean isPosted) {
         this.isPosted = isPosted;
+    }
+
+
+    public String getSessionToken() {
+        return sessionToken;
+    }
+
+    public void setSessionToken(String session_token) {
+        this.sessionToken = sessionToken;
+    }
+
+    public String getSessionExpiresIn() {
+        return sessionExpiresIn;
+    }
+
+    public void setSessionExpiresIn(String sessionExpiresIn) {
+        this.sessionExpiresIn = sessionExpiresIn;
     }
 
 }

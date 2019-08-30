@@ -1,6 +1,19 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/mobile-sdk-libraries/android-library/)
 
+### Version 4.5.0
+Released on **Aug 30,  2019** 
 
+##### Enhancements
+
+   - Added new PIN Authentication APIs. PIN authentication is an alternate way to do authentication, instead of password users can use the PIN. PIN Authentication can be used for re-authentication also (when the user accesses a specific section or area).
+   - Added new model parameters in LoginData and RegisterationData Class.	
+	
+	
+##### Bug Fixes
+
+  - Fixed bug to handle non-json error response.
+  
+  
 ### Version 4.4.0
 Released on **July 31,  2019** 
 

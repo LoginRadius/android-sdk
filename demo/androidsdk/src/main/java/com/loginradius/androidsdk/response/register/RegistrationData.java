@@ -300,6 +300,10 @@ public class RegistrationData {
     @SerializedName("AcceptPrivacyPolicy")
     @Expose
     private Boolean acceptPrivacyPolicy;
+    @SerializedName("PINInfo")
+    @Expose
+    private PINInfo pinInfo;
+
     /**
      * 
      * @return
@@ -2042,4 +2046,22 @@ public class RegistrationData {
     public void setAcceptPrivacyPolicy(Boolean acceptPrivacyPolicy) {
         this.acceptPrivacyPolicy = acceptPrivacyPolicy;
     }
+    /**
+     *
+     * @return
+     *     The pinInfo
+     */
+    public PINInfo getPinInfo() {
+        return pinInfo;
+    }
+    /**
+     *
+     * @param pinInfo
+     *     The pinInfo
+     */
+    public void setPinInfo(PINInfo pinInfo) {
+        this.pinInfo = pinInfo;
+    }
+
+
 }

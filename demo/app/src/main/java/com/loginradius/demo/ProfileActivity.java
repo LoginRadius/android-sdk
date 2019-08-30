@@ -256,7 +256,7 @@ public class ProfileActivity extends AppCompatActivity {
                             if(isLogout){
                                 Log.d("logout",String.valueOf(isLogout));
                                 Intent intent  = new Intent(getBaseContext(), MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            //    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
                             }
                         }

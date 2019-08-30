@@ -46,7 +46,9 @@ public class QueryParams {
     private String passwordlessLoginTemplate;
     private String[] fields;
     private boolean preventEmailVerification;
-
+    private String sessionToken;
+    private String pinAuthToken;
+    private String resetPinUrl;
     public String getEmail() {
         return email;
     }
@@ -374,4 +376,26 @@ public class QueryParams {
     public void setPreventEmailVerification(boolean preventEmailVerification) {
         this.preventEmailVerification = preventEmailVerification;
     }
+    public String getSessionToken() {
+        return sessionToken;
+    }
+
+    public void setSessionToken(String sessionToken) {
+        this.sessionToken = sessionToken;
+    }
+    public String getPinAuthToken() {
+        return pinAuthToken;
+    }
+
+    public void setPinAuthToken(String pinAuthToken) {
+        this.pinAuthToken = pinAuthToken;
+    }
+    public String getResetPinUrl() {
+        return resetPinUrl;
+    }
+
+    public void setResetPinUrl(String resetPinUrl) {
+        this.resetPinUrl = resetPinUrl;
+    }
+
 }
