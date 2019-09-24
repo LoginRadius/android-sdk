@@ -36,6 +36,7 @@ import com.loginradius.androidsdk.resource.LoginUtil;
 import com.loginradius.androidsdk.resource.QueryParams;
 import com.loginradius.androidsdk.response.AccessTokenResponse;
 import com.loginradius.androidsdk.response.LoginRadiusContactCursorResponse;
+import com.loginradius.androidsdk.response.UpdateProfileResponse;
 import com.loginradius.androidsdk.response.config.ConfigResponse;
 import com.loginradius.androidsdk.response.contact.LoginRadiusContact;
 import com.loginradius.androidsdk.response.phone.PhoneResponse;
@@ -446,10 +447,10 @@ public class ProfileActivity extends AppCompatActivity {
         update.addProperty("firstname", update1.getText().toString());
         update.addProperty("lastname", update2.getText().toString());
         update.addProperty("username", update3.getText().toString());
-        api.updateProfile(queryParams, update, new AsyncHandler<RegisterResponse>() {
+        api.updateProfile(queryParams, update, new AsyncHandler<UpdateProfileResponse>() {
             @Override
-            public void onSuccess(RegisterResponse registerResponse) {
-                if (registerResponse.getIsPosted()) {
+            public void onSuccess(UpdateProfileResponse response) {
+                if (response.getIsPosted()) {
                     NotifyToastUtil.showNotify(ProfileActivity.this,"You have successfully Update your Profile");
                 }
 

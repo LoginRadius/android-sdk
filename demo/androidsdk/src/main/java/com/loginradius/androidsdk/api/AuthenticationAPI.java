@@ -17,6 +17,7 @@ import com.loginradius.androidsdk.resource.QueryParams;
 import com.loginradius.androidsdk.response.AccessTokenResponse;
 import com.loginradius.androidsdk.response.CheckAvailability;
 import com.loginradius.androidsdk.response.DeleteAccountResponse;
+import com.loginradius.androidsdk.response.UpdateProfileResponse;
 import com.loginradius.androidsdk.response.securityquestions.SecurityQuestionsResponse;
 import com.loginradius.androidsdk.response.UpdateResponse;
 import com.loginradius.androidsdk.response.VerifyEmailResponse;
@@ -805,9 +806,9 @@ public class AuthenticationAPI {
                 });
     }
 
-    public void updateProfile(QueryParams queryParams, JsonObject data, final AsyncHandler<RegisterResponse> handler){
+    public void updateProfile(QueryParams queryParams, JsonObject data, final AsyncHandler<UpdateProfileResponse> handler){
         apiService.getUpdateprofile(Endpoint.API_V2_UPDATE_PROFILE, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapUpdateProfile(queryParams),data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<RegisterResponse>() {
+                .subscribe(new DisposableObserver<UpdateProfileResponse>() {
                     @Override
                     public void onComplete() {}
 
@@ -818,16 +819,16 @@ public class AuthenticationAPI {
                     }
 
                     @Override
-                    public void onNext(RegisterResponse response) {
+                    public void onNext(UpdateProfileResponse response) {
                         handler.onSuccess(response);
                     }
 
                 });
     }
 
-    public void updateProfile(QueryParams queryParams, RegistrationData data, final AsyncHandler<RegisterResponse> handler){
+    public void updateProfile(QueryParams queryParams, RegistrationData data, final AsyncHandler<UpdateProfileResponse> handler){
         apiService.getUpdateprofile(Endpoint.API_V2_UPDATE_PROFILE, "Bearer "+queryParams.getAccess_token(), QueryMapHelper.getMapUpdateProfile(queryParams),data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<RegisterResponse>() {
+                .subscribe(new DisposableObserver<UpdateProfileResponse>() {
                     @Override
                     public void onComplete() {}
 
@@ -838,7 +839,7 @@ public class AuthenticationAPI {
                     }
 
                     @Override
-                    public void onNext(RegisterResponse response) {
+                    public void onNext(UpdateProfileResponse response) {
                         handler.onSuccess(response);
                     }
 

@@ -16,7 +16,7 @@ public class LoginRadiusUltimateUserProfile {
  private String passwordExpirationDate;
 
  @SerializedName("Password")
- private Object password;
+ private String password;
  @SerializedName("EmailVerified")
 
  private Boolean emailVerified;
@@ -462,11 +462,11 @@ public class LoginRadiusUltimateUserProfile {
   this.previousUids = previousUids;
  }
 
- public Object getPassword() {
+ public String getPassword() {
   return password;
  }
 
- public void setPassword(Object password) {
+ public void setPassword(String password) {
   this.password = password;
  }
 

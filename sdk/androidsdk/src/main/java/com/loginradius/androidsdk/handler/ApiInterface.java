@@ -13,6 +13,7 @@ import com.loginradius.androidsdk.response.AccessTokenResponse;
 import com.loginradius.androidsdk.response.CheckAvailability;
 import com.loginradius.androidsdk.response.DeleteAccountResponse;
 import com.loginradius.androidsdk.response.PostResponse;
+import com.loginradius.androidsdk.response.UpdateProfileResponse;
 import com.loginradius.androidsdk.response.securityquestions.SecurityQuestionsResponse;
 import com.loginradius.androidsdk.response.LoginRadiusContactCursorResponse;
 import com.loginradius.androidsdk.response.PostAPIResponse;
@@ -327,10 +328,10 @@ public interface ApiInterface {
     Observable<PhoneResponse> getUpdatephone(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
 
     @PUT
-    Observable<RegisterResponse> getUpdateprofile(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
+    Observable<UpdateProfileResponse> getUpdateprofile(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body JsonObject data);
 
     @PUT
-    Observable<RegisterResponse> getUpdateprofile(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body RegistrationData data);
+    Observable<UpdateProfileResponse> getUpdateprofile(@Url String url, @Header("Authorization") String authHeader, @QueryMap Map<String, String> options, @Body RegistrationData data);
 
 
     @PUT

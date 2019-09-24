@@ -7,10 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.view.View;
 import android.widget.Button;
+
+import com.google.gson.JsonObject;
 import com.loginradius.androidsdk.activity.VkontakteNativeActivity;
+import com.loginradius.androidsdk.api.AuthenticationAPI;
+import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.helper.LoginRadiusSDK;
 import com.loginradius.androidsdk.helper.LoginRadiusSDK.Initialize;
-
+import com.loginradius.androidsdk.resource.QueryParams;
+import com.loginradius.androidsdk.response.UpdateProfileResponse;
 
 
 public class MainActivity extends AppCompatActivity {

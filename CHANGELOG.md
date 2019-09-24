@@ -1,5 +1,16 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/mobile-sdk-libraries/android-library/)
 
+### Version 4.5.1
+Released on **September 24,  2019** 
+
+##### Bug Fixes
+
+  - Fixed bug to retrieve Updated UserProfile After calling UpdateProfile API.
+
+##### Breaking Changes
+
+For developers migrating from v4.5.0, there will be some breaking changes in terms of SDK implementation. In this version, we have made some changes in the Response model in the "UPDATE USER PROFILE" method. For more details, please have a look [here](https://docs.loginradius.com/api/v2/mobile-libraries/android)
+
 ### Version 4.5.0
 Released on **Aug 30,  2019** 
 

@@ -29,6 +29,7 @@ import com.loginradius.androidsdk.handler.LoginDataHandler;
 import com.loginradius.androidsdk.helper.ErrorResponse;
 import com.loginradius.androidsdk.helper.LoginRadiusSDK;
 import com.loginradius.androidsdk.resource.QueryParams;
+import com.loginradius.androidsdk.response.UpdateProfileResponse;
 import com.loginradius.androidsdk.response.config.ConfigResponse;
 import com.loginradius.androidsdk.response.login.LoginData;
 import com.loginradius.androidsdk.response.register.RegisterResponse;
@@ -238,9 +239,9 @@ public class RequiredFieldsActivity extends AppCompatActivity {
             QueryParams queryParams = new QueryParams();
             queryParams.setAccess_token(response.getAccessToken());
             JsonObject jsonData = fieldUtil.getData(gtr,linearContainer);
-            api.updateProfile(queryParams, jsonData, new AsyncHandler<RegisterResponse>() {
+            api.updateProfile(queryParams, jsonData, new AsyncHandler<UpdateProfileResponse>() {
                 @Override
-                public void onSuccess(RegisterResponse data) {
+                public void onSuccess(UpdateProfileResponse data) {
                     if(fieldUtil.getPhone()!=null){
                         showMobileInfoDialog();
                         return;
