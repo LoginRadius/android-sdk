@@ -47,4 +47,3 @@ implementation 'com.google.android.gms:play-services-auth:16.0.0'
 implementation 'com.android.support:appcompat-v7:28.0.0'
 implementation 'com.vk:androidsdk:1.6.7'
 ```
-1`
