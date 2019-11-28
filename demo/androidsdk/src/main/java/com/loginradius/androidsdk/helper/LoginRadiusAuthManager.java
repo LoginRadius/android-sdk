@@ -269,6 +269,18 @@ public class LoginRadiusAuthManager {
 		providerHandler(Endpoint.API_V2_ACCESS_TOKEN_VKONTAKTE, params, handler);
 	}
 
+	/**
+	 * Send WeChat Code to LR server
+	 * @param code from Wechat
+	 * @param handler callback handler
+	 */
+	public static void getResponseWeChat(String code, final AsyncHandler<AccessTokenResponse> handler)
+	{
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("key",LoginRadiusSDK.getApiKey());
+		params.put("code",code);
+		providerHandler(Endpoint.API_V2_ACCESS_TOKEN_WECHAT, params, handler);
+	}
 
 	/**
 	 * Generic request

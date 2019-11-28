@@ -34,16 +34,3 @@ LoginRadius SDK is now available as AAR dependency. You can add it using File > 
 compile project(':androidsdk-release')
 
 ```
-
-If you prefer to use AAR dependency, then you've to add the following dependencies manually in build.gradle. The AAR file doesn't hold any information about external dependencies.
-
-```
-implementation 'com.facebook.android:facebook-login:[5,6)'
-implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-implementation 'com.google.code.gson:gson:2.8.5'
-implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
-implementation 'com.google.android.gms:play-services-auth:16.0.0'
-implementation 'com.android.support:appcompat-v7:28.0.0'
-implementation 'com.vk:androidsdk:1.6.7'
-```

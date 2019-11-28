@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.loginradius.androidsdk">
+    package="com.loginradius.androidsdk">
 
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true">
-        <activity android:name=".activity.FacebookNativeActivity"/>
-        <activity android:name=".activity.GoogleNativeActivity"/>
-        <activity android:name=".activity.WebViewActivity"/>
-        <activity android:name=".activity.VkontakteNativeActivity">
-        </activity>
-        <activity android:name=".activity.RequiredFieldsActivity">
-        </activity>
+        <activity android:name=".activity.WeChatNativeActivity"></activity>
+        <activity android:name=".activity.FacebookNativeActivity" />
+        <activity android:name=".activity.GoogleNativeActivity" />
+        <activity android:name=".activity.WebViewActivity" />
+        <activity android:name=".activity.VkontakteNativeActivity"></activity>
+        <activity android:name=".activity.RequiredFieldsActivity"></activity>
     </application>
 
 </manifest>

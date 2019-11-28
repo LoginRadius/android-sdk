@@ -1,5 +1,17 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/mobile-sdk-libraries/android-library/)
 
+### Version 4.6.0
+Released on **November 28,  2019**
+
+##### Enhancements
+
+  - Added new WeChat Native Login feature for Better Native User Experience.
+   
+##### Bug Fixes
+
+  - Fixed issue related to libraries reference with the SDK Gradle installation.
+
+
 ### Version 4.5.1
 Released on **September 24,  2019** 
 
