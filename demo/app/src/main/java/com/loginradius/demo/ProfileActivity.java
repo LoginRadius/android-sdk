@@ -30,7 +30,6 @@ import com.loginradius.androidsdk.api.ConfigurationAPI;
 import com.loginradius.androidsdk.api.SocialAPI;
 import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.helper.ErrorResponse;
-import com.loginradius.androidsdk.helper.LoginRadiusSDK;
 import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.resource.LoginUtil;
 import com.loginradius.androidsdk.resource.QueryParams;

@@ -11,7 +11,7 @@ import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.resource.SocialProviderConstant;
 
 /**
- * Updated by loginradius on 31/07/2019.
+ * Updated by LoginRadius on 16/06/2020.
  */
 
 public class LoginRadiusSDK {
@@ -98,7 +98,7 @@ public class LoginRadiusSDK {
         private boolean isRequired = true;
         private int fieldsColor;
         private Intent intent;
-        private static  String googleServerClientID;
+        private static  String googleServerClientID,socialAppName;
 
         public NativeLogin() {
             if(!LoginRadiusSDK.validate()){
@@ -120,6 +120,10 @@ public class LoginRadiusSDK {
         public void setGoogleServerClientID(String googleServerClientID) {
             NativeLogin.googleServerClientID = googleServerClientID;
 
+        }
+
+        public void setSocialAppName(String socialAppName){
+            NativeLogin.socialAppName =socialAppName;
         }
 
         private void startNativeLogin(Activity activity, int requestCode){
@@ -182,6 +186,10 @@ public class LoginRadiusSDK {
 
     public static String getGoogleServerClientID() {
         return NativeLogin.googleServerClientID;
+    }
+
+    public static String getSocialAppName() {
+        return NativeLogin.socialAppName;
     }
 
     public static class InitializeException extends RuntimeException{

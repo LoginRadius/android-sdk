@@ -13,7 +13,6 @@ import com.loginradius.androidsdk.response.UpdateResponse;
 import com.loginradius.androidsdk.response.login.LoginData;
 import com.loginradius.androidsdk.response.phonesendotp.PhoneSendOtpData;
 
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;

@@ -256,6 +256,23 @@ public class LoginRadiusAuthManager {
 		providerHandler(Endpoint.API_V2_ACCESS_TOKEN_GOOGLE, params, handler);
 	}
 
+
+	/**
+	 * Send Twitter Toekn to LR server
+	 * @param tw_access_token from Twitter
+	 * @param tw_token_secret from Twitter
+	 * @param handler callback handler
+	 */
+	public static void getResponseTwitter(String tw_access_token,String tw_token_secret, final AsyncHandler<AccessTokenResponse> handler)
+	{
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("key",LoginRadiusSDK.getApiKey());
+		params.put("tw_access_token",tw_access_token);
+		params.put("tw_token_secret",tw_token_secret);
+		providerHandler(Endpoint.API_V2_ACCESS_TOKEN_TWITTER, params, handler);
+	}
+
+
 	/**
 	 * Send Vkontakte token to LR server
 	 * @param vkontakteToken Token from Vkontakte
@@ -290,7 +307,9 @@ public class LoginRadiusAuthManager {
 	 */
 	public static void providerHandler(String uri, Map<String,String> params, final AsyncHandler<AccessTokenResponse> handler) {
 
-
+		if(LoginRadiusSDK.getSocialAppName()!="" && LoginRadiusSDK.getSocialAppName()!=null){
+			params.put("SocialAppName",LoginRadiusSDK.getSocialAppName());
+		}
 
 		ApiInterface apiService = RestRequest.getClient().create(ApiInterface.class);
 		apiService.getNativeLogin(uri,params).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())

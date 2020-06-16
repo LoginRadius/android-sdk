@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         init.setVerificationUrl(getString(R.string.verification_url));
         init.setResetPasswordUrl(getString(R.string.reset_password_url));
 
+
         listener = new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = null;

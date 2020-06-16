@@ -33,7 +33,6 @@ import com.loginradius.androidsdk.response.UpdateProfileResponse;
 import com.loginradius.androidsdk.response.config.ConfigResponse;
 import com.loginradius.androidsdk.response.login.LoginData;
 import com.loginradius.androidsdk.response.register.RegisterResponse;
-import com.loginradius.androidsdk.response.socialinterface.Provider;
 import com.loginradius.androidsdk.response.traditionalinterface.UserRegistration;
 import com.loginradius.androidsdk.response.userprofile.LoginRadiusUltimateUserProfile;
 import com.loginradius.androidsdk.ui.FieldViewUtil;
