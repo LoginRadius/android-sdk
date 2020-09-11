@@ -86,10 +86,15 @@ public class FacebookNativeActivity extends AppCompatActivity {
         LoginManager.getInstance().logOut();
         LoginRadiusAuthManager.nativeLogin = true;
         callManager = CallbackManager.Factory.create();
+
+        /*
+
         ProviderPermissions.resetPermissions();
         ProviderPermissions.addFbPermission(ProviderPermissions.FacebookPermission.USER_BASIC_INFO);
         ProviderPermissions.addFbPermission(ProviderPermissions.FacebookPermission.USER_BIRTHDAY);
         ProviderPermissions.addFbPermission(ProviderPermissions.FacebookPermission.USER_EMAIL);
+        */
+
         LoginRadiusAuthManager.setCallbackManager(LoginRadiusSDK.getApiKey(),callManager);
         showdialog();
     }

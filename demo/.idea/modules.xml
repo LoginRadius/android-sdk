@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android-sdk-master-demo.iml" filepath="$PROJECT_DIR$/.idea/modules/android-sdk-master-demo.iml" group="demo" />
       <module fileurl="file://$PROJECT_DIR$/androidsdk/androidsdk.iml" filepath="$PROJECT_DIR$/androidsdk/androidsdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/demo.iml" filepath="$PROJECT_DIR$/demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/androidsdk/demo-androidsdk.iml" filepath="$PROJECT_DIR$/.idea/modules/androidsdk/demo-androidsdk.iml" group="demo/androidsdk" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/demo-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/demo-app.iml" group="demo/app" />
     </modules>
   </component>
 </project>

@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                doLogin();
+                 doLogin();
             }
         });
 

@@ -192,12 +192,9 @@ public class LoginRadiusAuthManager {
 
 		});
 
-		if (ProviderPermissions.getFBPublishPermissions().length() == 0) {
-			LoginManager.getInstance().logInWithReadPermissions(activity, ProviderPermissions.getFBReadPermissionsArr());
-		}
-		else{
-			LoginManager.getInstance().logInWithPublishPermissions(activity,ProviderPermissions.getFBPublishPermissionsArr());
-		}
+
+		LoginManager.getInstance().logInWithReadPermissions(activity, LoginRadiusSDK.getFaceBookPermissions());
+
 
 	}
 

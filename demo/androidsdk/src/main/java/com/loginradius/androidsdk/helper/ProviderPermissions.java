@@ -96,8 +96,7 @@ public class ProviderPermissions
 	 */
 	public static String SCOPES = "oauth2:" + Scopes.PROFILE +
 			" https://www.googleapis.com/auth/userinfo.profile " +
-			"https://www.googleapis.com/auth/userinfo.email " +
-			"https://www.google.com/m8/feeds/";
+			"https://www.googleapis.com/auth/userinfo.email ";
 
 
 

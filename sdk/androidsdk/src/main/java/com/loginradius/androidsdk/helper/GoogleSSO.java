@@ -18,8 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.api.Scope;
+
 import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.response.AccessTokenResponse;
 
@@ -40,32 +39,33 @@ public class GoogleSSO extends Activity
 	{
 		super.onCreate(savedInstanceState);
    if(savedInstanceState == null) {
-   String feeds = ProviderPermissions.GoogleScopes.USER_FEEDS.id;
-   String photo = ProviderPermissions.GoogleScopes.USER_PHOTOS.id;
 
+	   GoogleSignInOptions gso =null;
 	   if (googleServerClientID == null){
-		   GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-				   .requestEmail().requestProfile()
-				   .requestScopes(new Scope(photo),new Scope(feeds),
-						   new Scope(Scopes.PLUS_LOGIN),
-						   new Scope(Scopes.PROFILE),
-						   new Scope(Scopes.EMAIL),
-						   new Scope(Scopes.PLUS_ME)).build();
-		   mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-	   } else if (googleServerClientID != null) {
-		   GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-				   .requestEmail().requestProfile().requestServerAuthCode(googleServerClientID,true)
-				   .requestScopes(new Scope(photo),new Scope(feeds),
-						   new Scope(Scopes.PLUS_LOGIN),
-					       new Scope(Scopes.PROFILE),
-						   new Scope(Scopes.EMAIL),
-		                   new Scope(Scopes.PLUS_ME)).build();
+		   if (LoginRadiusSDK.getGoogleScopes().length == 1) {
+			   gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+					   .requestEmail().requestProfile()
+					   .requestScopes(LoginRadiusSDK.getGoogleScopes()[0]).build();
+		   } else if (LoginRadiusSDK.getGoogleScopes().length > 1) {
+			   gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+					   .requestEmail().requestProfile()
+					   .requestScopes(LoginRadiusSDK.getGoogleScopes()[0], LoginRadiusSDK.getGoogleScopes()).build();
+		   }
+	   }else if (googleServerClientID != null) {
+		   if (LoginRadiusSDK.getGoogleScopes().length == 1) {
+			   gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+					   .requestEmail().requestProfile().requestServerAuthCode(googleServerClientID,true)
+					   .requestScopes(LoginRadiusSDK.getGoogleScopes()[0]).build();
+		   } else if (LoginRadiusSDK.getGoogleScopes().length > 1) {
+			   gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+					   .requestEmail().requestProfile().requestServerAuthCode(googleServerClientID,true)
+					   .requestScopes(LoginRadiusSDK.getGoogleScopes()[0], LoginRadiusSDK.getGoogleScopes()).build();
+		   }
 
-		   mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 	   }
-
-		   mGoogleSignInClient.signOut();
-		   SignIn();
+	   mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+	   mGoogleSignInClient.signOut();
+	   SignIn();
 
    }
 	}
