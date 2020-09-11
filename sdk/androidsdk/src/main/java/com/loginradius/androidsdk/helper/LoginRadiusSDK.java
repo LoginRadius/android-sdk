@@ -2,7 +2,10 @@ package com.loginradius.androidsdk.helper;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.Scope;
 import com.loginradius.androidsdk.activity.FacebookNativeActivity;
 import com.loginradius.androidsdk.activity.GoogleNativeActivity;
 import com.loginradius.androidsdk.activity.VkontakteNativeActivity;
@@ -10,8 +13,11 @@ import com.loginradius.androidsdk.activity.WebViewActivity;
 import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.resource.SocialProviderConstant;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 /**
- * Updated by LoginRadius on 16/06/2020.
+ * Updated by LoginRadius on 08/09/2020.
  */
 
 public class LoginRadiusSDK {
@@ -98,9 +104,15 @@ public class LoginRadiusSDK {
         private boolean isRequired = true;
         private int fieldsColor;
         private Intent intent;
+        private static Collection<String> facebookPermissions;
+        private static Scope[] googleScopes;
         private static  String googleServerClientID,socialAppName;
 
         public NativeLogin() {
+
+            this.googleScopes = new Scope[]{new Scope(Scopes.PROFILE),new Scope(Scopes.EMAIL)};
+            this.facebookPermissions = Arrays.asList("public_profile","email");
+
             if(!LoginRadiusSDK.validate()){
                 throw new LoginRadiusSDK.InitializeException();
             }
@@ -124,6 +136,28 @@ public class LoginRadiusSDK {
 
         public void setSocialAppName(String socialAppName){
             NativeLogin.socialAppName =socialAppName;
+        }
+
+
+        /**
+         * Change the scope to request on the user login. Use any of the permissions defined in https://developers.facebook.com/docs/facebook-login/android/permissions. Must be called before start().
+         * The permission "public_profile" and "email" is requested by default.
+         *
+         * @param permissions the permissions to add to the request
+         */
+
+        public void setPermissions(@NonNull Collection<String> permissions) {
+            this.facebookPermissions = permissions;
+        }
+
+        /**
+            * Change the scopes to request on the user login. Use any of the scopes defined in the com.google.android.gms.common.Scopes class. Must be called before start().
+            * The scope Scopes.PLUG_LOGIN and  Scopes.PROFILE is requested by default.
+            *
+            * @param scope the scope to add to the request
+        */
+        public void setGoogleScopes(@NonNull Scope... scope) {
+            this.googleScopes = scope;
         }
 
         private void startNativeLogin(Activity activity, int requestCode){
@@ -183,9 +217,17 @@ public class LoginRadiusSDK {
         }
     }
 
+    public static Collection<String> getFaceBookPermissions() {
+        return NativeLogin.facebookPermissions;
+    }
+
 
     public static String getGoogleServerClientID() {
         return NativeLogin.googleServerClientID;
+    }
+
+    public static Scope[] getGoogleScopes() {
+        return NativeLogin.googleScopes;
     }
 
     public static String getSocialAppName() {
