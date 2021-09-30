@@ -24,7 +24,7 @@ LoginRadius is now using Gradle.
 Use the following dependency in your project:
 
 ```
-implementation 'com.loginradius.android:androidsdk:4.8.0'
+implementation 'com.loginradius.android:androidsdk:4.9.0'
 
 ```
 
@@ -34,3 +34,40 @@ LoginRadius SDK is now available as AAR dependency. You can add it using File > 
 compile project(':androidsdk-release')
 
 ```
+
+## Initialize SDK
+
+Before using the SDK, you must initialize the SDK with the help of following code:
+
+
+
+```
+LoginRadiusSDK.Initialize init = new LoginRadiusSDK.Initialize();
+init.setApiKey("<your-api-key>");
+init.setSiteName("<your-site-name>");
+
+```
+
+## Referar Header (Optional)
+
+The referer header is used to determine the registration source from which the user has created the account and is synced in the  RegistrationSource field for the user profile. When initializing the SDK, you can optionally specify Referar Header.
+
+```
+init.setReferer("<Referar-Header-Value>");
+```
+
+
+
+## Custom Header (Optional)
+You can optionally specify Custom Header. This feature allow you to add the Custom header in an API request, you can add multiple headers using key ,value pair.
+
+
+```
+Map<String,String> customHeader=new HashMap<String, String>();
+customHeader.put("<Custom-Header-Name>", "<Custom-Header-Value>");
+customHeader.put("<Custom-Header-Name1>", "<Custom-Header-Value1>");
+init.setCustomHeader(customHeader);
+       
+```
+
+

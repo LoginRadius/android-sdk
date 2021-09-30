@@ -2,7 +2,7 @@ package com.loginradius.demo;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.multidex.MultiDex;
+import androidx.multidex.MultiDex;
 
 /**
  * Created by loginradius on 11-Oct-16.

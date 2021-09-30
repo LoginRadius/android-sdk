@@ -1,12 +1,20 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/mobile-sdk-libraries/android-library/)
 
 
+### Version 4.9.0
+Released on **September 30,  2021**
+
+##### Enhancements
+- Added Custom header feature
+- Added Referar Header Feature
+- Updated the Facebook Login SDK with the latest version 
+
 ### Version 4.8.0
 Released on **September 11,  2020**
 
 ##### Enhancements
 
-  - Added new Dynamic methods to changing Social Permission according to requirement for Google and Facebook Native Login.
+  - Added new Dyanamic methods to changing Social Permission according to requirement for Google and Facebook Native Login.
 
 
 ### Version 4.7.0

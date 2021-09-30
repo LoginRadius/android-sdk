@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -30,6 +30,7 @@ import com.loginradius.androidsdk.helper.LoginRadiusSDK;
 import com.loginradius.androidsdk.helper.LoginRadiusSDK.WebLogin;
 import com.loginradius.androidsdk.resource.LoginUtil;
 import com.loginradius.androidsdk.resource.QueryParams;
+import com.loginradius.androidsdk.resource.SocialProviderConstant;
 import com.loginradius.androidsdk.response.config.ConfigResponse;
 import com.loginradius.androidsdk.response.login.LoginData;
 import com.loginradius.androidsdk.response.socialinterface.Provider;
@@ -74,11 +75,11 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                 doLogin();
+               doLogin();
             }
         });
 
-        getSocialProviders();
+      getSocialProviders();
     }
 
     private void getSocialProviders() {

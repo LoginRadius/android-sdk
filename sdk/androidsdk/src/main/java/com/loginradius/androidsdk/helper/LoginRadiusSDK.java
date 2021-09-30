@@ -2,7 +2,7 @@ package com.loginradius.androidsdk.helper;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.Scope;
@@ -15,6 +15,8 @@ import com.loginradius.androidsdk.resource.SocialProviderConstant;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Updated by LoginRadius on 08/09/2020.
@@ -26,6 +28,9 @@ public class LoginRadiusSDK {
 
     public static class Initialize{
         private static String apiKey,siteName,verificationUrl,resetPasswordUrl;
+        private static String referer="Android";
+        private static Map<String,String> customHeader=new HashMap<String, String>();
+
 
         public void setApiKey(String apiKey) {
             Initialize.apiKey = apiKey;
@@ -42,6 +47,17 @@ public class LoginRadiusSDK {
         public void setResetPasswordUrl(String resetPasswordUrl) {
             Initialize.resetPasswordUrl = resetPasswordUrl;
         }
+
+
+        public void setCustomHeader(Map<String,String> customHeader) {
+            Initialize.customHeader = customHeader;
+        }
+
+
+        public  void setReferer(String referer) {
+            Initialize.referer = referer;
+        }
+
     }
 
     public static class WebLogin{
@@ -200,7 +216,14 @@ public class LoginRadiusSDK {
         return Initialize.siteName;
     }
 
+    public  static String getReferer() {
 
+        return Initialize.referer;
+    }
+    public static  Map<String,String> getCustomHeader() {
+
+        return Initialize.customHeader;
+    }
     public static String getVerificationUrl() {
         if(Initialize.verificationUrl!=null && Initialize.verificationUrl.length() > 0){
             return Initialize.verificationUrl;

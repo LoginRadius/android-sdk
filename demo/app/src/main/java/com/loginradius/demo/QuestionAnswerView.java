@@ -3,7 +3,7 @@ package com.loginradius.demo;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build.VERSION_CODES;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.EditText;
 import android.widget.LinearLayout;

@@ -499,6 +499,9 @@ public class AuthenticationAPI {
         Map<String,String> headers = new HashMap<>();
         headers.put("Content-Type","application/json");
         headers.put("X-LoginRadius-Sott",sott);
+        if(!LoginRadiusSDK.getReferer().isEmpty()){
+            headers.put("Referer",LoginRadiusSDK.getReferer());
+        }
         apiService.getTraditionalRegister(Endpoint.API_V2_REGISTER,headers, QueryMapHelper.getMapRegistration(queryParams),registrationData).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<RegisterResponse>() {
                     @Override
@@ -523,6 +526,9 @@ public class AuthenticationAPI {
         Map<String,String> headers = new HashMap<>();
         headers.put("Content-Type","application/json");
         headers.put("X-LoginRadius-Sott",sott);
+        if(!LoginRadiusSDK.getReferer().isEmpty()){
+            headers.put("Referer",LoginRadiusSDK.getReferer());
+        }
         apiService.getTraditionalRegister(Endpoint.API_V2_REGISTER,headers, QueryMapHelper.getMapRegistration(queryParams),data).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<RegisterResponse>() {
                     @Override
