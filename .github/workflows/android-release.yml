@@ -21,7 +21,7 @@ jobs:
           gpg_private_key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
     - name: Build with Maven
-      run: mvn -B verify --file sdk/androidsdk/build.gradle
+      run: mvn -B verify --file android-sdk/sdk/androidsdk/build.gradle
       
    
     - name: Set up Apache Maven Central
@@ -35,7 +35,7 @@ jobs:
 
 
     - name: Publish to Apache Maven Central
-      run: mvn --batch-mode deploy --file sdk/androidsdk/build.gradle
+      run: mvn --batch-mode deploy --file android-sdk/sdk/androidsdk/build.gradle
       env:
         MAVEN_USERNAME: ${{secrets.MAVEN_USERNAME}}
         MAVEN_CENTRAL_TOKEN: ${{secrets.MAVEN_PASSWORD}}
