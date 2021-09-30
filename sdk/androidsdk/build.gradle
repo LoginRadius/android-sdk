@@ -51,3 +51,5 @@ dependencies {
     api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.4.0'
     api 'androidx.appcompat:appcompat:1.0.0'
 }
+apply from: 'publish_maven.gradle'
+
