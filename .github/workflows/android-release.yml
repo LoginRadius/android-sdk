@@ -23,6 +23,8 @@ jobs:
           passphrase: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      - name: Generate Release AAR
+        run: ./gradlew assembleRelease
       - name: Publish package
         run: gradle publish
         working-directory: sdk/androidsdk
