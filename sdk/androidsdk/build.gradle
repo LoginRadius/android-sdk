@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-
+apply plugin:'maven'
 android {
     compileSdkVersion 29
 
@@ -11,7 +11,19 @@ android {
         multiDexEnabled true
 
     }
+publishing {
+  repositories {
+    maven {
+      name = "OSSRH"
+      url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+      credentials {
+        username = System.getenv("MAVEN_USERNAME")
+        password = System.getenv("MAVEN_PASSWORD")
+      }
+    }
 
+  }
+}
     buildTypes {
         debug {
             minifyEnabled false
@@ -52,5 +64,5 @@ dependencies {
     api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.4.0'
     api 'androidx.appcompat:appcompat:1.0.0'
 }
-apply from: 'publish_maven.gradle'
+
 
