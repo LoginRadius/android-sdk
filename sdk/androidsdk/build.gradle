@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-
+apply plugin: 'maven-publish'
 android {
     compileSdkVersion 29
 
@@ -38,7 +38,20 @@ android {
     }
 
 }
+publishing {
+  
+  repositories {
+    maven {
+      name = "OSSRH"
+      url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+      credentials {
+        username = System.getenv("MAVEN_USERNAME")
+        password = System.getenv("MAVEN_PASSWORD")
+      }
+    }
 
+  }
+}
 
 dependencies {
     api 'com.facebook.android:facebook-login:11.2.0'
@@ -51,5 +64,4 @@ dependencies {
     api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.4.0'
     api 'androidx.appcompat:appcompat:1.0.0'
 }
-apply from: 'publish_maven.gradle'
 
