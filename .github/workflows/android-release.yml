@@ -20,10 +20,8 @@ jobs:
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
 
       - name: Publish package
-        run: gradle -Pversion= 4.9.0 build publish
+        run: gradle  build 
         working-directory: sdk/androidsdk
-        env:
-         MAVEN_USERNAME: ${{secrets.MAVEN_USERNAME}}
-         MAVEN_CENTRAL_TOKEN: ${{secrets.MAVEN_PASSWORD}}
+        
 
   
