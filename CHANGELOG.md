@@ -1,7 +1,7 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/mobile-sdk-libraries/android-library/)
 
 
-### Version 4.9.0
+### Version 4.9.1
 Released on **October 01,  2021**
 
 ##### Enhancements

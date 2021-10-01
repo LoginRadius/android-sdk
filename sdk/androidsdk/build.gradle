@@ -7,7 +7,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 29
         versionCode 1
-        versionName "4.9.0"
+        versionName "4.9.1"
         multiDexEnabled true
 
     }
@@ -42,9 +42,9 @@ android {
 
 dependencies {
     api 'com.facebook.android:facebook-login:11.2.0'
-    api 'com.squareup.retrofit2:retrofit:2.4.0'
+    api 'com.squareup.retrofit2:retrofit:2.9.0'
     api 'com.google.code.gson:gson:2.8.5'
-    api 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    api 'io.reactivex.rxjava2:rxandroid:2.1.1'
     api 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     api 'com.google.android.gms:play-services-auth:16.0.0'
     api 'com.vk:androidsdk:1.6.7'
