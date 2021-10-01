@@ -41,7 +41,9 @@ android {
     }
 
 }
-
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.4'
+}
 task androidSourcesJar(type: Jar) {
     archiveClassifier.set('sources')
     from android.sourceSets.main.java.srcDirs
