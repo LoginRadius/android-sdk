@@ -7,7 +7,8 @@ Released on **October 01,  2021**
 ##### Enhancements
 - Added Custom header feature
 - Added Referar Header Feature
-- Updated the Facebook Login SDK with the latest version 
+- Updated the Facebook Login SDK with version 11.2.0
+
 
 ### Version 4.8.0
 Released on **September 11,  2020**
