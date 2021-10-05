@@ -48,12 +48,12 @@ init.setSiteName("<your-site-name>");
 
 ```
 
-## Referar Header (Optional)
+## Referer Header (Optional)
 
-The referer header is used to determine the registration source from which the user has created the account and is synced in the  RegistrationSource field for the user profile. When initializing the SDK, you can optionally specify Referar Header.
+The referer header is used to determine the registration source from which the user has created the account and is synced in the  RegistrationSource field for the user profile. When initializing the SDK, you can optionally specify Referer Header.
 
 ```
-init.setReferer("<Referar-Header-Value>");
+init.setReferer("<Referer-Header-Value>");
 ```
 
 
