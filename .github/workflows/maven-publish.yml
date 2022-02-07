@@ -17,14 +17,9 @@ jobs:
          distribution: adopt
          java-version: 11
 
-      # Gradle wrapper
-      - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
-        
-
         # Builds the release artifacts of the library
       - name: Release build
-        run: ./gradlew :androidsdk:assembleRelease
+        run: ./demo/gradlew :androidsdk:assembleRelease
 
         # Runs upload, and then closes & releases the repository
       - name: Publish to MavenCentral
