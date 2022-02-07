@@ -46,7 +46,6 @@ public class Endpoint {
 	public static final String API_V2_PHOTO = "api/v2/photo";
 	public static final String API_V2_POST = "api/v2/post";
 	public static final String API_V2_STATUS = "api/v2/status";
-	public static final String API_V2_SOCIAL_USERPROFILE = "api/v2/userprofile";
 	public static final String API_V2_USERPROFILE = "identity/v2/auth/account";
 	public static final String API_V2_VIDEO = "api/v2/video";
 	public static final String API_V2_ACCESS_TOKEN_FB = "api/v2/access_token/facebook";

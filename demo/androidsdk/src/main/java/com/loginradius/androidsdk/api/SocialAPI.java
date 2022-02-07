@@ -300,24 +300,6 @@ public class SocialAPI {
 
 
 
-    public void getUserProfile(QueryParams queryParams,final AsyncHandler<LoginRadiusUltimateUserProfile> handler) {
-        apiService.getUserProfile(Endpoint.API_V2_SOCIAL_USERPROFILE,QueryMapHelper.getMapUserProfile(queryParams)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<LoginRadiusUltimateUserProfile>() {
-                    @Override
-                    public void onComplete() {}
-
-                    @Override
-                    public void onError(Throwable e) {
-                        ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
-                        handler.onFailure(exceptionResponse.t, exceptionResponse.message);
-                    }
-
-                    @Override
-                    public void onNext(LoginRadiusUltimateUserProfile response) {
-                        handler.onSuccess(response);
-                    }
-
-                });}
 
     public void getVideo(QueryParams queryParams,final AsyncHandler<LoginRadiusVideo[]> handler) {
         apiService.getVideo(Endpoint.API_V2_VIDEO,queryParams.getAccess_token()).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())

@@ -82,10 +82,6 @@ public interface ApiInterface {
 
 
     @GET
-    Observable<LoginRadiusUltimateUserProfile> getUserProfile(@Url String url, @QueryMap Map<String,String> options);
-
-
-    @GET
     Observable<LoginRadiusAlbum[]> getAlbum(@Url String url, @Query("access_token") String access_token);
 
 

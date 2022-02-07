@@ -24,7 +24,7 @@ LoginRadius is now using Gradle.
 Use the following dependency in your project:
 
 ```
-implementation 'com.loginradius.android:androidsdk:4.9.1'
+implementation 'com.loginradius.android:androidsdk:4.9.2'
 
 ```
 
@@ -66,8 +66,6 @@ You can optionally specify Custom Header. This feature allow you to add the Cust
 Map<String,String> customHeader=new HashMap<String, String>();
 customHeader.put("<Custom-Header-Name>", "<Custom-Header-Value>");
 customHeader.put("<Custom-Header-Name1>", "<Custom-Header-Value1>");
-customHeader.put("<Custom-Header-Name1>", "<Custom-Header-Value1>");
-
 init.setCustomHeader(customHeader);
        
 ```

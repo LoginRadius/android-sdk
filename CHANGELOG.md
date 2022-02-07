@@ -1,6 +1,19 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/mobile-sdk-libraries/android-library/)
 
 
+### Version 4.9.2
+Released on **February 07,  2022**
+
+##### Removed (Deprecated) API:
+
+- `getUserProfile` (Social User Profile EndPoint)
+
+In this Android SDK version, we have **removed/deprecated** the `getUserProfile` method (Social User Profile  EndPoint ).
+This API endpoint is also deprecated from the LoginRadius backend soon, so we will suggest please use  `readAllUserProfile` method instead of `getUserProfile` method.
+
+To know more about the Implementation of this API please refer to this [document](https://www.loginradius.com/docs/libraries/mobile-sdk-libraries/android-library/#read-complete-user-profile).
+
+
 ### Version 4.9.1
 Released on **October 01,  2021**
 
@@ -8,7 +21,6 @@ Released on **October 01,  2021**
 - Added Custom header feature
 - Added Referer Header Feature
 - Updated the Facebook Login SDK with version 11.2.0
-
 
 ### Version 4.8.0
 Released on **September 11,  2020**

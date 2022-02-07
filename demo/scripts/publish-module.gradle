@@ -1,0 +1,72 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    if (project.plugins.findPlugin("com.android.library")) {
+        from android.sourceSets.main.java.srcDirs
+    }
+}
+
+artifacts {
+    archives androidSourcesJar
+}
+
+group = PUBLISH_GROUP_ID
+version = PUBLISH_VERSION
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+
+                groupId PUBLISH_GROUP_ID
+                artifactId PUBLISH_ARTIFACT_ID
+                version PUBLISH_VERSION
+
+                if (project.plugins.findPlugin("com.android.library")) {
+                    from components.release
+                } else {
+                    from components.java
+                }
+
+                artifact androidSourcesJar
+                
+              pom {
+                    name = PUBLISH_ARTIFACT_ID
+                    description = 'LoginRadius Android Library'
+                    url = 'https://github.com/LoginRadius/android-sdk/'
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'http://www.opensource.org/licenses/mit-license.php'
+                        }
+                    }
+                    developers {
+                        developer {
+                          id = 'support'
+                          name = 'LoginRadius Support'
+                          email = 'support@loginradius.com'
+                        }
+                    }
+
+                scm {
+                        connection = 'scm:git:github.com/LoginRadius/android-sdk.git'
+                        developerConnection = 'scm:git:ssh://github.com/LoginRadius/android-sdk.git'
+                        url = 'https://github.com/LoginRadius/android-sdk/tree/main'
+                    }
+                }
+            }
+        }
+    }
+}
+signing {
+    useInMemoryPgpKeys(
+            rootProject.ext["signing.keyId"],
+            rootProject.ext["signing.key"],
+            rootProject.ext["signing.password"]
+    )
+    sign publishing.publications
+}
+
