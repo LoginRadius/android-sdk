@@ -17,6 +17,11 @@ jobs:
          distribution: adopt
          java-version: 11
 
+      # Gradle wrapper
+      - name: Gradle wrapper
+        run: gradle wrapper
+        
+
         # Builds the release artifacts of the library
       - name: Release build
         run: ./gradlew :androidsdk:assembleRelease
