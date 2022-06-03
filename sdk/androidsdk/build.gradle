@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 ext {
     PUBLISH_GROUP_ID = "com.loginradius.androidsdk"
     PUBLISH_ARTIFACT_ID = 'androidsdk'
-    PUBLISH_VERSION = "4.9.2"
+    PUBLISH_VERSION = "5.0.0"
 }
 
 if(project.file("${rootDir}/scripts/publish-module.gradle").exists()){
@@ -18,7 +18,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 29
         versionCode 1
-        versionName "4.9.2"
+        versionName "5.0.0"
         multiDexEnabled true
 
     }
@@ -52,7 +52,7 @@ android {
 
 
 dependencies {
-    api 'com.facebook.android:facebook-login:11.2.0'
+    api 'com.facebook.android:facebook-login:13.2.0'
     api 'com.squareup.retrofit2:retrofit:2.9.0'
     api 'com.google.code.gson:gson:2.8.5'
     api 'io.reactivex.rxjava2:rxandroid:2.1.1'

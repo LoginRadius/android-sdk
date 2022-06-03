@@ -1,5 +1,22 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/mobile-sdk-libraries/android-library/)
 
+### Version 5.0.0
+Released on **June 03,  2022**
+
+##### Enhancements
+
+
+- Added a Security Improvement in the Android SDK for Storing secure information like a key, token, and secret in the [Android Keystore system](https://developer.android.com/training/articles/keystore). The Android Keystore system lets you store cryptographic keys in a container to make it more difficult to extract from the device.
+
+- The LoginRadius SDK provides the public helper functions `encryptData()` & `decryptData()` for the Secure Keystore encryption Process, these functions will be used for the encryption and decryption of sensitive information that will be stored inside the project. 
+
+> For Example:- Customers can able store any sensitive information in the above method by adding an additional security layer to make it difficult to extract data from the device.
+
+- Updated Facebook SDK with the latest version.
+
+#### Breaking Changes
+For developers migrating from v4.9.2, there will be 1 minor breaking change in terms of SDK implementation.<br>
+In this version, a Facebook Client Token will be required while implementing facebook native login, for more info please refer to our implementation [guide](https://www.loginradius.com/docs/libraries/mobile-sdk-libraries/android-library/#advancedoptions11).
 
 ### Version 4.9.2
 Released on **February 07,  2022**

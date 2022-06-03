@@ -2,6 +2,8 @@ package com.loginradius.androidsdk.helper;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.Scopes;
@@ -27,17 +29,31 @@ public class LoginRadiusSDK {
     private LoginRadiusSDK() {}
 
     public static class Initialize{
+
         private static String apiKey,siteName,verificationUrl,resetPasswordUrl;
+        private static boolean isEncryptionEnabled;
         private static String referer="Android";
         private static Map<String,String> customHeader=new HashMap<String, String>();
 
 
+
         public void setApiKey(String apiKey) {
-            Initialize.apiKey = apiKey;
+            if (LoginRadiusSDK.getIsEncryption() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Initialize.apiKey = LoginRadiusEncryptor.encryptData(apiKey);
+            }else{
+                Initialize.apiKey=apiKey;
+            }
+
         }
 
-        public void setSiteName(String siteName) {
-            Initialize.siteName = siteName;
+        public void setSiteName(String siteName)
+        {
+            if (LoginRadiusSDK.getIsEncryption() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Initialize.siteName = LoginRadiusEncryptor.encryptData(siteName);
+            }
+            else{
+                Initialize.siteName = siteName;
+            }
         }
 
         public void setVerificationUrl(String verificationUrl) {
@@ -56,6 +72,10 @@ public class LoginRadiusSDK {
 
         public  void setReferer(String referer) {
             Initialize.referer = referer;
+        }
+
+        public  void setIsEncryption(boolean isEncryptionEnabled) {
+            Initialize.isEncryptionEnabled = isEncryptionEnabled;
         }
 
     }
@@ -167,11 +187,11 @@ public class LoginRadiusSDK {
         }
 
         /**
-            * Change the scopes to request on the user login. Use any of the scopes defined in the com.google.android.gms.common.Scopes class. Must be called before start().
-            * The scope Scopes.PLUG_LOGIN and  Scopes.PROFILE is requested by default.
-            *
-            * @param scope the scope to add to the request
-        */
+         * Change the scopes to request on the user login. Use any of the scopes defined in the com.google.android.gms.common.Scopes class. Must be called before start().
+         * The scope Scopes.PLUG_LOGIN and  Scopes.PROFILE is requested by default.
+         *
+         * @param scope the scope to add to the request
+         */
         public void setGoogleScopes(@NonNull Scope... scope) {
             this.googleScopes = scope;
         }
@@ -209,17 +229,32 @@ public class LoginRadiusSDK {
     }
 
     public static String getApiKey() {
-        return Initialize.apiKey;
+        if (LoginRadiusSDK.getIsEncryption() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+           return LoginRadiusEncryptor.decryptData(Initialize.apiKey);
+        }
+        else{
+            return Initialize.apiKey;
+        }
     }
 
     public static String getSiteName() {
-        return Initialize.siteName;
+        if (LoginRadiusSDK.getIsEncryption() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return LoginRadiusEncryptor.decryptData( Initialize.siteName);
+        }
+        else{
+            return Initialize.siteName;
+        }
     }
 
     public  static String getReferer() {
 
         return Initialize.referer;
     }
+
+    public  static boolean getIsEncryption() {
+        return Initialize.isEncryptionEnabled;
+    }
+
     public static  Map<String,String> getCustomHeader() {
 
         return Initialize.customHeader;
