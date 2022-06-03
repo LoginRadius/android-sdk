@@ -5,6 +5,7 @@
     <string name="verification_url">https://auth.lrcontent.com/mobile/verification/index.html</string>
     <string name="reset_password_url">https://auth.lrcontent.com/mobile/verification/index.html</string>
     <string name="email_template">your-email-Template</string>
-    <string name="app_id">your facebook app_id</string>
+    <string name="facebook_app_id">your_facebook app_id</string>
+    <string name="facebook_client_token">your_facebook_client_token</string>
     <string name="sms_template">your-sms-template</string>
 </resources>

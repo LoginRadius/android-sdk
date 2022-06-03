@@ -1,7 +1,7 @@
 // Create variables with empty default values
 ext["ossrhUsername"] = ''
 ext["ossrhPassword"] = ''
-ext["sonatypeStagingProfileId"] = 'jj'
+ext["sonatypeStagingProfileId"] = ''
 ext["signing.keyId"] = ''
 ext["signing.password"] = ''
 ext["signing.key"] = ''
