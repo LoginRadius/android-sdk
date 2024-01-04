@@ -24,7 +24,7 @@ LoginRadius is now using Gradle.
 Use the following dependency in your project:
 
 ```
-implementation 'com.loginradius.android:androidsdk:5.0.0'
+implementation 'com.loginradius.android:androidsdk:5.1.0'
 
 ```
 
@@ -111,7 +111,7 @@ LoginRadius provides key store encryption for sensitive information, you can lev
 
 
 #### <b>Encryption</b>
-To encrypt the sensitive information using the helper function `encryptData()` please use the following code 
+To encrypt the sensitive information using the helper function `encryptData()` please use the following code
 ```java
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
     String dataToBeEncrypted="<data-to-be-encrypted>";

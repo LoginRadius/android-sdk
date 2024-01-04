@@ -3,7 +3,7 @@ apply plugin: 'com.android.library'
 ext {
     PUBLISH_GROUP_ID = "com.loginradius.androidsdk"
     PUBLISH_ARTIFACT_ID = 'androidsdk'
-    PUBLISH_VERSION = "5.0.0"
+    PUBLISH_VERSION = "5.1.0"
 }
 
 if(project.file("${rootDir}/scripts/publish-module.gradle").exists()){
@@ -12,13 +12,13 @@ if(project.file("${rootDir}/scripts/publish-module.gradle").exists()){
 
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 29
+        targetSdkVersion 33
         versionCode 1
-        versionName "5.0.0"
+        versionName "5.1.0"
         multiDexEnabled true
 
     }
@@ -57,8 +57,9 @@ dependencies {
     api 'com.google.code.gson:gson:2.8.5'
     api 'io.reactivex.rxjava2:rxandroid:2.1.1'
     api 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
-    api 'com.google.android.gms:play-services-auth:16.0.0'
     api 'com.vk:androidsdk:1.6.7'
     api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.4.0'
     api 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
+    implementation 'androidx.biometric:biometric:1.1.0'
 }
