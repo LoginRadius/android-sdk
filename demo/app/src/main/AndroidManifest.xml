@@ -13,7 +13,7 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".multidexclass"
@@ -26,8 +26,8 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-        <meta-data 
-            android:name="com.facebook.sdk.ClientToken" 
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token"/>
 
         <activity android:name="com.loginradius.androidsdk.helper.GoogleSSO" />
@@ -38,7 +38,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -71,7 +72,8 @@
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".DeepLinkVerifyActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
