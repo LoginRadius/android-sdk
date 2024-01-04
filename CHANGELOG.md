@@ -1,7 +1,7 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/mobile-sdk-libraries/android-library/)
 
 ### Version 5.1.0
-Released on **December 28, 2023**
+Released on **January 04, 2024**
 
 ##### Enhancements
 Added Biometric Authentication helper class in the LoginRadius SDK to authenticate using Face and Fingerprint. For detailed information on Biometric Authentication, please refer to the following document:
