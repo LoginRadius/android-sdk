@@ -572,4 +572,11 @@ public class QueryMapHelper {
         params.put("session_token",queryParams);
         return params;
     }
+    public static Map<String,String> getMFAPushVerificationMAp(QueryParams queryParams){
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("apikey", queryParams.getApiKey ());
+        params.put ( "secondfactorauthenticationtoken",queryParams.getSecondfactorauthenticationtoken () );
+        return params;
+    }
+
 }

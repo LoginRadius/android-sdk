@@ -13,8 +13,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 public class RestRequest {
 
 
-	public static String API_V2_BASE_URL = "https://api.loginradius.com/";
-	public static String API_V2_BASE_URL_CONFIG = "https://config.lrcontent.com/";
+      public static String API_V2_BASE_URL = "https://api.loginradius.com/";
+       public static String API_V2_BASE_URL_CONFIG = "https://config.lrcontent.com/";
 	public static Retrofit retrofit = null;
 	public static Retrofit retrofitconfig = null;
 	public static OkHttpClient.Builder okHttpBuilder=new OkHttpClient.Builder();

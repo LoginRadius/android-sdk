@@ -73,5 +73,15 @@
         android:textAllCaps="false"
         android:text="Fingerprint / Face"/>
 
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/register_device"
+        android:layout_below="@id/face_finger"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="15dp"
+        android:textAllCaps="false"
+        android:text="Register Device"/>
+
 
 </RelativeLayout>

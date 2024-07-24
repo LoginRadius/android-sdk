@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:padding="50dp"
+    tools:ignore="MissingDefaultResource">
+
+    <TextView
+
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Are you trying to sign in?"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/emailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp"
+        android:text="Name: "
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/NameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emailTextView"
+        android:layout_marginTop="12dp"
+        android:textColor="#1B1919"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/NameTextView"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:text="Browser: "
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/deviceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/device"
+        android:layout_marginTop="12dp"
+        android:textColor="#1B1919"
+        android:textSize="16sp" />
+
+
+    <TextView
+        android:id="@+id/location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/deviceTextView"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:text="Near:"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/locationtextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/location"
+        android:layout_marginTop="12dp"
+        android:textColor="#1B1919"
+        android:textSize="16sp" />
+
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/locationtextview"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:text="Time: "
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/timetextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/time"
+        android:layout_marginTop="12dp"
+        android:textColor="#1B1919"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/noButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timetextview"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="32dp"
+        android:background="@color/white"
+        android:padding="8dp"
+        android:text="No,don't allow"
+        android:textColor="@color/vk_black"
+        android:textSize="15sp" />
+
+    <Button
+        android:id="@+id/yesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timetextview"
+        android:layout_marginLeft="22dp"
+        android:layout_marginTop="32dp"
+        android:layout_toRightOf="@id/noButton"
+        android:background="@color/white"
+        android:padding="8dp"
+        android:text="Yes, it's me"
+        android:textColor="@color/vk_black"
+        android:textSize="15sp" />
+
+
+</RelativeLayout>

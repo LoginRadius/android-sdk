@@ -15,6 +15,7 @@ import java.util.concurrent.Executor;
 
 public class BiometricManagerClass extends AppCompatActivity {
 
+
     public interface BiometricCallback {
         void onBiometricAuthenticationSuccess ( );
         void onBiometricAuthenticationFailure( );
@@ -35,7 +36,8 @@ public class BiometricManagerClass extends AppCompatActivity {
         this.context = context;
     }
 
-    public void showBiometricPrompt (BiometricPromptBuilder biometricPromptBuilder, BiometricCallback callback ) {
+    public void showBiometricPrompt ( BiometricPromptBuilder biometricPromptBuilder, BiometricCallback callback ) {
+
         String title = ((biometricPromptBuilder.getTitle () != null &&  !biometricPromptBuilder.getTitle ().trim().isEmpty()) ? biometricPromptBuilder.getTitle() : "Biometric Login");
         String subTitle = ((biometricPromptBuilder.getSubtitle () != null &&  !biometricPromptBuilder.getSubtitle ().trim().isEmpty()) ? biometricPromptBuilder.getSubtitle() : "Log in using Biometric Credential");
         String negativeButtonName = ((biometricPromptBuilder.getNegativeButtonName () != null &&  !biometricPromptBuilder.getNegativeButtonName ().trim().isEmpty()) ? biometricPromptBuilder.getNegativeButtonName(): "Cancel");
