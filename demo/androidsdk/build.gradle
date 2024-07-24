@@ -27,13 +27,11 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-            //useProguard false
-           // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+           
         }
         release {
             minifyEnabled false
-            //useProguard false
-            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+          
         }
     }
     compileOptions {
