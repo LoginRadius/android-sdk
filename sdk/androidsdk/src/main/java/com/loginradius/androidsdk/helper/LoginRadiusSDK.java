@@ -27,13 +27,14 @@ import java.util.Map;
 public class LoginRadiusSDK {
 
     private LoginRadiusSDK() {}
-
     public static class Initialize{
 
         private static String apiKey,siteName,verificationUrl,resetPasswordUrl;
         private static boolean isEncryptionEnabled;
         private static String referer="Android";
         private static Map<String,String> customHeader=new HashMap<String, String>();
+
+
 
 
 

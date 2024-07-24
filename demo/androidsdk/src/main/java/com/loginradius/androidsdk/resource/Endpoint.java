@@ -81,6 +81,7 @@ public class Endpoint {
 	public static final String API_V2_PIN_RESET_USERNAME_SECURITY_QUESTION="identity/v2/auth/pin/reset/securityAnswer/username";
 	public static final String API_V2_PIN_RESET_PHONE_SECURITY_QUESTION="identity/v2/auth/pin/reset/securityAnswer/phone";
 	public static final String API_V2_PIN_CHANGE_BY_ACCESS_TOKEN="identity/v2/auth/pin/change";
+	public static final String  API_V2_MFA_VERIFICATION="identity/v2/auth/login/2fa/verification/push";
 
 	public static final String SHAREDPREFERENCEFILEKEY = "com.loginradius.loginradiusraas.PREFERENCE_FILE_KEY";
 	public static final String webviewlogin=".hub.loginradius.com/RequestHandlor.aspx";
