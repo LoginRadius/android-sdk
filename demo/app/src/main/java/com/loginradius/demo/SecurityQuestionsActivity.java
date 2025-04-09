@@ -135,7 +135,7 @@ public class SecurityQuestionsActivity extends AppCompatActivity implements OnCl
                     QuestionAnswerView qaView = (QuestionAnswerView)lvQuestions.getChildAt(i);
                     String answer = qaView.getAnswer();
                     if(answer.length() == 0){
-                        NotifyToastUtil.showNotify(SecurityQuestionsActivity.this,"Please fill all security answers");
+                        NotifyToastUtil.showNotify(SecurityQuestionsActivity.this,"Please fill all security answers.");
                         return;
                     }else{
                         arrQuestionId[i] = securityQuestionsResponse[i].getQuestionId();

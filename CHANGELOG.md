@@ -1,8 +1,15 @@
 > **LoginRadius Android SDK Change Log** provides information regarding what has changed, more specifically what changes, improvements and bug fix has been made to the SDK. For more details please refer to the [LoginRadius API Documention](https://www.loginradius.com/docs/api/v2/deployment/mobile-sdk-libraries/android-library/)
 
+### Version 5.2.1
+Released on ** April 09, 2025**
+
+##### Enhancements
+
+- Improved error and success messages.
+- Updated the Google Sign-In and authentication services with version 21.3.0
 
 ### Version 5.2.0
-Released on **July 24, 2024**
+Released on ** June 06, 2024**
 
 ##### Enhancements
 Added MFA push notification functionality in the SDK which allow to  register the device by scanning the QR code to register the device. Upon successful registration, LoginRadius can issue an authentication challenge to the registered device. When the consumer receives the push notification, they simply need to tap 'allow' or 'deny' to respond.

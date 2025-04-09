@@ -129,8 +129,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onBiometricAuthenticationFailure () {
                                         // Handle authentication failure.
-                                        Toast.makeText ( MainActivity.this, "Authentication failed!", Toast.LENGTH_SHORT ).show ( );
-                                    }
+                                        Toast.makeText ( MainActivity.this, "Authentication Failed!", Toast.LENGTH_SHORT ).show ( );                                    }
 
                                     @Override
                                     public void onBiometricAuthenticationError ( ErrorResponse error ) {

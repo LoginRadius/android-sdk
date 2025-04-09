@@ -202,7 +202,7 @@ public class QRScanner {
 
             } else {
 
-                Toast.makeText(context, "Please Provide valid parameters to sign", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Please Provide valid parameters to Sign.", Toast.LENGTH_LONG).show();
 
             }
         } catch (Exception e) {

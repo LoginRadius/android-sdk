@@ -295,7 +295,7 @@ public class LoginRadiusSDK {
 
     public static class InitializeException extends RuntimeException{
         public InitializeException() {
-            super("LoginRadius SDK not initialized properly");
+            super("LoginRadius SDK is not initialized properly");
         }
     }
 }
