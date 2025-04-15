@@ -78,10 +78,10 @@ public class MFAPushHandler extends AppCompatActivity implements FcmUtils.FcmTok
 
  SharedPreferences sh = context.getSharedPreferences("Message", Context.MODE_PRIVATE);
   String message = sh.getString("message", "");
-  String displayMessage  = !TextUtils.isEmpty(message)? message : "Registration Successful";
+  String displayMessage  = !TextUtils.isEmpty(message)? message : "Registration Successful.";
 
-  Toast.makeText ( context, displayMessage, Toast.LENGTH_LONG ).show ( );                Log.w("Registration successful", deviceRegisterResponse.toString());
-
+                Toast.makeText ( context, displayMessage, Toast.LENGTH_LONG ).show ( );
+                Log.w("Registration Successful", deviceRegisterResponse.toString());
 
             }
 

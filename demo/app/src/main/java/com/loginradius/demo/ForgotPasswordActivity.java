@@ -189,8 +189,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             @Override
             public void onSuccess(PhoneForgotPasswordResponse data) {
                 hideProgressDialog();
-                NotifyToastUtil.showNotify(ForgotPasswordActivity.this,"OTP sent successfully to your phone");
-                new Handler().postDelayed(new Runnable() {
+                NotifyToastUtil.showNotify(ForgotPasswordActivity.this,"OTP sent successfully to your Phone.");                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         startActivity(new Intent(ForgotPasswordActivity.this,OTPActivity.class)

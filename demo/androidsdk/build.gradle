@@ -4,7 +4,7 @@ apply plugin: 'com.android.library'
 ext {
     PUBLISH_GROUP_ID = "com.loginradius.androidsdk"
     PUBLISH_ARTIFACT_ID = 'androidsdk'
-    PUBLISH_VERSION = "5.2.0"
+    PUBLISH_VERSION = "5.2.1"
 }
 
 if (project.file("${rootDir}/scripts/publish-module.gradle").exists()) {
@@ -13,13 +13,13 @@ if (project.file("${rootDir}/scripts/publish-module.gradle").exists()) {
 
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 33
+        compileSdkVersion 34
         versionCode 1
-        versionName "5.2.0"
+        versionName "5.2.1"
         multiDexEnabled true
 
     }
@@ -27,11 +27,13 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-           
+            //useProguard false
+           // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
             minifyEnabled false
-          
+            //useProguard false
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -62,7 +64,7 @@ dependencies {
     api 'com.vk:androidsdk:1.6.7'
     api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:5.4.0'
     api 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'com.google.android.gms:play-services-auth:19.2.0'
+    implementation 'com.google.android.gms:play-services-auth:21.3.0'
     implementation 'androidx.biometric:biometric:1.1.0'
     implementation 'com.google.firebase:firebase-messaging:23.0.0'
     implementation 'com.google.zxing:core:3.4.0'

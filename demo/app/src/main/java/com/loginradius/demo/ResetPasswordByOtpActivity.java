@@ -61,9 +61,8 @@ public class ResetPasswordByOtpActivity extends AppCompatActivity implements OnC
                 }else if(confirmPassword.length() == 0){
                     etConfirmPassword.setError("Required");
                 }else if(newPassword.length()<6){
-                    NotifyToastUtil.showNotify(this,"Password must be at least 6 characters");
-                }else if(!newPassword.equals(confirmPassword)){
-                    NotifyToastUtil.showNotify(this,"Password mismatch");
+                    NotifyToastUtil.showNotify(this,"Password must be at least 6 characters.");                }else if(!newPassword.equals(confirmPassword)){
+                    NotifyToastUtil.showNotify(this,"Password mismatch.");
                 }else{
                     submitOtp(otp,newPassword,confirmPassword);
                 }
@@ -84,7 +83,7 @@ public class ResetPasswordByOtpActivity extends AppCompatActivity implements OnC
             @Override
             public void onSuccess(RegisterResponse data) {
                 hideProgressDialog();
-                NotifyToastUtil.showNotify(ResetPasswordByOtpActivity.this,"Password changed successfully");
+                NotifyToastUtil.showNotify(ResetPasswordByOtpActivity.this,"Password Changed Successfully.");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

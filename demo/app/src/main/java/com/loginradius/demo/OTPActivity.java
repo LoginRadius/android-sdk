@@ -80,7 +80,7 @@ public class OTPActivity extends AppCompatActivity implements OnClickListener{
             @Override
             public void onSuccess(RegisterResponse data) {
                 hideProgressDialog();
-                NotifyToastUtil.showNotify(OTPActivity.this,"OTP sent successfully to your phone");
+                NotifyToastUtil.showNotify(OTPActivity.this,"OTP sent successfully to your Phone.");
             }
 
             @Override

@@ -163,7 +163,7 @@ public class ProfileActivity extends AppCompatActivity {
         unlinkStackexchange=(Button)findViewById(R.id.unlinkStackexchange);
         pbLoad = (ProgressBar)findViewById(R.id.pbLoad);
         pbInitLoad = (ProgressBar)findViewById(R.id.pbInitLoad);
-        NotifyToastUtil.showNotify(this,"Welcome in Loginradius");
+        NotifyToastUtil.showNotify(this,"Welcome To LoginRadius");
         if (intent != null) {
             LoginUtil loginUtil = new LoginUtil(this);
             String token = loginUtil.getAccessToken();
@@ -450,8 +450,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(UpdateProfileResponse response) {
                 if (response.getIsPosted()) {
-                    NotifyToastUtil.showNotify(ProfileActivity.this,"You have successfully Update your Profile");
-                }
+                    NotifyToastUtil.showNotify(ProfileActivity.this,"You have Successfully Update your Profile");                }
 
             }
             @Override
@@ -473,8 +472,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(RegisterResponse registerResponse) {
                 if (registerResponse.getIsPosted()) {
-                    NotifyToastUtil.showNotify(ProfileActivity.this,"You have successfully Change your Password");
-                }
+                    NotifyToastUtil.showNotify(ProfileActivity.this,"You have successfully changed your password.");                }
             }
 
             @Override
@@ -542,7 +540,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(RegisterResponse registerResponse) {
                 if (registerResponse.getIsPosted()) {
-                    NotifyToastUtil.showNotify(ProfileActivity.this,"your phone is update successfully");
+                    NotifyToastUtil.showNotify(ProfileActivity.this,"Your phone is updated successfully");
                 }
             }
 
@@ -1686,8 +1684,7 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(RegisterResponse registerResponse) {
                         if (registerResponse.getIsPosted()){
-                            NotifyToastUtil.showNotify(ProfileActivity.this,"you have successfully link with " +token.provider);
-                            final SharedPreferences.Editor editor = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).edit();
+                            NotifyToastUtil.showNotify(ProfileActivity.this,"You have successfully link your account with " +token.provider);                            final SharedPreferences.Editor editor = getSharedPreferences(Endpoint.SHAREDPREFERENCEFILEKEY, MODE_PRIVATE).edit();
                             switch (token.provider.toLowerCase()){
                                 case "facebook":
                                     Facebook.setVisibility(View.GONE);
@@ -2285,8 +2282,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DeleteResponse deleteResponse) {
                 if (deleteResponse.getIsDeleted()){
-                    NotifyToastUtil.showNotify(ProfileActivity.this,"you have successfully Unlink with " +token.provider);
-                    switch (token.provider){
+                    NotifyToastUtil.showNotify(ProfileActivity.this,"You have successfully Unlink your account with " +token.provider);                    switch (token.provider){
                         case "Facebook":
                             Facebook.setVisibility(View.VISIBLE);
                             unlinkFacebook.setVisibility(View.GONE);

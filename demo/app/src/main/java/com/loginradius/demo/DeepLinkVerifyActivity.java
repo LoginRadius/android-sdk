@@ -41,7 +41,7 @@ public class DeepLinkVerifyActivity extends AppCompatActivity {
             public void onSuccess(VerifyEmailResponse data) {
                 LoginData loginData = data.getData();
                 final String access_token = loginData.getAccessToken();
-                NotifyToastUtil.showNotify(DeepLinkVerifyActivity.this,"Email verified successfully");
+                NotifyToastUtil.showNotify(DeepLinkVerifyActivity.this,"Email Verified Successfully");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

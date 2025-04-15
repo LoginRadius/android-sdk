@@ -137,7 +137,7 @@ public class JsonDeserializer extends Converter.Factory {
 			ErrorResponse errorResponse =new ErrorResponse();
 			errorResponse.setErrorCode(100);
 			errorResponse.setDescription(jsonString);
-			errorResponse.setMessage("Unable to complete the request at the moment");
+			errorResponse.setMessage("Unable to complete the request at the moment.");
 			return (T) errorResponse;
 		}
 		return result;
@@ -151,7 +151,7 @@ public class JsonDeserializer extends Converter.Factory {
         else{
             if(errorcode.equals("TimeoutError")){
                 errorResponse.setErrorCode(101);
-                errorResponse.setDescription("Unable to reach host please check your internet connection");
+                errorResponse.setDescription("Unable to reach host please check your internet connection.");
                 errorResponse.setMessage("TimeoutError");
                 return (T) errorResponse;
 
@@ -177,7 +177,7 @@ public class JsonDeserializer extends Converter.Factory {
             else{
                 errorResponse.setErrorCode(100);
                 errorResponse.setDescription(error);
-                errorResponse.setMessage("Unable to complete the request at the moment");
+                errorResponse.setMessage("Unable to complete the request at the moment.");
                 return (T) errorResponse;
             }
         }

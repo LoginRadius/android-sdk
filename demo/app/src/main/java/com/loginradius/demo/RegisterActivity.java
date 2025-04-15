@@ -177,11 +177,11 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.i("ErrorCode",String.valueOf(errorCode));
                     switch (errorCode){
                         case 936:
-                            Toast.makeText(context,"Email already exists",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context,"Email already Exist.",Toast.LENGTH_SHORT).show();
                             setRequiredFieldsView();
                             break;
                         case 1058:
-                            Toast.makeText(context,"Mobile number already exists",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context,"Mobile number already Exist.",Toast.LENGTH_SHORT).show();
                             setRequiredFieldsView();
                             break;
                         case 970:
@@ -191,7 +191,7 @@ public class RegisterActivity extends AppCompatActivity {
                             showMobileInfoDialog();
                             break;
                         default:
-                            Toast.makeText(context,"Unable to complete the request at the moment",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context,"Unable to complete the request at the moment.",Toast.LENGTH_SHORT).show();
                             setRequiredFieldsView();
                             break;
                     }
@@ -264,7 +264,7 @@ public class RegisterActivity extends AppCompatActivity {
         api.resendOtp(null, jsonObject, new AsyncHandler<RegisterResponse>() {
             @Override
             public void onSuccess(RegisterResponse data) {
-                Toast.makeText(context,"OTP sent to your mobile number",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"OTP sent to your mobile number.",Toast.LENGTH_SHORT).show();
                 setOTPView();
             }
 
@@ -289,7 +289,7 @@ public class RegisterActivity extends AppCompatActivity {
         api.verifyOtp(queryParams,jsonObject, new AsyncHandler<LoginData>() {
             @Override
             public void onSuccess(LoginData data) {
-                Toast.makeText(context,"Registration successful",Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"Registration Successful.",Toast.LENGTH_LONG).show();
                 finish();
             }
 
@@ -299,9 +299,9 @@ public class RegisterActivity extends AppCompatActivity {
                 int errorCode = errorResponse.getErrorCode();
                 Log.i("ErrorCode",String.valueOf(errorCode));
                 if(errorCode == 1067){
-                    Toast.makeText(context,"OTP is not correct. Please try again",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"OTP is not correct. Please try again!",Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(context,"Unable to complete the request at the moment",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"Unable to complete the request at the moment.",Toast.LENGTH_SHORT).show();
                 }
                 setOTPView();
             }
