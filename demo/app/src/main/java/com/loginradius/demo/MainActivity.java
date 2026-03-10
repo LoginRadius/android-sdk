@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
         init.setSiteName ( getString ( R.string.site_name ) );
         init.setVerificationUrl ( getString ( R.string.verification_url ) );
         init.setResetPasswordUrl ( getString ( R.string.reset_password_url ) );
+        init.setCallback(getString(R.string.callaback));
 
         qrscanner = new QRScanner ( this );
 
