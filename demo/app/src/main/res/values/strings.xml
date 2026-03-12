@@ -8,6 +8,7 @@
     <string name="facebook_app_id">your_facebook app_id</string>
     <string name="facebook_client_token">your_facebook_client_token</string>
     <string name="sms_template">your-sms-template</string>
+    <string name="callaback">your-callback-url</string>
 
  <string name="google_app_id">"your_firebase_google_app_id</string>
  <string name="gcm_defaultSenderId">your_firebase_sender_id</string>

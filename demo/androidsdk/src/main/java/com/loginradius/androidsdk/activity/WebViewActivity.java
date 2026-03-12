@@ -96,6 +96,7 @@ public class WebViewActivity extends AppCompatActivity {
         params.put("is_access_token", "true");
         params.put("ismobile", "true");
         params.put("is_custom_scope",String.valueOf(customScopeEnabled));
+        params.put("callback", LoginRadiusSDK.getCallback());
         encodedURL = sitebuilder + URLHelper.URLBuilder(Endpoint.webviewlogin, params);
         if (i != null) {
             startWebView(encodedURL);
