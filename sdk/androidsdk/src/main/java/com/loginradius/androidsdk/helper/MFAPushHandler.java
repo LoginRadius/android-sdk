@@ -76,20 +76,20 @@ public class MFAPushHandler extends AppCompatActivity implements FcmUtils.FcmTok
             @Override
             public void onSuccess(DeviceRegisterResponse deviceRegisterResponse) {
 
- SharedPreferences sh = context.getSharedPreferences("Message", Context.MODE_PRIVATE);
-  String message = sh.getString("message", "");
-  String displayMessage  = !TextUtils.isEmpty(message)? message : "Registration Successful.";
+                SharedPreferences sh = context.getSharedPreferences("Message", Context.MODE_PRIVATE);
+                String message = sh.getString("message", "");
+                String displayMessage  = !TextUtils.isEmpty(message)? message : "Registration Successful";
 
                 Toast.makeText ( context, displayMessage, Toast.LENGTH_LONG ).show ( );
-                Log.w("Registration Successful", deviceRegisterResponse.toString());
-
+                Log.w("Registration successful", deviceRegisterResponse.toString());
+                
             }
 
-                       @Override
+            @Override
             public void onFailure ( Throwable error, String errorcode ) {
                 Log.w ( "Error is", error.getMessage ( ) );
                 if (error.getMessage ( ).contains("<html>") && error.getMessage ( ).contains("</html>")){
-                    Toast.makeText ( context, "Error:" + "Network Error Try Again!", Toast.LENGTH_LONG ).show ( );
+                    Toast.makeText ( context, "There's some issue with the QR code. Please regenerate it.", Toast.LENGTH_LONG ).show ( );
 
                 }else {
                     Toast.makeText(context, "Error:" + error.getMessage(), Toast.LENGTH_LONG).show();

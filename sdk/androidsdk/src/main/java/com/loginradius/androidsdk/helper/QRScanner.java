@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 
 import android.os.Build;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -54,7 +55,7 @@ public class QRScanner {
 
 
     public void startScan(String Message) {
-       SharedPreferences sharedPreferences = context.getSharedPreferences("Message",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Message",MODE_PRIVATE);
         SharedPreferences.Editor myEdit = sharedPreferences.edit();
         myEdit.putString("message", Message);
         myEdit.commit();
@@ -120,7 +121,6 @@ public class QRScanner {
 
 
                 MFAPushHandler mfaPushHandler = new MFAPushHandler(context);
-
                 mfaPushHandler.processData(qrData, getPublicKeyValue(), getDeviceName());
 
             }
@@ -169,13 +169,16 @@ public class QRScanner {
 
     @SuppressLint("LongLogTag")
     public String createSignature(String Value, String SFA) {
+        return createSignature(Value, SFA, null);
+    }
+
+    @SuppressLint("LongLogTag")
+    public String createSignature(String Value, String SFA, String challenge) {
         // Sign the payload
-
-
         String signedData1 = null;
         String response = Value;
         String secondFactorToken = SFA;
-        String payload = response + secondFactorToken;
+        String payload = buildVerificationPayload(response, secondFactorToken, challenge);
 
         SharedPreferences sh = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
 
@@ -202,7 +205,7 @@ public class QRScanner {
 
             } else {
 
-                Toast.makeText(context, "Please Provide valid parameters to Sign.", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Please Provide valid parameters to sign", Toast.LENGTH_LONG).show();
 
             }
         } catch (Exception e) {
@@ -211,6 +214,20 @@ public class QRScanner {
         return signedData1;
 
 
+    }
+
+    private String buildVerificationPayload(String response, String secondFactorToken, String challenge) {
+        StringBuilder payloadBuilder = new StringBuilder();
+        if (response != null) {
+            payloadBuilder.append(response);
+        }
+        if (secondFactorToken != null) {
+            payloadBuilder.append(secondFactorToken);
+        }
+        if (!TextUtils.isEmpty(challenge)) {
+            payloadBuilder.append(challenge);
+        }
+        return payloadBuilder.toString();
     }
 
 

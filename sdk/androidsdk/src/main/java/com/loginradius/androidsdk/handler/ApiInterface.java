@@ -14,34 +14,30 @@ import com.loginradius.androidsdk.response.CheckAvailability;
 import com.loginradius.androidsdk.response.DeleteAccountResponse;
 import com.loginradius.androidsdk.response.DeviceRegisterResponse;
 import com.loginradius.androidsdk.response.PostResponse;
+import com.loginradius.androidsdk.response.ParContextResponse;
 import com.loginradius.androidsdk.response.UpdateProfileResponse;
 import com.loginradius.androidsdk.response.securityquestions.SecurityQuestionsResponse;
 import com.loginradius.androidsdk.response.PostAPIResponse;
 import com.loginradius.androidsdk.response.UpdateResponse;
 import com.loginradius.androidsdk.response.VerifyResponse;
 import com.loginradius.androidsdk.response.VerifyEmailResponse;
-
 import com.loginradius.androidsdk.response.config.ConfigResponse;
 import com.loginradius.androidsdk.response.customobject.CreateCustomObject;
 import com.loginradius.androidsdk.response.customobject.ReadCustomObject;
-
 import com.loginradius.androidsdk.response.login.LoginData;
-
+import com.loginradius.androidsdk.response.page.LoginRadiusPage;
 import com.loginradius.androidsdk.response.password.ForgotPasswordResponse;
 import com.loginradius.androidsdk.response.phone.PhoneDataResponse;
 import com.loginradius.androidsdk.response.phone.PhoneForgotPasswordResponse;
 import com.loginradius.androidsdk.response.phone.PhoneResponse;
 import com.loginradius.androidsdk.response.phonesendotp.PhoneSendOtpData;
-
 import com.loginradius.androidsdk.response.register.DeleteResponse;
 import com.loginradius.androidsdk.response.register.RegisterResponse;
 import com.loginradius.androidsdk.response.register.RegistrationData;
 import com.loginradius.androidsdk.response.securityquestions.UpdateSecurityQuestionsResponse;
 import com.loginradius.androidsdk.response.socialinterface.SocialInterface;
-
 import com.loginradius.androidsdk.response.traditionalinterface.UserRegistration;
 import com.loginradius.androidsdk.response.userprofile.LoginRadiusUltimateUserProfile;
-
 
 import java.util.List;
 import java.util.Map;
@@ -70,8 +66,8 @@ public interface ApiInterface {
      * Retrofit2 with RxJava GET
      */
 
-
-
+    @GET
+    Observable<LoginRadiusPage> getPage(@Url String url, @QueryMap Map<String, String> options);
 
 
     @GET
@@ -200,7 +196,8 @@ public interface ApiInterface {
     @POST
     Observable<PostAPIResponse> getMessage(@Url String url, @QueryMap Map<String, String> options);
 
-
+    @POST
+    Observable<PostAPIResponse> getStatusUpdate(@Url String url, @QueryMap Map<String, String> options);
 
     @POST
     Observable<RegisterResponse> getTraditionalRegister(@Url String url, @HeaderMap Map<String, String> headers, @QueryMap Map<String, String> options, @Body RegistrationData data);
@@ -326,6 +323,9 @@ public interface ApiInterface {
 
     @POST
     Observable<DeviceRegisterResponse> getRegisterDevice( @Url String url, @HeaderMap Map<String, String> headers, @Body JsonObject data);
+
+    @GET
+    Observable<ParContextResponse> getParContext(@Url String url, @Query("apikey") String apiKey);
 
     @PUT
     Observable<PostResponse> getMFAVerification(@Url String url,  @HeaderMap Map<String, String> headers,@QueryMap Map<String, String> options, @Body JsonObject data);

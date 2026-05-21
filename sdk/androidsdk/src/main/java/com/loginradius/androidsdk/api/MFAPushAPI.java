@@ -5,11 +5,11 @@ import com.loginradius.androidsdk.handler.ApiInterface;
 import com.loginradius.androidsdk.handler.AsyncHandler;
 import com.loginradius.androidsdk.handler.ExceptionResponse;
 import com.loginradius.androidsdk.handler.RestRequest;
-import com.loginradius.androidsdk.helper.LoginRadiusSDK;
 import com.loginradius.androidsdk.resource.Endpoint;
 import com.loginradius.androidsdk.resource.QueryMapHelper;
 import com.loginradius.androidsdk.resource.QueryParams;
 import com.loginradius.androidsdk.response.DeviceRegisterResponse;
+import com.loginradius.androidsdk.response.ParContextResponse;
 import com.loginradius.androidsdk.response.PostResponse;
 
 
@@ -25,11 +25,11 @@ public class MFAPushAPI {
 
     private ApiInterface apiService = RestRequest.getClient ( ).create ( ApiInterface.class );
 
-    public MFAPushAPI () {
-        if (!LoginRadiusSDK.validate ( )) {
-            throw new LoginRadiusSDK.InitializeException ( );
-        }
-    }
+//    public MFAPushAPI () {
+//        if (!LoginRadiusSDK.validate ( )) {
+//            throw new LoginRadiusSDK.InitializeException ( );
+//        }
+//    }
 
 
     public void registerDevice ( String Endpoint, JsonObject jsonData, final AsyncHandler<DeviceRegisterResponse> handler ) {
@@ -81,5 +81,26 @@ public class MFAPushAPI {
                 } );
     }
 
+    public void getParContext(String linkingId, String apiKey, final AsyncHandler<ParContextResponse> handler) {
+        apiService.getParContext(Endpoint.API_V2_MFA_PAR_CONTEXT + linkingId, apiKey)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<ParContextResponse>() {
+                    @Override
+                    public void onNext(ParContextResponse parContextResponse) {
+                        handler.onSuccess(parContextResponse);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ExceptionResponse exceptionResponse = ExceptionResponse.HandleException(e);
+                        handler.onFailure(exceptionResponse.t, exceptionResponse.message);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
 
 }

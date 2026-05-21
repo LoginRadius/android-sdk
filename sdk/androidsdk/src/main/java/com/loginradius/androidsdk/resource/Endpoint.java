@@ -31,7 +31,6 @@ public class Endpoint {
 	public static final String API_V2_CUSTOMOBJECT="identity/v2/auth/customobject";
 	public static final String API_V2_VERIFY_USERNAME="identity/v2/auth/username";
 	public static final String API_V2_DELETE_ACCOUNT="identity/v2/auth/account/delete";
-
 	public static final String API_V2_USERPROFILE = "identity/v2/auth/account";
 	public static final String API_V2_ACCESS_TOKEN_FB = "api/v2/access_token/facebook";
 	public static final String API_V2_ACCESS_TOKEN_GOOGLE = "api/v2/access_token/google";
@@ -67,6 +66,7 @@ public class Endpoint {
 	public static final String API_V2_PIN_RESET_PHONE_SECURITY_QUESTION="identity/v2/auth/pin/reset/securityAnswer/phone";
 	public static final String API_V2_PIN_CHANGE_BY_ACCESS_TOKEN="identity/v2/auth/pin/change";
 	public static final String  API_V2_MFA_VERIFICATION="identity/v2/auth/login/2fa/verification/push";
+	public static final String API_V2_MFA_PAR_CONTEXT="identity/v2/auth/push/par";
 
 	public static final String SHAREDPREFERENCEFILEKEY = "com.loginradius.loginradiusraas.PREFERENCE_FILE_KEY";
 	public static final String webviewlogin=".hub.loginradius.com/RequestHandlor.aspx";

@@ -129,7 +129,8 @@ public class LoginRadiusAuthManager {
 		}
 		catch(FacebookOperationCanceledException f){
 			Log.i("Cancel","facebook");
-			LoginRadiusAuthManager.asyncHandler.onFailure(new Throwable("Facebook Operation Cancelled"), "lr_LOGIN_CANCELLED");		}
+			LoginRadiusAuthManager.asyncHandler.onFailure(new Throwable("Facebook Operation cancelled"), "lr_LOGIN_CANCELLED");
+		}
 
 	}
 
@@ -181,7 +182,8 @@ public class LoginRadiusAuthManager {
 			@Override
 			public void onCancel() {
 				Log.i("Cancel", "facebook");
-				LoginRadiusAuthManager.asyncHandler.onFailure(new Throwable("Facebook Operation Cancelled"), "lr_LOGIN_CANCELLED");			}
+				LoginRadiusAuthManager.asyncHandler.onFailure(new Throwable("Facebook Operation cancelled"), "lr_LOGIN_CANCELLED");
+			}
 
 			@Override
 			public void onError(FacebookException error) {
@@ -217,7 +219,7 @@ public class LoginRadiusAuthManager {
 
 	/* Handling Facebook Operation Cancellation Event for native facebook login */
 	public static void onNativeFailure(){
-		asyncHandler.onFailure(new Throwable("Facebook Operation Cancelled"), "lr_LOGIN_CANCELLED");
+		   asyncHandler.onFailure(new Throwable("Facebook Operation cancelled"), "lr_LOGIN_CANCELLED");
 	}
 
 	/**
