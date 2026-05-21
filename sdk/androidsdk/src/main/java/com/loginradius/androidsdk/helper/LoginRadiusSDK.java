@@ -29,7 +29,7 @@ public class LoginRadiusSDK {
     private LoginRadiusSDK() {}
     public static class Initialize{
 
-        private static String apiKey,siteName,verificationUrl,resetPasswordUrl,callback;
+        private static String apiKey,siteName,verificationUrl,resetPasswordUrl;
         private static boolean isEncryptionEnabled;
         private static String referer="Android";
         private static Map<String,String> customHeader=new HashMap<String, String>();
@@ -55,15 +55,6 @@ public class LoginRadiusSDK {
             else{
                 Initialize.siteName = siteName;
             }
-        }
-
-        public void setCallback(String callback) {
-            if (LoginRadiusSDK.getIsEncryption() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                Initialize.callback = LoginRadiusEncryptor.encryptData(callback);
-            }else{
-                Initialize.callback=callback;
-            }
-
         }
 
         public void setVerificationUrl(String verificationUrl) {
@@ -240,7 +231,7 @@ public class LoginRadiusSDK {
 
     public static String getApiKey() {
         if (LoginRadiusSDK.getIsEncryption() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return LoginRadiusEncryptor.decryptData(Initialize.apiKey);
+           return LoginRadiusEncryptor.decryptData(Initialize.apiKey);
         }
         else{
             return Initialize.apiKey;
@@ -255,14 +246,7 @@ public class LoginRadiusSDK {
             return Initialize.siteName;
         }
     }
-    public static String getCallback() {
-        if (LoginRadiusSDK.getIsEncryption() && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return LoginRadiusEncryptor.decryptData(Initialize.callback);
-        }
-        else{
-            return Initialize.callback;
-        }
-    }
+
     public  static String getReferer() {
 
         return Initialize.referer;
@@ -311,7 +295,7 @@ public class LoginRadiusSDK {
 
     public static class InitializeException extends RuntimeException{
         public InitializeException() {
-            super("LoginRadius SDK is not initialized properly");
+            super("LoginRadius SDK not initialized properly");
         }
     }
 }

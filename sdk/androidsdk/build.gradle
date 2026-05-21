@@ -4,7 +4,7 @@ apply plugin: 'com.android.library'
 ext {
     PUBLISH_GROUP_ID = "com.loginradius.androidsdk"
     PUBLISH_ARTIFACT_ID = 'androidsdk'
-    PUBLISH_VERSION = "5.2.3"
+    PUBLISH_VERSION = "5.3.0"
 }
 
 if (project.file("${rootDir}/scripts/publish-module.gradle").exists()) {
@@ -19,7 +19,7 @@ android {
         minSdkVersion 21
         compileSdkVersion 34
         versionCode 1
-        versionName "5.2.3"
+        versionName "5.3.0"
         multiDexEnabled true
 
     }

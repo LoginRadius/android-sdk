@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class QueryMapHelper {
 
-
+    
     public static Map<String,String> getMapAddEmail(QueryParams queryParams){
         Map<String, String> params = new HashMap<String, String>();
         params.put("apikey", LoginRadiusSDK.getApiKey());
